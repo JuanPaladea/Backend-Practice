@@ -17,10 +17,14 @@ class ProductManager {
   }
 
   saveProducts() {
-    fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2), 'utf-8');
+    try {
+      fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2), 'utf-8');
+    } catch (error) {
+      console.error('Error saving products:', error);
+    }
   }
 
-  calculateIncrementId() {
+  calculateIncrementId() { // Para evitar que se repita el ID al ejecutar mas de una vez el script: Chequea el ID mas alto de la lista de productos y le agrega +1;
     const maxId = this.products.reduce((max, product) => (product.id > max ? product.id : max), 0);
     return maxId + 1;
   }
@@ -34,7 +38,8 @@ class ProductManager {
     const codeExist = this.products.some((product) => product.code === productData.code);
 
     if (codeExist) {
-      throw new Error(`Error: Producto con código ${productData.code} ya existe.`);
+      console.error(`Error: Producto con código ${productData.code} ya existe.`);
+      return    
     }
 
     const product = {
