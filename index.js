@@ -25,20 +25,15 @@ class ProductManager {
     return maxId + 1;
   }
 
-  addProduct(title, description, price, thumbnail, code, stock) {
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
+  addProduct(productData) {
+    if (!productData.title || !productData.description || !productData.price || !productData.thumbnail || !productData.code || !productData.stock) {
       console.error("Error: Todos los campos son obligatorios.");
       return;
     }
 
     const product = {
       id: this.incrementId++,
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      stock,
+      ...productData,
     };
 
     console.log(`Añadiendo producto...`)
@@ -65,25 +60,27 @@ class ProductManager {
     return product;
   }
 
-  updateProduct(id, title, description, price, thumbnail, code, stock) {
-    if (!id || !title || !description || !price || !thumbnail || !code || !stock) {
+  updateProduct(id, updatedFields) {
+    if (!id || !updatedFields) {
       console.error("Error: Todos los campos son obligatorios.");
       return;
     }
-
+  
     const index = this.products.findIndex((product) => product.id === id);
-
+  
     if (index === -1) {
-      console.error(`Error: Producto con id ${id} no encontrado.`);
+      console.error(`Error: Producto con ID ${id} no encontrado.`);
       return;
     }
+  
+    console.log(`Actualizando producto con ID ${id}`);
+    
+    this.products[index] = { ...this.products[index], ...updatedFields };
 
-    console.log(`Actualizando producto con id ${id}`)
-    this.products[index] = { ...this.products[index], title, description, price, thumbnail, code, stock };
     this.saveProducts();
-    console.log(`Producto ${title} actualizado...`)
-    this.getProductById(id)
-  }
+    console.log(`Producto con ID ${id} actualizado...`);
+    this.getProductById(id);
+  }  
 
   deleteProduct(id) {
     const index = this.products.findIndex((product) => product.id === id);
@@ -100,19 +97,32 @@ class ProductManager {
 
 const productManager = new ProductManager('products.json')
 
+productManager.addProduct({
+  title: 'producto prueba',
+  description: 'Este es un producto de prueba',
+  price: 200,
+  thumbnail: 'Sin imagen',
+  code: 'abc123',
+  stock: 25,
+})
+productManager.addProduct({
+  title: 'producto prueba',
+  description: 'Este es un producto de prueba',
+  price: 200,
+  thumbnail: 'Sin imagen',
+  code: 'abc123',
+  stock: 25,
+})
+productManager.addProduct({
+  title: 'producto prueba',
+  description: 'Este es un producto de prueba',
+  price: 200,
+  thumbnail: 'Sin imagen',
+  code: 'abc123',
+  stock: 25,
+})
 productManager.getProducts();
-productManager.addProduct('producto prueba', 'este es un producto de prueba', 200, 'sin imagen', 'abc123', 25);
-productManager.addProduct('producto prueba', 'este es un producto de prueba', 200, 'sin imagen', 'abc123', 25);
-productManager.addProduct('producto prueba', 'este es un producto de prueba', 200, 'sin imagen', 'abc123', 25);
-productManager.addProduct('producto prueba', 'este es un producto de prueba', 200, 'sin imagen', 'abc123', 25);
-productManager.addProduct('producto prueba', 'este es un producto de prueba', 200, 'sin imagen', 'abc123', 25);
-productManager.addProduct('producto prueba', 'este es un producto de prueba', 200, 'sin imagen', 'abc123', 25);
-productManager.getProducts();
-productManager.getProductById(2);
-productManager.deleteProduct(3);
-productManager.getProducts();
-productManager.addProduct('producto prueba', 'este es un producto de prueba', 200, 'sin imagen', 'abc123', 25);
-productManager.getProducts();
-productManager.updateProduct(4, 'Nuevo título', 'Nueva descripción', 300, 'nueva imagen', 'xyz789', 50);
-productManager.deleteProduct(5);
+productManager.getProductById(3);
+productManager.deleteProduct(2);
+productManager.updateProduct(1, {title: 'Producto modificado', propiedadNueva: 'propiedadNueva'});
 productManager.getProducts();
