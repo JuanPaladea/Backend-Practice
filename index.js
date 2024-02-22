@@ -31,6 +31,12 @@ class ProductManager {
       return;
     }
 
+    const codeExist = this.products.some((product) => product.code === productData.code);
+
+    if (codeExist) {
+      throw new Error(`Error: Producto con código ${productData.code} ya existe.`);
+    }
+
     const product = {
       id: this.incrementId++,
       ...productData,
@@ -72,6 +78,11 @@ class ProductManager {
       console.error(`Error: Producto con ID ${id} no encontrado.`);
       return;
     }
+
+    if (updatedFields.code && this.products.some((product) => product.code === updatedFields.code)) {
+      console.error(`Error: Producto con código ${updatedFields.code} ya existe.`);
+      return
+    }
   
     console.log(`Actualizando producto con ID ${id}`);
     
@@ -102,7 +113,7 @@ productManager.addProduct({
   description: 'Este es un producto de prueba',
   price: 200,
   thumbnail: 'Sin imagen',
-  code: 'abc123',
+  code: 'abc1234',
   stock: 25,
 })
 productManager.addProduct({
@@ -110,7 +121,7 @@ productManager.addProduct({
   description: 'Este es un producto de prueba',
   price: 200,
   thumbnail: 'Sin imagen',
-  code: 'abc123',
+  code: 'abc12345',
   stock: 25,
 })
 productManager.addProduct({
@@ -118,7 +129,7 @@ productManager.addProduct({
   description: 'Este es un producto de prueba',
   price: 200,
   thumbnail: 'Sin imagen',
-  code: 'abc123',
+  code: 'abc123456',
   stock: 25,
 })
 productManager.getProducts();
