@@ -12,7 +12,6 @@ class ProductManager {
       const data = fs.readFileSync(this.path, 'utf-8');
       return JSON.parse(data);
     } catch (error) {
-      // If the file doesn't exist or there is an error, return an empty array
       return [];
     }
   }
@@ -42,11 +41,14 @@ class ProductManager {
       stock,
     };
 
+    console.log(`Añadiendo producto...`)
     this.products.push(product);
     this.saveProducts();
+    console.log(`${product.title} agregado.`)
   }
 
   getProducts() {
+    console.log(`Buscando productos...`)
     console.log(this.products);
     return this.products;
   }
@@ -55,29 +57,44 @@ class ProductManager {
     const product = this.products.find((product) => product.id === id);
 
     if (!product) {
-      console.error("Error: Producto no encontrado.");
+      console.error(`Error: Producto con id ${id} no encontrado.`);
       return;
     }
-
+    console.log(`Buscando producto con id ${id}...`)
     console.log(product);
     return product;
   }
 
   updateProduct(id, title, description, price, thumbnail, code, stock) {
-    const index = this.products.findIndex((product) => product.id === id);
-
-    if (index === -1) {
-      console.error("Error: Producto no encontrado.");
+    if (!id || !title || !description || !price || !thumbnail || !code || !stock) {
+      console.error("Error: Todos los campos son obligatorios.");
       return;
     }
 
+    const index = this.products.findIndex((product) => product.id === id);
+
+    if (index === -1) {
+      console.error(`Error: Producto con id ${id} no encontrado.`);
+      return;
+    }
+
+    console.log(`Actualizando producto con id ${id}`)
     this.products[index] = { ...this.products[index], title, description, price, thumbnail, code, stock };
     this.saveProducts();
+    console.log(`Producto ${title} actualizado...`)
+    this.getProductById(id)
   }
 
   deleteProduct(id) {
+    const index = this.products.findIndex((product) => product.id === id);
+    if (index === -1) {
+      console.error(`Error: Producto con id ${id} no encontrado.`);
+      return
+    }
+    console.log(`Eliminando producto con id ${id}...`)
     this.products = this.products.filter((product) => product.id !== id);
     this.saveProducts();
+    console.log(`Producto ${id} eliminado.`)
   }
 }
 
