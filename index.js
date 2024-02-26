@@ -20,7 +20,7 @@ class ProductManager {
     try {
       fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2), 'utf-8');
     } catch (error) {
-      console.error('Error saving products:', error);
+      console.error('Error guardando productos:', error);
     }
   }
 
