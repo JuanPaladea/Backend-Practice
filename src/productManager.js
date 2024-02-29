@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 class ProductManager {
   constructor(filePath) {
@@ -53,14 +53,17 @@ class ProductManager {
     console.log(`${product.title} agregado.`)
   }
 
-  getProducts() {
+  getProducts(limit) {
     console.log(`Buscando productos...`)
     console.log(this.products);
-    return this.products;
+    if (+limit) {
+      return this.products.slice(0, limit);
+    }
+    return this.products
   }
 
   getProductById(id) {
-    const product = this.products.find((product) => product.id === id);
+    const product = this.products.find((product) => product.id == id);
 
     if (!product) {
       console.error(`Error: Producto con id ${id} no encontrado.`);
@@ -111,34 +114,4 @@ class ProductManager {
   }
 }
 
-const productManager = new ProductManager('products.json')
-
-productManager.addProduct({
-  title: 'producto prueba',
-  description: 'Este es un producto de prueba',
-  price: 200,
-  thumbnail: 'Sin imagen',
-  code: 'abc1234',
-  stock: 25,
-})
-productManager.addProduct({
-  title: 'producto prueba',
-  description: 'Este es un producto de prueba',
-  price: 200,
-  thumbnail: 'Sin imagen',
-  code: 'abc12345',
-  stock: 25,
-})
-productManager.addProduct({
-  title: 'producto prueba',
-  description: 'Este es un producto de prueba',
-  price: 200,
-  thumbnail: 'Sin imagen',
-  code: 'abc123456',
-  stock: 25,
-})
-productManager.getProducts();
-productManager.getProductById(3);
-productManager.deleteProduct(2);
-productManager.updateProduct(1, {title: 'Producto modificado', propiedadNueva: 'propiedadNueva'});
-productManager.getProducts();
+export default ProductManager;
