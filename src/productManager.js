@@ -30,7 +30,7 @@ class ProductManager {
   }
 
   addProduct(productData) {
-    if (!productData.title || !productData.description || !productData.price || !productData.thumbnail || !productData.code || !productData.stock) {
+    if (!productData.title || !productData.description || !productData.price || !productData.status || !productData.code || !productData.stock) {
       console.error("Error: Todos los campos son obligatorios.");
       return;
     }
