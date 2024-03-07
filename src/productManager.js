@@ -60,7 +60,7 @@ export default class ProductManager {
   getProducts(limit) {
     console.log(`Buscando productos...`)
     console.log(this.products);
-    if (+limit) {
+    if (limit) {
       return this.products.slice(0, limit);
     }
     return this.products

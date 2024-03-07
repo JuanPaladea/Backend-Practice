@@ -45,5 +45,15 @@
     "stock": 20,
     "category": "Electronics",
     "thumbnails": []
+  },
+  {
+    "id": 7,
+    "title": "producto prueba por put",
+    "description": "Este es un producto de prueba",
+    "code": "abc1234567",
+    "price": 2200,
+    "status": true,
+    "stock": 40,
+    "thumbnails": []
   }
 ]

@@ -9,6 +9,10 @@
       {
         "product": "21",
         "quantity": 1
+      },
+      {
+        "product": "3",
+        "quantity": 1
       }
     ]
   }
