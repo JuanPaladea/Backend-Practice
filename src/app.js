@@ -1,6 +1,6 @@
 import express from 'express'
-import { ProductManager } from './productManager.js'
 import CartManager from './cartManager.js'
+import ProductManager from './productManager.js'
 
 const productManagerInstance = new ProductManager('../data/products.json')
 const cartManagerInstance = new CartManager('../data/carts.json')
