@@ -1,15 +1,17 @@
 import express from 'express'
-import ProductManager from './productManager.js'
+import { ProductManager, CartManager } from './productManager.js'
 
 const productManagerInstance = new ProductManager('../data/products.json')
+const cartManagerInstance = new CartManager('../data/carts.json')
 
 const app = express();
 const port = 8800;
 
 app.use(express.urlencoded({extended: true}))
+app.use(express.json())
 
 app.get('/', (req, res) => {
-  res.send("Bievenido.<br></br>Ve a /api/products para ver productos <br></br>Ve a /api/products/[id] para ir a un producto especifico<br></br>Introduce /api/products/?limit=(numero) para mostrar un máximo de productos")
+  res.send("Bievenido")
 })
 
 // PRODUCTS MANAGEMENT
@@ -33,10 +35,6 @@ app.get('/api/products/:productId', async (req, res) => {
 app.post('/api/products', async (req, res) => {
   const { title, description, code, price, stock, category } = req.body;
 
-  if (!title || !description || !code || !price || !stock || !category) {
-    return res.status(400).send({ status: 'error', message: 'Missing required fields' });
-  }
-
   try {
     await productManagerInstance.addProduct({
       title,
@@ -46,34 +44,34 @@ app.post('/api/products', async (req, res) => {
       status: true,
       stock,
       category,
-      thumbnails: thumbnails || [],
     })
-  } catch {
+  } catch (error){
+    console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
-
   res.send({status:'success', message:'producto agregado'});  
 })
 
 app.put('/api/products/:productId', async (req, res) => {
-  const productId = req.params.productId;
+  const productId = +req.params.productId;
   const productData = req.body;
-
+  console.log(req.body)
   try {
     await productManagerInstance.updateProduct(productId, productData);
-  } catch {
+  } catch (error){
+    console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
-
   res.send({status:'success', message:'producto editado'});
 })
 
 app.delete('/api/products/:productId', async (req, res) => {
-  const productId = req.params.productId;
+  const productId = +req.params.productId;
   
   try {
     await productManagerInstance.deleteProduct(productId);
-  } catch {
+  } catch (error){
+    console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
 
@@ -81,8 +79,38 @@ app.delete('/api/products/:productId', async (req, res) => {
 })
 
 // CART MANAGEMENT
+app.post('/api/carts/', async (req, res) => {
+  try {
+    await cartManagerInstance.addCart();
+  } catch (error){
+    console.error(error)
+    res.status(400).send({status:'error', error:'ha ocurrido un error'})
+  }
 
+  res.send({status:'success', message:'carrito creado'});
+})
 
+app.post('/api/carts/:cid/product/:pid', async (req, res) => {
+  const cartId = +req.params.cid;
+  const productId = req.params.pid;
+  
+  try {
+    await cartManagerInstance.addProductToCart(cartId, productId);
+  } catch (error){
+    console.error(error)
+    res.status(400).send({status:'error', error:'ha ocurrido un error'})
+  }
+  res.send({status:'success', message:'producto agregado al carrito'});
+})
+
+app.get('/api/carts/:cid', async (req, res) => {
+  const cartId = +req.params.cid;
+  const cart = await cartManagerInstance.getCart(cartId);
+  if (!cart) {
+    return res.status(400).send({status:'error', error:'ha ocurrido un error'})
+  }
+  res.send({cart});
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

@@ -1,20 +1,11 @@
 [
   {
     "id": 1,
-    "title": "producto prueba1",
+    "title": "Producto editado desde PUT",
     "description": "Este es un producto de prueba",
     "price": 200,
     "thumbnail": "Sin imagen",
     "code": "abc1234",
-    "stock": 25
-  },
-  {
-    "id": 2,
-    "title": "producto prueba2",
-    "description": "Este es un producto de prueba",
-    "price": 200,
-    "thumbnail": "Sin imagen",
-    "code": "abc12345",
     "stock": 25
   },
   {
@@ -43,5 +34,16 @@
     "thumbnail": "Sin imagen",
     "code": "abc123456",
     "stock": 25
+  },
+  {
+    "id": 6,
+    "title": "Nuevo Producto",
+    "description": "Descripción del nuevo producto",
+    "code": "newproduct123",
+    "price": 150,
+    "status": true,
+    "stock": 20,
+    "category": "Electronics",
+    "thumbnails": []
   }
 ]

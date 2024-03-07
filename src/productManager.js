@@ -11,7 +11,8 @@ class ProductManager {
     try {
       const data = fs.readFileSync(this.path, 'utf-8');
       return JSON.parse(data);
-    } catch (error) {
+    } catch (error){
+      console.error(error)
       return [];
     }
   }
@@ -19,7 +20,8 @@ class ProductManager {
   saveProducts() {
     try {
       fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2), 'utf-8');
-    } catch (error) {
+    } catch (error){
+      console.error(error)
       console.error('Error guardando productos:', error);
     }
   }
@@ -30,6 +32,7 @@ class ProductManager {
   }
 
   addProduct(productData) {
+    console.log('Received product data:', productData);
     if (!productData.title || !productData.description || !productData.price || !productData.status || !productData.code || !productData.stock) {
       console.error("Error: Todos los campos son obligatorios.");
       return;
@@ -45,6 +48,7 @@ class ProductManager {
     const product = {
       id: this.incrementId++,
       ...productData,
+      thumbnails: productData.thumbnails ?? []
     };
 
     console.log(`Añadiendo producto...`)
@@ -114,4 +118,76 @@ class ProductManager {
   }
 }
 
-export default ProductManager;
+class CartManager {
+  constructor(filepath) {
+    this.path = filepath;
+    this.cart = this.loadCarts()
+    this.incrementId = this.calculateIncrementId();
+  }
+  
+  calculateIncrementId() { // Para evitar que se repita el ID al ejecutar mas de una vez el script: Chequea el ID mas alto de la lista de productos y le agrega +1;
+    const maxId = this.cart.reduce((max, cart) => (cart.id > max ? cart.id : max), 0);
+    return maxId + 1;
+  }
+
+  loadCarts() {
+    try {
+      const data = fs.readFileSync(this.path, 'utf-8');
+      return JSON.parse(data);
+    } catch (error){
+      console.error(error)
+      return [];
+    }
+  }
+
+  saveCart() {
+    try {
+      fs.writeFileSync(this.path, JSON.stringify(this.cart, null, 2), 'utf-8');
+    } catch (error){
+      console.error(error)
+      console.error('Error guardando carrito:', error);
+    }
+  }
+
+  addCart() {
+    const cart = {
+      id: this.incrementId++,
+      products: [],
+    }
+    this.cart.push(cart);
+    this.saveCart();
+    return cart;
+  }
+
+  addProductToCart(cartid, productId, quantity = 1) {
+    const cart = this.cart.find((cart) => cart.id == cartid);
+    if (cart) {
+      const existingProductIndex = cart.products.findIndex((product) => product.product === productId);
+      if (existingProductIndex !== -1) {
+        cart.products[existingProductIndex].quantity += quantity;
+      } else {
+        cart.products.push({
+          product: productId,
+          quantity: quantity,
+        });
+        
+        this.saveCart();
+        return cart;
+      }
+    } else {
+      console.error('carrito no encontrado')
+      return;
+    }
+  }
+
+  getCart(id) {
+    const cart = this.cart.find((cart) => cart.id == id);
+    if (!cart) {
+      console.error('Carrito no encontrado')
+      return
+    }
+    return cart;
+  }
+}
+
+export {ProductManager, CartManager};
