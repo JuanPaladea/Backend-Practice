@@ -1,14 +1,20 @@
 import { Router } from "express";
-import ProductManager from '../productManager.js'
+import ProductManager from '../utils/productManager.js'
 
 const router = Router();
 
-const productManagerInstance = new ProductManager("../data/products.json");
+const productManagerInstance = new ProductManager('data/products.json');
 
 router.get('/', async (req, res) => {
   let limit = +req.query.limit;
   const products = await productManagerInstance.getProducts(limit);
-  res.send({products})
+  res.render(
+    "index",
+    {
+      style: "index.css",
+      products: products,
+    }
+  )
 })
 
 router.get('/:productId', async (req, res) => {
