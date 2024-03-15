@@ -9,10 +9,23 @@ router.get('/', async (req, res) => {
   let limit = +req.query.limit;
   const products = await productManagerInstance.getProducts(limit);
   res.render(
-    "index",
+    "home",
     {
       style: "index.css",
       products: products,
+      layout: 'products',
+    }
+  )
+})
+
+router.get('/realtimeproducts', async (req, res) => {
+  const products = await productManagerInstance.getProducts();
+  res.render(
+    "realTimeProducts",
+    {
+      style: "index.css",
+      products: products,
+      layout: 'products'
     }
   )
 })
