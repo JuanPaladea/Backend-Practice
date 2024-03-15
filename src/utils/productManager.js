@@ -32,7 +32,6 @@ export default class ProductManager {
   }
 
   addProduct(productData) {
-    console.log('Received product data:', productData);
     if (!productData.title || !productData.description || !productData.price || !productData.status || !productData.code || !productData.stock) {
       console.error("Error: Todos los campos son obligatorios.");
       return;
@@ -51,15 +50,11 @@ export default class ProductManager {
       thumbnails: productData.thumbnails ?? []
     };
 
-    console.log(`Añadiendo producto...`)
     this.products.push(product);
     this.saveProducts();
-    console.log(`${product.title} agregado.`)
   }
 
   getProducts(limit) {
-    console.log(`Buscando productos...`)
-    console.log(this.products);
     if (limit) {
       return this.products.slice(0, limit);
     }
@@ -73,8 +68,6 @@ export default class ProductManager {
       console.error(`Error: Producto con id ${id} no encontrado.`);
       return;
     }
-    console.log(`Buscando producto con id ${id}...`)
-    console.log(product);
     return product;
   }
 
@@ -95,13 +88,10 @@ export default class ProductManager {
       console.error(`Error: Producto con código ${updatedFields.code} ya existe.`);
       return
     }
-  
-    console.log(`Actualizando producto con ID ${id}`);
-    
+      
     this.products[index] = { ...this.products[index], ...updatedFields };
 
     this.saveProducts();
-    console.log(`Producto con ID ${id} actualizado...`);
     this.getProductById(id);
   }  
 
@@ -111,9 +101,7 @@ export default class ProductManager {
       console.error(`Error: Producto con id ${id} no encontrado.`);
       return
     }
-    console.log(`Eliminando producto con id ${id}...`)
     this.products = this.products.filter((product) => product.id !== id);
     this.saveProducts();
-    console.log(`Producto ${id} eliminado.`)
   }
 }

@@ -18,18 +18,6 @@ router.get('/', async (req, res) => {
   )
 })
 
-router.get('/realtimeproducts', async (req, res) => {
-  const products = await productManagerInstance.getProducts();
-  res.render(
-    "realTimeProducts",
-    {
-      style: "index.css",
-      products: products,
-      layout: 'products'
-    }
-  )
-})
-
 router.get('/:productId', async (req, res) => {
   let productId = +req.params.productId;
   let product = await productManagerInstance.getProductById(productId);

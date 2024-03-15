@@ -9,26 +9,8 @@
     "stock": 25
   },
   {
-    "id": 3,
-    "title": "producto prueba3",
-    "description": "Este es un producto de prueba",
-    "price": 200,
-    "thumbnail": "Sin imagen",
-    "code": "abc123456",
-    "stock": 25
-  },
-  {
     "id": 4,
     "title": "producto prueba4",
-    "description": "Este es un producto de prueba",
-    "price": 200,
-    "thumbnail": "Sin imagen",
-    "code": "abc123456",
-    "stock": 25
-  },
-  {
-    "id": 5,
-    "title": "producto prueba5",
     "description": "Este es un producto de prueba",
     "price": 200,
     "thumbnail": "Sin imagen",
@@ -47,13 +29,47 @@
     "thumbnails": []
   },
   {
-    "id": 7,
-    "title": "producto prueba por put",
-    "description": "Este es un producto de prueba",
-    "code": "abc1234567",
-    "price": 2200,
+    "id": 8,
+    "title": "productoform",
+    "description": "metido desde el form",
+    "price": "20",
     "status": true,
-    "stock": 40,
-    "thumbnails": []
+    "thumbnails": "asdsad",
+    "code": "231243",
+    "stock": "23",
+    "category": "remera"
+  },
+  {
+    "id": 9,
+    "title": "producto prueba 5",
+    "description": "producto de prueba",
+    "price": "40",
+    "status": true,
+    "thumbnails": "imagen2",
+    "code": "232123",
+    "stock": "54",
+    "category": "remera"
+  },
+  {
+    "id": 10,
+    "title": "producto prueba 3",
+    "description": "producto 3",
+    "price": "20",
+    "status": true,
+    "thumbnails": "asdsad",
+    "code": "121389431",
+    "stock": "23",
+    "category": "remera"
+  },
+  {
+    "id": 11,
+    "title": "agregadodeForm",
+    "description": "descrpition",
+    "price": "2000",
+    "status": true,
+    "thumbnails": "imagencita",
+    "code": "23191238",
+    "stock": "23",
+    "category": "remera"
   }
 ]
