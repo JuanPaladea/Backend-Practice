@@ -84,7 +84,7 @@ router.delete('/:productId', async (req, res) => {
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
 
-  res.send({status:'success', message:'producto eliminado'});
+  res.send({status:'success', message:'producto eliminado' + productId});
 })
 
 export default router

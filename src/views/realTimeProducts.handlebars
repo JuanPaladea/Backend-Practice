@@ -3,17 +3,17 @@
     <p class="product-title">{{this.title}}</p>
     <p class="product-description">{{this.description}}</p>
     <p class="product-price">${{this.price}}</p>
-    <form action="/{{this.id}}" method="DELETE">
-      <button type="submit" class="btn-delete">Delete</button>
-    </form>
+    <div>
+      <button type="button" onclick="handleDeleteProduct('{{this.id}}')">Delete</button>
+    </div>
   </div>
 {{/each}}
 
-<form id="addProductForm" action="/" method="POST">
-  <input type="text" name="title" placeholder="Title" required>
-  <input type="text" name="description" placeholder="Description" required>
-  <input type="number" name="price" placeholder="Price" required>
-  <button type="submit">Add Product</button>
+<form id="addProductForm">
+  <input type="text" id="title" name="title" placeholder="Title" required>
+  <input type="text" id="description" name="description" placeholder="Description" required>
+  <input type="number" id="price" name="price" placeholder="Price" required>
+  <button type="button" onclick="handleAddProduct()">Add Product</button>
 </form>
 
 <script src="/socket.io/socket.io.js"></script>

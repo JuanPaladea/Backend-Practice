@@ -30,12 +30,7 @@ const httpServer = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-export const socketServer = new Server(httpServer);
+const socketServer = new Server(httpServer);
 socketServer.on("connection", socket => {
   console.log("Nuevo cliente conectado -----> ", socket.id);
-
-  socket.on('mensaje', (data) => {
-    console.log('Mensaje recibido desde el cliente:', data);
-  });
-
 })
