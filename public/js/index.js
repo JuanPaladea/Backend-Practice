@@ -3,6 +3,9 @@ const socket = io();
 socket.emit('mensaje','Mensaje recibido desde el cliente');
 
 // Solicita al servidor los productos para renderizar por primera vez, get Products emite un receiveProducts que envia los products al cliente; al escuchar el receiveProducts llama a RenderProducts
+function getProducts() {
+  socket.emit('getProducts')
+}
 getProducts()
 
 socket.on('receiveProducts', products => {
@@ -38,9 +41,6 @@ function deleteProduct(productId) {
   getProducts()
 }
 
-function getProducts() {
-  socket.emit('getProducts')
-}
 
 function renderProducts(products) {
   const productsContainer = document.getElementById("products-container");
