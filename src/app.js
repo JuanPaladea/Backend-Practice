@@ -22,11 +22,12 @@ app.set("view engine", "handlebars");
 
 const connection = async () => {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017", {dbName: "products"})
+    await mongoose.connect("mongodb+srv://juanpaladea:<Lsxp#Ae7M$.fmNv>@database.hkfmtm1.mongodb.net/?retryWrites=true&w=majority&appName=DataBase", {dbName: "products"})
   } catch (error) {
     console.error(error)
   }
 }
+connection()
 
 //BIENVENIDA
 app.get('/', (req, res) => {
