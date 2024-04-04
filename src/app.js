@@ -22,7 +22,7 @@ app.set("view engine", "handlebars");
 
 const connection = async () => {
   try {
-    await mongoose.connect("mongodb+srv://juanpaladea:<Lsxp#Ae7M$.fmNv>@database.hkfmtm1.mongodb.net/?retryWrites=true&w=majority&appName=DataBase", {dbName: "products"})
+    await mongoose.connect("mongodb+srv://juanpaladea:coderpaladea@database.hkfmtm1.mongodb.net/?retryWrites=true&w=majority&appName=DataBase", {dbName: "ecommerce"})
   } catch (error) {
     console.error(error)
   }
