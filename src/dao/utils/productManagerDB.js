@@ -5,7 +5,7 @@ export default class ProductManagerDB {
     if (limit) {
       return this.products.slice(0, limit);
     }
-    return productModel.find()
+    return productModel.find().lean()
   }
 
   addProduct(productData) {
