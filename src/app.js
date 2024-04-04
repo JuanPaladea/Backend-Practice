@@ -10,6 +10,10 @@ import mongoose from 'mongoose';
 const app = express();
 const productManagerInstance = new ProductManager("data/products.json")
 
+//MONGOOSE
+const uri = "mongodb+srv://juanpaladea:coderpaladea@database.hkfmtm1.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=DataBase"
+mongoose.connect(uri)
+
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(express.static(`${__dirname}/../public`));
@@ -17,16 +21,6 @@ app.use(express.static(`${__dirname}/../public`));
 app.engine("handlebars", handlebars.engine());
 app.set("views",`${__dirname}/views`);
 app.set("view engine", "handlebars");
-
-//MONGOOSE
-const connection = async () => {
-  try {
-    await mongoose.connect("mongodb+srv://juanpaladea:coderpaladea@database.hkfmtm1.mongodb.net/?retryWrites=true&w=majority&appName=ecommerce", {dbName: "ecommerce"})
-  } catch (error) {
-    console.error(error)
-  }
-}
-connection()
 
 //BIENVENIDA
 app.get('/', (req, res) => {

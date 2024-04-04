@@ -3,9 +3,35 @@ import mongoose from "mongoose";
 const productsCollection = 'products'
 
 const productsSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  price: Number,
+  title: {
+    type: String
+  }, 
+  description: {
+    type: String
+  },
+  code: {
+    type: String
+  },
+  price: {
+    type: Number
+  },
+  status: {
+    type: String,
+    require: true,
+    default: true
+  },
+  stock : {
+    type: Number,
+  },
+  category: {
+    type: String
+  },
+  thumbnails: {
+    type: String,
+    default: []
+  }
 })
 
-export const productModel = mongoose.model(productsCollection, productsSchema);
+const productModel = mongoose.model(productsCollection, productsSchema);
+
+export default productModel;
