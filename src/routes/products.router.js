@@ -1,13 +1,13 @@
 import { Router } from "express";
-import ProductManager from '../utils/productManager.js'
+import ProductManager from "../dao/utils/productManager.js";
+import { productModel } from "../dao/models/productsModel.js";
 
 const router = Router();
 
 const productManagerInstance = new ProductManager('data/products.json');
 
 router.get('/', async (req, res) => {
-  let limit = +req.query.limit;
-  const products = await productManagerInstance.getProducts(limit);
+  const products = await productModel.find();
   res.render(
     "home",
     {
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
   const { title, description, code, price, stock, category } = req.body;
 
   try {
-    await productManagerInstance.addProduct({
+    await productModel.insertOne({
       title,
       description,
       code,

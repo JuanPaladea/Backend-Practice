@@ -4,7 +4,7 @@ import cartsRouter from "./routes/carts.router.js"
 import productsRouter from "./routes/products.router.js"
 import { Server } from "socket.io";
 import { __dirname } from './utils.js';
-import ProductManager from './utils/productManager.js';
+import ProductManager from './dao/utils/productManager.js';
 import mongoose from 'mongoose';
 
 const app = express();
@@ -19,10 +19,9 @@ app.set("views",`${__dirname}/views`);
 app.set("view engine", "handlebars");
 
 //MONGOOSE
-
 const connection = async () => {
   try {
-    await mongoose.connect("mongodb+srv://juanpaladea:coderpaladea@database.hkfmtm1.mongodb.net/?retryWrites=true&w=majority&appName=DataBase", {dbName: "ecommerce"})
+    await mongoose.connect("mongodb+srv://juanpaladea:coderpaladea@database.hkfmtm1.mongodb.net/?retryWrites=true&w=majority&appName=ecommerce", {dbName: "ecommerce"})
   } catch (error) {
     console.error(error)
   }
