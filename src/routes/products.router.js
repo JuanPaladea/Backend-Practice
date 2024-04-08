@@ -7,7 +7,7 @@ const router = Router();
 const productManagerService = new ProductManagerDB()
 
 router.get('/', async (req, res) => {
-  let limit = +req.query.limit;
+  let limit = req.query.limit;
   const products = await productManagerService.getProducts(limit);
   res.render(
     "home",
@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:productId', async (req, res) => {
-  let productId = +req.params.productId;
+  let productId = req.params.productId;
   let product = await productManagerService.getProductById(productId);
 
   if (!product) {
@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:productId', async (req, res) => {
-  const productId = +req.params.productId;
+  const productId = req.params.productId;
   const productData = req.body;
 
   try {
@@ -64,7 +64,7 @@ router.put('/:productId', async (req, res) => {
 })
 
 router.delete('/:productId', async (req, res) => {
-  const productId = +req.params.productId;
+  const productId = req.params.productId;
   
   try {
     await productManagerService.deleteProduct(productId);

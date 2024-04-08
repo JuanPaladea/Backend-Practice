@@ -1,13 +1,15 @@
 import { Router } from "express";
-import CartManager from "../dao/utils/cartManager.js";
+// import CartManager from "../dao/utils/cartManager.js";
+import CartManagerDB from "../dao/utils/cartManagerDB.js";
 
 const router = Router();
 
-const cartManagerInstance = new CartManager('data/carts.json')
+// const cartManagerInstance = new CartManager('data/carts.json')
+const cartManagerService = new CartManagerDB()
 
 router.post('/', async (req, res) => {
   try {
-    await cartManagerInstance.addCart();
+    await cartManagerService.addCart();
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
@@ -17,11 +19,11 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/:cid/product/:pid', async (req, res) => {
-  const cartId = +req.params.cid;
+  const cartId = req.params.cid;
   const productId = req.params.pid;
   
   try {
-    await cartManagerInstance.addProductToCart(cartId, productId);
+    await cartManagerService.addProductToCart(cartId, productId);
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
@@ -30,8 +32,8 @@ router.post('/:cid/product/:pid', async (req, res) => {
 })
 
 router.get('/:cid', async (req, res) => {
-  const cartId = +req.params.cid;
-  const cart = await cartManagerInstance.getCart(cartId);
+  const cartId = req.params.cid;
+  const cart = await cartManagerService.getCart(cartId);
   if (!cart) {
     return res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
