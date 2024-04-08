@@ -55,17 +55,19 @@ export default class ProductManagerDB {
       console.error(`Error: Producto con código ${updatedFields.code} ya existe.`);
       return
     }
-      
+    
+    productModel.findOneAndUpdate({_id: id}, updatedFields)
     
   }  
 
   deleteProduct(id) {
-    const index = this.products.findIndex((product) => product.id === id);
-    if (index === -1) {
+    const product = productModel.find({_id: id});
+
+    if (!product) {
       console.error(`Error: Producto con id ${id} no encontrado.`);
-      return
+      return;
     }
-    this.products = this.products.filter((product) => product.id !== id);
-    this.saveProducts();
+
+    productModel.deleteOne({_id: id})
   }
 }

@@ -1,9 +1,9 @@
 import { Router } from "express";
-import ProductManager from "../dao/utils/productManager.js";
+// import ProductManager from "../dao/utils/productManager.js";
 import ProductManagerDB from "../dao/utils/productManagerDB.js";
 const router = Router();
 
-const productManagerInstance = new ProductManager('data/products.json');
+// const productManagerInstance = new ProductManager('data/products.json');
 const productManagerService = new ProductManagerDB()
 
 router.get('/', async (req, res) => {
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:productId', async (req, res) => {
   let productId = +req.params.productId;
-  let product = await productManagerInstance.getProductById(productId);
+  let product = await productManagerService.getProductById(productId);
 
   if (!product) {
     return res.send({error: 'Producto no encontrado'});
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
   const { title, description, code, price, stock, category } = req.body;
 
   try {
-    await productManagerInstance.addProduct({
+    await productManagerService.addProduct({
       title,
       description,
       code,
@@ -54,7 +54,7 @@ router.put('/:productId', async (req, res) => {
   const productData = req.body;
 
   try {
-    await productManagerInstance.updateProduct(productId, productData);
+    await productManagerService.updateProduct(productId, productData);
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
@@ -67,7 +67,7 @@ router.delete('/:productId', async (req, res) => {
   const productId = +req.params.productId;
   
   try {
-    await productManagerInstance.deleteProduct(productId);
+    await productManagerService.deleteProduct(productId);
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
