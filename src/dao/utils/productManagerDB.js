@@ -14,13 +14,14 @@ export default class ProductManagerDB {
 
   async addProduct(productData) {
     try {
-      if (!productData.title || !productData.description || !productData.price || !productData.code || !productData.stock) {
+      if (!productData.title || !productData.description || !productData.price || !productData.code || !productData.stock || !productData.category) {
         console.error("Error: Todos los campos son obligatorios.");
         return;
       }
       
-      const codeExist = await productModel.find({code: productData.code});
-      if (codeExist > 0) {
+      const codeExist = await productModel.findOne({code: productData.code});
+      console.log(codeExist)
+      if (codeExist) {
         console.error(`Error: Producto con código ${productData.code} ya existe.`);
         return    
       }
@@ -35,7 +36,7 @@ export default class ProductManagerDB {
 
   async getProductById(id) {
     try {
-      const product = await productModel.find({_id: id});
+      const product = await productModel.findOne({_id: id});
   
       if (!product) {
         console.error(`Error: Producto con id ${id} no encontrado.`);
@@ -55,14 +56,14 @@ export default class ProductManagerDB {
         return;
       }
     
-      const product = await productModel.find({_id: id});
+      const product = await productModel.findOne({_id: id});
     
       if (!product) {
         console.error(`Error: Producto con ID ${id} no encontrado.`);
         return;
       }
   
-      if (updatedFields.code && productModel.find({code: updatedFields.code})) {
+      if (updatedFields.code && productModel.findOne({code: updatedFields.code})) {
         console.error(`Error: Producto con código ${updatedFields.code} ya existe.`);
         return
       }
@@ -75,7 +76,7 @@ export default class ProductManagerDB {
 
   async deleteProduct(id) {
     try {
-      const product = await productModel.find({_id: id});
+      const product = await productModel.findOne({_id: id});
   
       if (!product) {
         console.error(`Error: Producto con id ${id} no encontrado.`);

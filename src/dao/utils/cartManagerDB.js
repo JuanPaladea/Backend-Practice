@@ -11,7 +11,7 @@ export default class CartManagerDB {
 
   async addProductToCart(cartid, productId, quantity = 1) {
     try {
-      const cart = await cartModel.find({_id: cartid});
+      const cart = await cartModel.findOne({_id: cartid});
       if (!cart) {
         return console.error(error)
       }
@@ -40,6 +40,18 @@ export default class CartManagerDB {
         return
       }
       return cart;
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async deleteCart(id) {
+    try {
+      const cart = await cartModel.deleteOne({_id: id})
+      if (!cart) {
+        console.error('Carrito no encontrado')
+        return
+      }
     } catch (error) {
       console.error(error)
     }
