@@ -1,12 +1,9 @@
 import productModel from "../models/productsModel.js";
 
 export default class ProductManagerDB {
-  async getProducts(limit) {
+  async getProducts(limit, page, query) {
     try {
-      if (limit) {
-        return await productModel.find().lean().limit(limit)
-      }
-      return await productModel.find().lean()
+      return await productModel.find(query).limit(limit).skip((page - 1) * limit).lean()
     } catch (error) {
       console.error(error)
     }

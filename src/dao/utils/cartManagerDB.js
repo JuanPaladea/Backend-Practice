@@ -56,4 +56,15 @@ export default class CartManagerDB {
       console.error(error)
     }
   }
+
+  async deleteProductFromCart(cartId, productId) {
+    try {
+      await cartModel.findOneAndUpdate(
+        {_id: cartId},
+        { $pull: {products: productId}},
+      )
+    } catch (error) {
+      console.error(error)
+    }
+  }
 }

@@ -7,16 +7,13 @@ const router = Router();
 const productManagerService = new ProductManagerDB()
 
 router.get('/', async (req, res) => {
-  let limit = req.query.limit;
-  const products = await productManagerService.getProducts(limit);
-  res.render(
-    "home",
-    {
-      style: "index.css",
-      products: products,
-      layout: 'products',
-    }
-  )
+  try {
+    let { limit = 10, page = 1, query = {}} = req.query;
+    const products = await productManagerService.getProducts(limit, page, query);
+    res.send({products})
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 router.get('/:productId', async (req, res) => {

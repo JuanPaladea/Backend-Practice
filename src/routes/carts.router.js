@@ -53,4 +53,15 @@ router.delete("/:cid", async (req, res) => {
   }
 })
 
+router.delete("/:cid/products/:pid", async (req, res) => {
+  const cartId = req.params.cid;
+  const productId = req.params.pid
+  try {
+    await cartManagerService.deleteProductFromCart(cartId, productId)
+    res.send('Producto ' + productId + ' eliminado del carrito')
+  } catch (error) {
+    console.error(error)
+  }
+})
+
 export default router
