@@ -2,13 +2,14 @@ import express from 'express'
 import handlebars from "express-handlebars";
 import cartsRouter from "./routes/carts.router.js"
 import productsRouter from "./routes/products.router.js"
+import messagesRouter from "./routes/messages.router.js"
 import { Server } from "socket.io";
 import { __dirname } from './utils.js';
 import ProductManager from './dao/utils/productManager.js';
 import mongoose from 'mongoose';
 
 const app = express();
-const productManagerInstance = new ProductManager("data/products.json")
+const productManagerInstance = new ProductManager("src/data/products.json")
 
 //MONGOOSE
 const uri = "mongodb+srv://juanpaladea:coderpaladea@database.hkfmtm1.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=DataBase"
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 //ROUTES
 app.use("/api/products", productsRouter)
 app.use("/api/carts", cartsRouter)
+app.use("/chat", messagesRouter)
 
 //PORT LISTEN
 const port = 8080;

@@ -11,4 +11,6 @@ const messagesSchema = new mongoose.Schema({
   }
 })
 
-export const cartModel = mongoose.model(messagesCollection, messagesSchema);
+const messageModel = mongoose.model(messagesCollection, messagesSchema);
+
+export default messageModel
