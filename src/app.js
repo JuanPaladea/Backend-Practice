@@ -39,17 +39,6 @@ const httpServer = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-// REAL TIME PRODUCTS
-app.get('/realtimeproducts', async (req, res) => {
-  res.render(
-    "realTimeProducts",
-    {
-      style: "index.css",
-      layout: 'products'
-    }
-  )
-})
-
 // SOCKET SERVER
 const socketServer = new Server(httpServer);
 socketServer.on("connection", socket => {
