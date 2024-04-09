@@ -1,6 +1,10 @@
-<div>
-  {{#each chat}}
-    <p>User: {{this.user}}</p>
-    <p>Message: {{this.message}}</p>
-  {{/each}}
-</div>
+<form>
+  <input type="text" id="user" name="user" placeholder="user" required>
+  <input type="text" id="message" name="message" placeholder="message" required>
+  <button type="button" onclick="addMessage()">Add Message</button>
+</form>
+  <div id="messagesBox">
+  </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

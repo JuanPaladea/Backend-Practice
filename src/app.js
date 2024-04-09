@@ -2,14 +2,12 @@ import express from 'express'
 import handlebars from "express-handlebars";
 import cartsRouter from "./routes/carts.router.js"
 import productsRouter from "./routes/products.router.js"
-import messagesRouter from "./routes/messages.router.js"
 import { Server } from "socket.io";
 import { __dirname } from './utils.js';
-import ProductManager from './dao/utils/productManager.js';
 import mongoose from 'mongoose';
+import messagesManagerDB from './dao/utils/messageManagerDB.js';
 
 const app = express();
-const productManagerInstance = new ProductManager("src/data/products.json")
 
 //MONGOOSE
 const uri = "mongodb+srv://juanpaladea:coderpaladea@database.hkfmtm1.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=DataBase"
@@ -31,7 +29,6 @@ app.get('/', (req, res) => {
 //ROUTES
 app.use("/api/products", productsRouter)
 app.use("/api/carts", cartsRouter)
-app.use("/chat", messagesRouter)
 
 //PORT LISTEN
 const port = 8080;
@@ -39,21 +36,29 @@ const httpServer = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-// SOCKET SERVER
+// SOCKET SERVER CHAT
 const socketServer = new Server(httpServer);
+const messagesManagerService = new messagesManagerDB()
+
+app.get('/chat', async (req, res) => {
+  const chat = await messagesManagerService.getMessages({})
+  res.render(
+    "chat",
+    {
+      style: 'index.css',
+      layout: 'main',
+      chat: chat
+    }
+  )
+})
+
 socketServer.on("connection", socket => {
-  console.log("Nuevo cliente conectado -----> ", socket.id);
-
-  socket.on("addProduct", async productData => {
-    await productManagerInstance.addProduct(productData)
+  socket.on("addMessage", async messageData => {
+    await messagesManagerService.addMessage(messageData.user, messageData.message)
   })
 
-  socket.on("deleteProduct", async productId => {
-    await productManagerInstance.deleteProduct(productId)
+  socket.on("getMessages", async () => {
+    const message = await messagesManagerService.getMessages()
+    socket.emit("receiveMessages", message)
   })
-
-  socket.on("getProducts", async () => {
-    const products = await productManagerInstance.getProducts();
-    socket.emit("receiveProducts", products);
-  });
 })
