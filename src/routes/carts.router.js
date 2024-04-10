@@ -28,7 +28,7 @@ router.get('/:cid', async (req, res) => {
   }
 })
 
-router.post('/:cid/product/:pid', async (req, res) => {
+router.post('/:cid/products/:pid', async (req, res) => {
   const cartId = req.params.cid;
   const productId = req.params.pid;
   
@@ -44,9 +44,8 @@ router.post('/:cid/product/:pid', async (req, res) => {
 router.put('/:cid', async (req, res) => {
   const cartId = req.query.cid
   const products = req.body.products
-
   try {
-    await cartManagerService.updateCart(cartId)
+    await cartManagerService.updateCart(cartId, products)
   } catch (error) {
     console.error(error)
   }
@@ -54,8 +53,8 @@ router.put('/:cid', async (req, res) => {
 
 router.put('/:cid/products/:pid', async (req, res) => {
   const cartId = req.query.cid
-  const productId= req.query.pid
-
+  const productId = req.query.pid
+  const quantity = +req.body.quantity 
   try {
     await cartManagerService.updateProductQuantity(cartId, productId, quantity)
   } catch (error) {

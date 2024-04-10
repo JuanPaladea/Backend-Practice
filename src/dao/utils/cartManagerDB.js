@@ -24,8 +24,9 @@ export default class CartManagerDB {
   }
 
   async updateCart(cartId, products) {
+    console.log(products)
     try {
-      await cartModel.findByIdAndUpdate(cartId, { products: products})
+      return await cartModel.findByIdAndUpdate(cartId, {"products.product": {products}})
     } catch (error) {
       console.error(error)
     }
@@ -33,9 +34,9 @@ export default class CartManagerDB {
 
   async updateProductQuantity(cartId, productId, quantity) {
     try {
-      cartModel.updateOne(
-        {"_id": cartId, "products._id": productId},
-        {$inc: {"products.$.quantity": quantity}}
+      return cartModel.updateOne(
+        {"_id": cartId, "products.product": productId},
+        {$set: {"products.quantity": quantity}}
       )
     } catch (error) {
       console.error(error)
@@ -52,7 +53,7 @@ export default class CartManagerDB {
       if (existingProduct) {
         await cartModel.updateOne(
           {"products.product": productId},
-          {$inc : {"products.$.quantity": quantity++}}  
+          {$inc : {"products.$.quantity": 1}}  
         )
       } else {
         await cartModel.updateOne(
