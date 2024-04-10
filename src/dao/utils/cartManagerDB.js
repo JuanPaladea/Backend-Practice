@@ -1,9 +1,42 @@
 import {cartModel} from "../models/cartsModel.js";
 
-export default class CartManagerDB {
+export default class CartManagerDB {  
+  
   async addCart() {
     try {
-      await cartModel.create({ products: [] })
+      await cartModel.create({})
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async getCart(id) {
+    try {
+      const cart = await cartModel.findOne({_id: id});
+      if (!cart) {
+        console.error('Carrito no encontrado')
+        return
+      }
+      return cart;
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async updateCart(cartId, products) {
+    try {
+      await cartModel.findByIdAndUpdate(cartId, { products: products})
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async updateProductQuantity(cartId, productId, quantity) {
+    try {
+      cartModel.updateOne(
+        {"_id": cartId, "products._id": productId},
+        {$inc: {"products.$.quantity": quantity}}
+      )
     } catch (error) {
       console.error(error)
     }
@@ -32,19 +65,6 @@ export default class CartManagerDB {
     }
   }
 
-  async getCart(id) {
-    try {
-      const cart = await cartModel.findOne({_id: id});
-      if (!cart) {
-        console.error('Carrito no encontrado')
-        return
-      }
-      return cart;
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   async deleteCart(id) {
     try {
       const cart = await cartModel.deleteOne({_id: id})
@@ -52,6 +72,14 @@ export default class CartManagerDB {
         console.error('Carrito no encontrado')
         return
       }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async deleteAllProductsFromCart(cartId) {
+    try {
+      await cartModel.findByIdAndUpdate(cartId, { products : []})
     } catch (error) {
       console.error(error)
     }

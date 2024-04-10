@@ -10,7 +10,10 @@ router.get('/', async (req, res) => {
   try {
     let { limit = 10, page = 1, query = {}} = req.query;
     const products = await productManagerService.getProducts(limit, page, query);
-    res.send({products})
+    res.send({
+      status: 'success',
+      payload: products
+    })
   } catch (error) {
     console.error(error)
   }
