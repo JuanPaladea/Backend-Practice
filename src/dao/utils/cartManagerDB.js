@@ -24,22 +24,29 @@ export default class CartManagerDB {
     }
   }
 
-  // NO FUNCIONA
-  async updateCart(cartId, products) {
-    console.log(products)
+  async getAllCarts() {
     try {
-      return await cartModel.findByIdAndUpdate(cartId, {$set: {products: products}})
+      const carts = await cartModel.find();
+      return carts
     } catch (error) {
       console.error(error)
     }
   }
 
-  // NO FUNCIONA
+  async updateCart(cartId, products) {
+    console.log(cartId, products)
+    try {
+      return await cartModel.findByIdAndUpdate(cartId, {products: products})
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   async updateProductQuantity(cartId, productId, quantity) {
     try {
       return cartModel.updateOne(
-        {"_id": cartId, products: {product: productId}},
-        {$set: { products : {quantity: quantity} }}
+        {"_id": cartId, "products.product": productId},
+        {$set: {"products.$.quantity": quantity}}
       )
     } catch (error) {
       console.error(error)
