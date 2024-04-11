@@ -30,12 +30,15 @@ router.get('/', async (req, res) => {
 
 router.get('/:productId', async (req, res) => {
   let productId = req.params.productId;
-  let product = await productManagerService.getProductById(productId);
-
-  if (!product) {
-    return res.send({error: 'Producto no encontrado'});
+  try {
+    const product = await productManagerService.getProductById(productId);
+    if (!product) {
+      return res.send({error: 'Producto no encontrado'});
+    }
+    res.send({product})
+  } catch (error) {
+    console.error(error)
   }
-  res.send({product})
 })
 
 router.post('/', async (req, res) => {
@@ -51,11 +54,11 @@ router.post('/', async (req, res) => {
       stock,
       category,
     })
+    res.send({status:'success', message:'producto agregado'});  
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
-  res.send({status:'success', message:'producto agregado'});  
 })
 
 router.put('/:productId', async (req, res) => {
@@ -64,12 +67,11 @@ router.put('/:productId', async (req, res) => {
 
   try {
     await productManagerService.updateProduct(productId, productData);
+    res.send({status:'success', message:'producto editado'});
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
-
-  res.send({status:'success', message:'producto editado'});
 })
 
 router.delete('/:productId', async (req, res) => {
@@ -77,12 +79,11 @@ router.delete('/:productId', async (req, res) => {
   
   try {
     await productManagerService.deleteProduct(productId);
+    res.send({status:'success', message:'producto eliminado ' + productId});
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
-
-  res.send({status:'success', message:'producto eliminado ' + productId});
 })
 
 export default router

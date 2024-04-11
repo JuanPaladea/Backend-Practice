@@ -9,11 +9,11 @@ const cartManagerService = new CartManagerDB()
 router.post('/', async (req, res) => {
   try {
     await cartManagerService.addCart();
+    res.send({status:'success', message:'carrito creado'});
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
-  res.send({status:'success', message:'carrito creado'});
 })
 
 router.get('/', async (req, res) => {
@@ -43,11 +43,11 @@ router.post('/:cid/products/:pid', async (req, res) => {
 
   try {
     await cartManagerService.addProductToCart(cartId, productId, quantity);
+    res.send({status:'success', message:'producto agregado al carrito'});
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
   }
-  res.send({status:'success', message:'producto agregado al carrito'});
 })
 
 router.put('/:cid', async (req, res) => {
@@ -55,20 +55,19 @@ router.put('/:cid', async (req, res) => {
   const products = req.body.products
   try {
     const cart = await cartManagerService.updateCart(cartId, products)
-    res.send({cart})
+    res.send({status:'success', message:'carrito editado', cart});
   } catch (error) {
     console.error(error)
   }
 })
 
-// NO FUNCIONA
 router.put('/:cid/products/:pid', async (req, res) => {
   const cartId = req.params.cid
   const productId = req.params.pid
   const quantity = req.body.quantity 
   try {
     await cartManagerService.updateProductQuantity(cartId, productId, quantity)
-    res.send({status:'success', message:'cantidad editada'});
+    res.send({status:'success', message:'cantidad editada', cart});
   } catch (error) {
     console.error(error)
   }
