@@ -1,6 +1,7 @@
 import { Router } from "express";
 // import ProductManager from "../dao/utils/productManager.js";
 import ProductManagerDB from "../dao/utils/productManagerDB.js";
+import productModel from "../dao/models/productsModel.js";
 const router = Router();
 
 // const productManagerInstance = new ProductManager('data/products.json');
@@ -14,6 +15,15 @@ router.get('/', async (req, res) => {
       status: 'success',
       payload: products
     })
+  } catch (error) {
+    console.error(error)
+  }
+})
+
+router.get('/paginate', async (req, res) => {
+  try {
+    const products = await productModel.paginate({})
+    res.send({products})
   } catch (error) {
     console.error(error)
   }
