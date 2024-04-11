@@ -4,7 +4,8 @@ export default class CartManagerDB {
   
   async addCart() {
     try {
-      await cartModel.create({})
+      const cart = await cartModel.create({})
+      return cart
     } catch (error) {
       console.error(error)
     }
@@ -12,7 +13,7 @@ export default class CartManagerDB {
 
   async getCart(id) {
     try {
-      const cart = await cartModel.findOne({_id: id});
+      const cart = await cartModel.findById(id);
       if (!cart) {
         console.error('Carrito no encontrado')
         return
@@ -23,20 +24,22 @@ export default class CartManagerDB {
     }
   }
 
+  // NO FUNCIONA
   async updateCart(cartId, products) {
     console.log(products)
     try {
-      return await cartModel.findByIdAndUpdate(cartId, {"products.product": {products}})
+      return await cartModel.findByIdAndUpdate(cartId, {$set: {products: products}})
     } catch (error) {
       console.error(error)
     }
   }
 
+  // NO FUNCIONA
   async updateProductQuantity(cartId, productId, quantity) {
     try {
       return cartModel.updateOne(
-        {"_id": cartId, "products.product": productId},
-        {$set: {"products.quantity": quantity}}
+        {"_id": cartId, products: {product: productId}},
+        {$set: { products : {quantity: quantity} }}
       )
     } catch (error) {
       console.error(error)
@@ -49,6 +52,7 @@ export default class CartManagerDB {
       if (!cart) {
         return console.error(error)
       }
+
       const existingProduct = await cartModel.findOne({"products.product": productId})
       if (existingProduct) {
         await cartModel.updateOne(
@@ -58,7 +62,7 @@ export default class CartManagerDB {
       } else {
         await cartModel.updateOne(
           {_id: cartid},
-          {products: [{product: productId, quantity: quantity}]}  
+          {$push: {products: [{product: productId, quantity: quantity}]}}  
         )
       }
     } catch (error) {
@@ -68,11 +72,7 @@ export default class CartManagerDB {
 
   async deleteCart(id) {
     try {
-      const cart = await cartModel.deleteOne({_id: id})
-      if (!cart) {
-        console.error('Carrito no encontrado')
-        return
-      }
+      return await cartModel.deleteOne({_id: id})
     } catch (error) {
       console.error(error)
     }
@@ -80,7 +80,7 @@ export default class CartManagerDB {
 
   async deleteAllProductsFromCart(cartId) {
     try {
-      await cartModel.findByIdAndUpdate(cartId, { products : []})
+      await cartModel.findByIdAndUpdate(cartId, { products: []})
     } catch (error) {
       console.error(error)
     }
@@ -88,9 +88,9 @@ export default class CartManagerDB {
 
   async deleteProductFromCart(cartId, productId) {
     try {
-      await cartModel.findOneAndUpdate(
+      return await cartModel.findOneAndUpdate(
         {_id: cartId},
-        { $pull: {products: productId}},
+        { $pull: { products: {product: productId}}},
       )
     } catch (error) {
       console.error(error)

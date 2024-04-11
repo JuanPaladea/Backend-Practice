@@ -31,9 +31,10 @@ router.get('/:cid', async (req, res) => {
 router.post('/:cid/products/:pid', async (req, res) => {
   const cartId = req.params.cid;
   const productId = req.params.pid;
-  
+  const quantity = req.body.quantity
+
   try {
-    await cartManagerService.addProductToCart(cartId, productId);
+    await cartManagerService.addProductToCart(cartId, productId, quantity);
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
@@ -41,25 +42,30 @@ router.post('/:cid/products/:pid', async (req, res) => {
   res.send({status:'success', message:'producto agregado al carrito'});
 })
 
+// NO FUNCIONA
 router.put('/:cid', async (req, res) => {
   const cartId = req.query.cid
   const products = req.body.products
   try {
-    await cartManagerService.updateCart(cartId, products)
+    const cart = await cartManagerService.updateCart(cartId, products)
+    res.send({cart})
   } catch (error) {
     console.error(error)
   }
+  res.send({status:'success', message:'producto agregado al carrito'});
 })
 
+// NO FUNCIONA
 router.put('/:cid/products/:pid', async (req, res) => {
   const cartId = req.query.cid
   const productId = req.query.pid
-  const quantity = +req.body.quantity 
+  const quantity = req.body.quantity 
   try {
     await cartManagerService.updateProductQuantity(cartId, productId, quantity)
   } catch (error) {
     console.error(error)
   }
+  res.send({status:'success', message:'cantidad editada'});
 })
 
 router.delete("/:cid", async (req, res) => {
