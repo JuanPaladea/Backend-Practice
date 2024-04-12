@@ -24,7 +24,11 @@ app.set("view engine", "handlebars");
 
 //BIENVENIDA
 app.get('/', (req, res) => {
-  res.send("Bievenido")
+  res.render(
+    "home", {
+      layout: "default"
+    }
+  )
 })
 
 //ROUTES
@@ -36,7 +40,7 @@ app.use("/carts", cartsRouter)
 //PORT LISTEN
 const port = 8080;
 const httpServer = app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port http://localhost:${port}`)
 })
 
 // SOCKET SERVER
