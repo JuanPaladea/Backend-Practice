@@ -13,7 +13,7 @@ export default class CartManagerDB {
 
   async getCart(id) {
     try {
-      const cart = await cartModel.findById(id);
+      const cart = await cartModel.findById(id).populate('products.product').lean();
       if (!cart) {
         console.error('Carrito no encontrado')
         return

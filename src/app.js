@@ -1,7 +1,9 @@
 import express from 'express'
 import handlebars from "express-handlebars";
-import cartsRouter from "./routes/carts.router.js"
+import apiCartsRouter from "./routes/apiCarts.router.js"
+import apiProductsRouter from "./routes/apiProducts.router.js"
 import productsRouter from "./routes/products.router.js"
+import cartsRouter from "./routes/carts.router.js"
 import { Server } from "socket.io";
 import { __dirname } from './utils.js';
 import mongoose from 'mongoose';
@@ -26,8 +28,10 @@ app.get('/', (req, res) => {
 })
 
 //ROUTES
-app.use("/api/products", productsRouter)
-app.use("/api/carts", cartsRouter)
+app.use("/api/products", apiProductsRouter)
+app.use("/api/carts", apiCartsRouter)
+app.use("/products", productsRouter)
+app.use("/cart", cartsRouter)
 
 //PORT LISTEN
 const port = 8080;

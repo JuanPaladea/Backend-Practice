@@ -3,7 +3,7 @@ import productModel from "../models/productsModel.js";
 export default class ProductManagerDB {
   async getProducts(limit, page, query, sort) {
     try {
-      return await productModel.paginate(query, {limit: limit, page: page})
+      return await productModel.paginate(query, {limit: limit, page: page, lean: true, sort: sort})
     } catch (error) {
       console.error(error)
     }
@@ -33,7 +33,7 @@ export default class ProductManagerDB {
 
   async getProductById(id) {
     try {
-      const product = await productModel.findOne({_id: id});
+      const product = await productModel.findOne({_id: id}).lean();
   
       if (!product) {
         console.error(`Error: Producto con id ${id} no encontrado.`);
