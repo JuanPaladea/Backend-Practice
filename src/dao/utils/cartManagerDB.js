@@ -34,7 +34,6 @@ export default class CartManagerDB {
   }
 
   async updateCart(cartId, products) {
-    console.log(cartId, products)
     try {
       return await cartModel.findByIdAndUpdate(cartId, {products: products})
     } catch (error) {
