@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 app.use("/api/products", apiProductsRouter)
 app.use("/api/carts", apiCartsRouter)
 app.use("/products", productsRouter)
-app.use("/cart", cartsRouter)
+app.use("/carts", cartsRouter)
 
 //PORT LISTEN
 const port = 8080;

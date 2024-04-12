@@ -17,7 +17,6 @@ export default class ProductManagerDB {
       }
       
       const codeExist = await productModel.findOne({code: productData.code});
-      console.log(codeExist)
       if (codeExist) {
         console.error(`Error: Producto con código ${productData.code} ya existe.`);
         return    
