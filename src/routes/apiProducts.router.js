@@ -9,7 +9,15 @@ const productManagerService = new ProductManagerDB()
 
 router.get('/', async (req, res) => {
   try {
-    let { limit = 10, page = 1, query = {}, sort = null} = req.query;
+    let { limit = 10, page = 1, query = null, sort = null} = req.query
+
+    if (query) {
+      query = JSON.parse(query);
+    }
+    if (sort) {
+      sort = JSON.parse(sort);
+    }
+
     const result = await productManagerService.getProducts(limit, page, query, sort);
     res.send({
       status: 'success',
@@ -20,8 +28,12 @@ router.get('/', async (req, res) => {
       page: result.page,
       hasPrevPage: result.hasPrevPage,
       hasNextPage: result.hasNextPage,
-      prevLink: result.prevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : null,
-      nextLink: result.nextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : null
+      prevLink: result.prevPage ? `http://localhost:8080/api/products?${query ? `query=${encodeURIComponent(JSON.stringify(query))}` : ''}${limit ? `&limit=${limit}` : ''}${sort ? `&sort=${encodeURIComponent(JSON.stringify(sort))}` : ''}&page=${result.prevPage}` : null,
+      nextLink: result.nextPage ? `http://localhost:8080/api/products?${query ? `query=${encodeURIComponent(JSON.stringify(query))}` : ''}${limit ? `&limit=${limit}` : ''}${sort ? `&sort=${encodeURIComponent(JSON.stringify(sort))}` : ''}&page=${result.nextPage}` : null,
+      limit, 
+      page,
+      query,
+      sort
     })
   } catch (error) {
     console.error(error)

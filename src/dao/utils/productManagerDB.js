@@ -3,7 +3,7 @@ import productModel from "../models/productsModel.js";
 export default class ProductManagerDB {
   async getProducts(limit, page, query, sort) {
     try {
-      return await productModel.paginate(query, {limit: limit, page: page, lean: true, sort: sort})
+      return await productModel.paginate(query, {limit, page, sort, lean: true})
     } catch (error) {
       console.error(error)
     }
