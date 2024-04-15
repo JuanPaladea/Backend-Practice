@@ -7,7 +7,7 @@ const productManagerService = new ProductManagerDB()
 
 router.get('/', async (req, res) => {
   try {
-    let { limit = 8, page = 1, query = {}, sort = null} = req.query;
+    let { limit = 8, page = 1, query = null, sort = null} = req.query;
     const result = await productManagerService.getProducts(limit, page, query, sort);
     res.render(
       "products",
@@ -30,6 +30,19 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/add', async (req, res) => {
+  try {
+    res.render(
+      "addProduct",
+      {
+        layout: "default"
+      }
+    )
+  } catch (error) {
+    console.error(error)
+  }
+})
+
 router.get('/:pid', async (req, res) => {
   const productId = req.params.pid
   try {
@@ -44,6 +57,16 @@ router.get('/:pid', async (req, res) => {
   } catch (error) {
     console.error(error)
   }
+})
+
+router.post('/add', async (req, res) => {
+  const product = req.body.product
+  try {
+    productManagerService.addProduct(product)
+  } catch (error) {
+    console.error(error)
+  }
+  res.send(`producto agregado`)
 })
 
 export default router

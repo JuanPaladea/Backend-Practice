@@ -1,6 +1,6 @@
 <div class="bg-white py-6 sm:py-8 lg:py-12">
   <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
-    <div class="rounded-lg bg-gray-100 px-4 py-6 md:py-8 lg:py-12">
+    <div class="bg-gray-100 px-4 py-6 md:py-8 lg:py-12">
 
       <h2 class="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">Productos</h2>
 
@@ -16,11 +16,11 @@
       {{#each products}}
         <div>
           {{#if this.thumbnails.length}}
-          <a href="http://localhost:8080/products/{{this._id}}" class="group relative mb-2 block h-80 overflow-hidden rounded-lg bg-gray-100 lg:mb-3">
+          <a href="http://localhost:8080/products/{{this._id}}" class="group relative mb-2 block h-80 overflow-hidden bg-gray-100 lg:mb-3">
             <img src="{{this.thumbnails.[0]}}" alt="{{this.title}}" class="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" />
           </a>
           {{else}}
-          <a href="http://localhost:8080/products/{{this._id}}" class="group relative mb-2 block h-80 overflow-hidden rounded-lg bg-gray-100 lg:mb-3">
+          <a href="http://localhost:8080/products/{{this._id}}" class="group relative mb-2 block h-80 overflow-hidden bg-gray-100 lg:mb-3">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ5BVHgJRJeqFMG_LvNuo3W_xmPgtmNRZ49qOSI4gxsA&s" alt="" class="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" />
           </a>
           {{/if}}
@@ -36,24 +36,46 @@
   </div>
 </div>
 
-<div class="flex justify-between bg-white py-6 sm:py-8 lg:py-12 mx-auto max-w-screen-2xl px-4 md:px-8">
-  {{#if hasPrevPage}}
-  <a href="{{prevLink}}" class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">
-    Anterior
-  </a>
-  {{else}}
-    <a class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-gray-200 border border-gray-300 rounded-lg cursor-not-allowed">
-    Anterior
-  </a>
-  {{/if}}
+<nav class="flex bg-white py-6 sm:py-8 lg:py-12 mx-auto max-w-screen-2xl px-4 md:px-8">
+  <ul class="flex bg-white mx-auto">
+    {{#if hasPrevPage}}
+      <li>
+        <a href="{{prevLink}}" class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+          Anterior
+        </a>
+        {{else}}
+          <a class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-gray-200 border border-gray-300 cursor-not-allowed">
+          Anterior
+        </a>
+      </li>
+    {{/if}}
 
-  {{#if hasNextPage}}
-  <a href="{{nextLink}}" class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">
-    Siguiente
-  </a>
-  {{else}}
-    <a class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-gray-200 border border-gray-300 rounded-lg cursor-not-allowed">
-    Siguiente
-  </a>
-  {{/if}}
-</div>
+    {{#if hasPrevPage}}
+      <li>
+        <a href='http://localhost:8080/products/?page={{prevPage}}' class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{prevPage}}</a>
+      </li>
+    {{/if}}
+
+    <li>
+      <a href="#" aria-current="page" class="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{page}}</a>
+    </li>
+
+    {{#if hasNextPage}}
+      <li>
+        <a href='http://localhost:8080/products/?page={{nextPage}}' class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{nextPage}}</a>
+      </li>
+    {{/if}}
+
+    {{#if hasNextPage}}
+      <li>
+        <a href="{{nextLink}}" class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+          Siguiente
+        </a>
+      {{else}}
+        <a class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-gray-200 border border-gray-300 cursor-not-allowed">
+        Siguiente
+        </a>
+      </li>
+    {{/if}}
+  </ul>
+</nav>
