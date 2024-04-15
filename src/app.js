@@ -26,7 +26,8 @@ app.set("view engine", "handlebars");
 app.get('/', (req, res) => {
   res.render(
     "home", {
-      layout: "default"
+      layout: "default",
+      title: 'Backend Juan Paladea'
     }
   )
 })

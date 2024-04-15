@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const productForm = document.getElementById('addProductForm')
 const productTitle = document.getElementById('title')
 const productDescription = document.getElementById('description')
@@ -21,11 +19,11 @@ productForm.addEventListener('submit', async (e) => {
   });
   
   console.log(product)
+  
+  try {
+    const response = await axios.post('/products/add', {product})
+    console.log(response.data)
+  } catch (error) {
+    console.error(error)
+  }
 })
-
-try {
-  const response = await axios.post('/add', {product})
-  console.log(response.data)
-} catch (error) {
-  console.error(error)
-}

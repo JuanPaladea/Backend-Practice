@@ -14,7 +14,8 @@ router.get('/:cid', async (req, res) => {
     {
       layout: 'default',
       style: 'index.css',
-      products: cart.products
+      products: cart.products,
+      title: 'Backend Juan Paladea | Carrito'
     })
   } catch (error) {
     console.error(error)

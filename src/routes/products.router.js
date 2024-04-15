@@ -15,6 +15,7 @@ router.get('/', async (req, res) => {
       layout: "default",
       style: "index.css",
       status: 'success',
+      title: 'Backend Juan Paladea | Productos',
       products: result.docs,
       totalPages: result.totalPages,
       prevPage: result.prevPage,
@@ -35,7 +36,9 @@ router.get('/add', async (req, res) => {
     res.render(
       "addProduct",
       {
-        layout: "default"
+        layout: "default",
+        script: 'addProduct.js',
+        title: 'Backend Juan Paladea | Agregar producto'
       }
     )
   } catch (error) {
@@ -51,7 +54,8 @@ router.get('/:pid', async (req, res) => {
       "product",
       {
         layout: "default",
-        style: "index.css",
+        script: 'addToCart.js',
+        title: 'Backend Juan Paladea | ' + product.title,
         product: product
       })
   } catch (error) {
@@ -62,11 +66,11 @@ router.get('/:pid', async (req, res) => {
 router.post('/add', async (req, res) => {
   const product = req.body.product
   try {
-    productManagerService.addProduct(product)
+    await productManagerService.addProduct(product)
+    res.send(`producto agregado`)
   } catch (error) {
     console.error(error)
   }
-  res.send(`producto agregado`)
 })
 
 export default router

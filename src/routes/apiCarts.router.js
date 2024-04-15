@@ -8,8 +8,8 @@ const router = Router();
 const cartManagerService = new CartManagerDB()
 router.post('/', async (req, res) => {
   try {
-    await cartManagerService.addCart();
-    res.send({status:'success', message:'carrito creado'});
+    const cart = await cartManagerService.addCart();
+    res.send({status:'success', message:'carrito creado', cart});
   } catch (error){
     console.error(error)
     res.status(400).send({status:'error', error:'ha ocurrido un error'})
