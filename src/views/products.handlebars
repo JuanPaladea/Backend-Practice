@@ -10,10 +10,10 @@
 </div>
 
   <nav class="flex justify-between bg-white py-6 sm:py-8 mx-auto max-w-screen-2xl px-4 md:px-8">
-    <form class="mb-3 flex gap-2 sm:mb-5">
-        <input placeholder="Funcionalidad pendiente..." class="bg-gray-white w-full flex-1 rounded border h-10 border-gray-300 px-3 py-2 text-gray-800 placeholder-gray-400 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+    <form id="addForm" class="mb-3 flex gap-2 sm:mb-5">
+        <input id="searchInput" type="text" name="query" placeholder="Funcionalidad pendiente..." class="bg-gray-white w-full flex-1 rounded border h-10 border-gray-300 px-3 py-2 text-gray-800 placeholder-gray-400 outline-none ring-indigo-300 transition duration-100 focus:ring" />
 
-        <button class="inline-block rounded bg-indigo-500 px-8 py-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">Buscar</button>
+        <button id="searchButton" type="submit" class="inline-block rounded bg-indigo-500 px-8 py-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">Buscar</button>
     </form>
     <ul class="flex bg-white">
       <li>
@@ -99,3 +99,5 @@
     {{/if}}
   </ul>
 </nav>
+
+<script src="/js/{{script}}"></script>

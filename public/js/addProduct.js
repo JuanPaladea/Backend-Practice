@@ -17,13 +17,19 @@ productForm.addEventListener('submit', async (e) => {
   formData.forEach((value, key) => {
     product[key] = value;
   });
-  
-  console.log(product)
-  
+    
   try {
     const response = await axios.post('/products/add', {product})
-    console.log(response.data)
+    alert(response.data)
   } catch (error) {
     console.error(error)
   }
+
+  productTitle.value = '';
+  productDescription.value = '';
+  productCode.value = '';
+  productPrice.value = '';
+  productStock.value = '';
+  productCategory.value = '';
+  productThumbnails.value = '';
 })
