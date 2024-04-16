@@ -7,12 +7,13 @@ import cartsRouter from "./routes/carts.router.js"
 import { Server } from "socket.io";
 import { __dirname } from './utils.js';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const app = express();
 
 //MONGOOSE
-const uri = "mongodb+srv://juanpaladea:coderpaladea@database.hkfmtm1.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=DataBase"
-mongoose.connect(uri)
+mongoose.connect(process.env.MONGODB_URI)
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
