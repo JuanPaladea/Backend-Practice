@@ -1,11 +1,12 @@
 import { Router } from "express";
 import ProductManagerDB from "../dao/utils/productManagerDB.js";
+import auth from "../middlewares/auth.js";
 
 const router = Router();
 
 const productManagerService = new ProductManagerDB()
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     let { limit = 8, page = 1, query = null, sort = null} = req.query;
 
