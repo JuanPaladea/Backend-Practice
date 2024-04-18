@@ -4,10 +4,14 @@ import apiCartsRouter from "./routes/apiCarts.router.js"
 import apiProductsRouter from "./routes/apiProducts.router.js"
 import productsRouter from "./routes/products.router.js"
 import cartsRouter from "./routes/carts.router.js"
+import apiSessionRouter from "./routes/apiSession.router.js"
+import sessionRouter from "./routes/session.router.js"
 import { Server } from "socket.io";
 import { __dirname } from './utils.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import MongoStore from 'connect-mongo';
+import session from 'express-session';
 
 dotenv.config();
 const app = express();
@@ -23,19 +27,41 @@ app.engine("handlebars", handlebars.engine());
 app.set("views",`${__dirname}/views`);
 app.set("view engine", "handlebars");
 
+app.use(session(
+  {
+    store: MongoStore.create(
+      {
+        mongoUrl: process.env.MONGODB_URI,
+        mongoOption: { useUnifiedTopology: true},
+        ttl: 40000
+      }),
+      secret: 'secretPhrase',
+      resave: true,
+      saveUninitialized: true
+  }
+))
+
 //BIENVENIDA
 app.get('/', (req, res) => {
-  res.render(
-    "home", {
-      layout: "default",
-      title: 'Backend Juan Paladea'
-    }
-  )
+  if (req.session.user) {
+    res.render(
+      "home", {
+        layout: "default",
+        title: 'Backend Juan Paladea',
+        user: req.session.user
+      }
+    )
+  } else {
+    res.redirect('/login')
+  }
 })
 
+
 //ROUTES
+app.use('/api/session', apiSessionRouter)
 app.use("/api/products", apiProductsRouter)
 app.use("/api/carts", apiCartsRouter)
+app.use(sessionRouter)
 app.use("/products", productsRouter)
 app.use("/carts", cartsRouter)
 

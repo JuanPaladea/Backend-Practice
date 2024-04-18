@@ -24,7 +24,6 @@ router.get('/', async (req, res) => {
       layout: "default",
       style: "index.css",
       status: 'success',
-      script: 'products.js',
       title: 'Backend Juan Paladea | Productos',
       products: result.docs,
       totalPages: result.totalPages,
