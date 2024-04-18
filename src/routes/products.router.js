@@ -26,6 +26,7 @@ router.get('/', auth, async (req, res) => {
       style: "index.css",
       status: 'success',
       title: 'Backend Juan Paladea | Productos',
+      user: req.session.user,
       products: result.docs,
       totalPages: result.totalPages,
       prevPage: result.prevPage,
@@ -45,7 +46,7 @@ router.get('/', auth, async (req, res) => {
   }
 })
 
-router.get('/add', async (req, res) => {
+router.get('/add', auth, async (req, res) => {
   try {
     res.render(
       "addProduct",
@@ -60,7 +61,7 @@ router.get('/add', async (req, res) => {
   }
 })
 
-router.get('/:pid', async (req, res) => {
+router.get('/:pid', auth, async (req, res) => {
   const productId = req.params.pid
   try {
     const product = await productManagerService.getProductById(productId)

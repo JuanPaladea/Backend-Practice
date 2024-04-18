@@ -1,6 +1,4 @@
 import { Router } from "express";
-import userManagerDB from "../dao/utils/userManagerDB.js";
-import auth from "../middlewares/auth.js";
 
 const router = Router();
 

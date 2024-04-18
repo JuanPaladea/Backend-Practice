@@ -32,7 +32,12 @@ router.post("/login", async (req, res) => {
     }
 
     req.session.user = user
+
+    if (user.email == "adminCoder@coder.com" && user.password == "adminCod3r123") {
+      req.session.user.role = 'admin'
+    }
     res.redirect('/')
+
   } catch (error) {
     console.error('Error during login:', error);
     req.session.failLogin = true;
