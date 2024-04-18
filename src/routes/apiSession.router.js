@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
       return res.redirect('/login')
     }
 
-    req.session.user = result
+    req.session.user = user
     res.redirect('/')
   } catch (error) {
     console.error('Error during login:', error);

@@ -5,5 +5,10 @@
     <div class="flex items-center text-gray-700">
         <h1 class="text-sm">Age: {{user.age}} </h1>
     </div>
+    <div class="flex gap-2.5 py-2">
+      <form action="/api/session/logout" method="POST">
+        <button type="submit"  href="#" class="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-1 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">Cerrar Sesión</button>
+      </form>
+    </div>
   </div>
 </div>
