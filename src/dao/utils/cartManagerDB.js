@@ -2,10 +2,15 @@ import {cartModel} from "../models/cartsModel.js";
 
 export default class CartManagerDB {  
   
-  async addCart() {
+  async addCart(userId) {
     try {
-      const cart = await cartModel.create({})
-      return cart
+      const cartExist = await cartModel.findOne({user: userId})
+      if (cartExist) {
+        return cartExist
+      } else {
+        const cart = await cartModel.create({user: userId})
+        return cart
+      }
     } catch (error) {
       console.error(error)
     }
@@ -13,7 +18,7 @@ export default class CartManagerDB {
 
   async getCart(id) {
     try {
-      const cart = await cartModel.findById(id).populate('products.product').lean();
+      const cart = await cartModel.findById(id).populate('products.product').populate('user').lean();
       if (!cart) {
         console.error('Carrito no encontrado')
         return

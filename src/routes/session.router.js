@@ -30,6 +30,7 @@ router.get('/register', async (req, res) => {
 })
 
 router.get('/user', (req, res) => {
+  
   if (!req.session.user) {
     res.redirect('/login')
   }
