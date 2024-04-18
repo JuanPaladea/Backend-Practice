@@ -16,24 +16,27 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const email = req.body.email
+  const { email, password } = req.body;
   try {
     req.session.failLogin = false
-    const result = await userManagerService.findUserEmail(email)
-    if (!result) {
+    const user = await userManagerService.findUserEmail(email);
+    
+    if (!user) {
       req.session.failLogin = true;
-      res.redirect('/login')
+      return res.redirect('/login');
     }
-    if (req.body.password !== result.password) {
-      req.session.failLogin = true
-      res.redirect('/login')
-    }
-    req.session.user = result
 
+    if (password !== user.password) {
+      req.session.failLogin = true
+      return res.redirect('/login')
+    }
+
+    req.session.user = result
     res.redirect('/')
   } catch (error) {
-    req.session.failLogin = true
-    res.redirect('/products')
+    console.error('Error during login:', error);
+    req.session.failLogin = true;
+    res.redirect('/login');
   }
 });
 

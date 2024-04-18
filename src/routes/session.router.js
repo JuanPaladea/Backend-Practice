@@ -4,11 +4,9 @@ import auth from "../middlewares/auth.js";
 
 const router = Router();
 
-const userManagerService = new userManagerDB()
-
 router.get('/login', async (req, res) => {
   if (req.session.user) {
-    res.redirect('/')
+    res.redirect('/user')
   }
   res.render(
     "login",
@@ -21,6 +19,9 @@ router.get('/login', async (req, res) => {
 })
 
 router.get('/register', async (req, res) => {
+  if (req.session.user) {
+    res.redirect('/user')
+  }
   res.render(
     'register',
     {
@@ -31,18 +32,17 @@ router.get('/register', async (req, res) => {
 })
 
 router.get('/user', (req, res) => {
-  if (req.session.user) {
-    res.render(
-      "user",
-      {
-        layout: "default",
-        title: 'Backend Juan Paladea | Usuario',
-        user: req.session.user
-      }
-    )
-  } else {
+  if (!req.session.user) {
     res.redirect('/login')
   }
+  res.render(
+    "user",
+    {
+      layout: "default",
+      title: 'Backend Juan Paladea | Usuario',
+      user: req.session.user
+    }
+  )
 })
 
 export default router
