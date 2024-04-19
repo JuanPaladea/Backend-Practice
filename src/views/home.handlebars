@@ -21,7 +21,7 @@
 
       </div>
       <div class="flex gap-2.5 py-2">
-        {{#if cart}}
+        {{#if cart.products.length}}
           <a href="/carts/{{cart._id}}" class="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-1 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">Mi carrito</a>
         {{/if}}
         <form action="/api/session/logout" method="POST">
@@ -58,6 +58,17 @@
         <div class="flex flex-col">
           <span class="text-gray-500">API</span>
           <a href="http://localhost:8080/api/carts" class="text-lg font-bold text-gray-800 transition duration-100 hover:text-gray-500 lg:text-xl">Carts</a>
+        </div>
+      </div>
+
+      <div>
+        <a href="http://localhost:8080/api/session/users" class="group mb-2 block h-96 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:mb-3">
+          <img src="https://i.imgur.com/wbytqto.png" alt="API Carts" class="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" />
+        </a>
+
+        <div class="flex flex-col">
+          <span class="text-gray-500">API</span>
+          <a href="http://localhost:8080/api/session/users" class="text-lg font-bold text-gray-800 transition duration-100 hover:text-gray-500 lg:text-xl">Users</a>
         </div>
       </div>
 

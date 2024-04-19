@@ -23,7 +23,6 @@ router.get('/', auth, async (req, res) => {
       "products",
       {
       layout: "default",
-      style: "index.css",
       status: 'success',
       title: 'Backend Juan Paladea | Productos',
       user: req.session.user,
@@ -34,8 +33,8 @@ router.get('/', auth, async (req, res) => {
       page: result.page,
       hasPrevPage: result.hasPrevPage,
       hasNextPage: result.hasNextPage,
-      prevLink: result.prevPage ? `http://localhost:8080/products?${query ? `query=${encodeURIComponent(JSON.stringify(query))}` : ''}${limit ? `&limit=${limit}` : ''}${sort ? `&sort=${encodeURIComponent(JSON.stringify(sort))}` : ''}&page=${result.prevPage}` : null,
-      nextLink: result.nextPage ? `http://localhost:8080/products?${query ? `query=${encodeURIComponent(JSON.stringify(query))}` : ''}${limit ? `&limit=${limit}` : ''}${sort ? `&sort=${encodeURIComponent(JSON.stringify(sort))}` : ''}&page=${result.nextPage}` : null,
+      prevLink: result.prevPage ? `/products?${query ? `query=${encodeURIComponent(JSON.stringify(query))}` : ''}${limit ? `&limit=${limit}` : ''}${sort ? `&sort=${encodeURIComponent(JSON.stringify(sort))}` : ''}&page=${result.prevPage}` : null,
+      nextLink: result.nextPage ? `/products?${query ? `query=${encodeURIComponent(JSON.stringify(query))}` : ''}${limit ? `&limit=${limit}` : ''}${sort ? `&sort=${encodeURIComponent(JSON.stringify(sort))}` : ''}&page=${result.nextPage}` : null,
       limit, 
       page,
       query,

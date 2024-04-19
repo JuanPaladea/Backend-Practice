@@ -1,14 +1,29 @@
 import { Router } from "express";
 import userManagerDB from "../dao/utils/userManagerDB.js";
+import CartManagerDB from "../dao/utils/cartManagerDB.js";
 
 const router = Router();
 
 const userManagerService = new userManagerDB()
+const cartManagerService = new CartManagerDB()
+
+router.get('/users', async (req, res) => {
+  try {
+    const result = await userManagerService.getUsers()
+    res.send({users: result})
+  } catch (error) {
+    console.error(error)
+  }
+})
 
 router.post("/register", async (req, res) => {
   const user = req.body
   try {
-    await userManagerService.registerUser(user)
+    const response = await userManagerService.registerUser(user)
+    const cart = await cartManagerService.addCart(response._id)
+
+    //ADD CART TO USER
+    await userManagerService.updateUser(response._id, cart._id)
     res.redirect('/')
   } catch (error) {
     res.redirect('/register')
@@ -32,10 +47,6 @@ router.post("/login", async (req, res) => {
     }
 
     req.session.user = user
-
-    if (user.email == "adminCoder@coder.com" && user.password == "adminCod3r123") {
-      req.session.user.role = 'admin'
-    }
     res.redirect('/')
 
   } catch (error) {

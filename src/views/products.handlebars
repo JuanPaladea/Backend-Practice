@@ -18,12 +18,12 @@
     </form>
     <ul class="flex bg-white">
       <li>
-        <a href="http://localhost:8080/products?sort={%22price%22:1}" class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+        <a href="/products?sort={%22price%22:1}" class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
           Ordenar por Precio Ascendente
         </a>
       </li>
       <li>
-        <a href="http://localhost:8080/products?sort={%22price%22:-1}" class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+        <a href="/products?sort={%22price%22:-1}" class="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
           Ordenar por Precio Descendente
         </a>
       </li>
@@ -37,16 +37,16 @@
       {{#each products}}
         <div>
           {{#if this.thumbnails.length}}
-          <a href="http://localhost:8080/products/{{this._id}}" class="group relative mb-2 block h-80 overflow-hidden bg-gray-100 lg:mb-3">
+          <a href="/products/{{this._id}}" class="group relative mb-2 block h-80 overflow-hidden bg-gray-100 lg:mb-3">
             <img src="{{this.thumbnails.[0]}}" alt="{{this.title}}" class="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" />
           </a>
           {{else}}
-          <a href="http://localhost:8080/products/{{this._id}}" class="group relative mb-2 block h-80 overflow-hidden bg-gray-100 lg:mb-3">
+          <a href="/products/{{this._id}}" class="group relative mb-2 block h-80 overflow-hidden bg-gray-100 lg:mb-3">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ5BVHgJRJeqFMG_LvNuo3W_xmPgtmNRZ49qOSI4gxsA&s" alt="" class="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" />
           </a>
           {{/if}}
           <div>
-            <a href="http://localhost:8080/products/{{this._id}}" class="hover:gray-800 mb-1 text-gray-500 transition duration-100 lg:text-lg">{{this.title}}</a>
+            <a href="products/{{this._id}}" class="hover:gray-800 mb-1 text-gray-500 transition duration-100 lg:text-lg">{{this.title}}</a>
             <div class="text-gray-500 text-md">{{this.category}}</div>
             <div class="font-bold text-gray-800 lg:text-lg">${{this.price}}</div>
           </div>
@@ -73,7 +73,7 @@
 
     {{#if hasPrevPage}}
       <li>
-        <a href='http://localhost:8080/products/?page={{prevPage}}' class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{prevPage}}</a>
+        <a href='/products/?page={{prevPage}}' class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{prevPage}}</a>
       </li>
     {{/if}}
 
@@ -83,7 +83,7 @@
 
     {{#if hasNextPage}}
       <li>
-        <a href='http://localhost:8080/products/?page={{nextPage}}' class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{nextPage}}</a>
+        <a href='/products/?page={{nextPage}}' class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{nextPage}}</a>
       </li>
     {{/if}}
 
