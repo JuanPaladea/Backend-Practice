@@ -12,6 +12,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
+import { cartModel } from './dao/models/cartsModel.js';
 
 dotenv.config();
 const app = express();
@@ -42,13 +43,16 @@ app.use(session(
 ))
 
 //BIENVENIDA
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   if (req.session.user) {
+    const userId = req.session.user._id
+    const cart = await cartModel.findOne({user: userId}).lean()
     res.render(
       "home", {
         layout: "default",
         title: 'Backend Juan Paladea',
-        user: req.session.user
+        user: req.session.user,
+        cart: cart
       }
     )
   } else {
@@ -56,11 +60,14 @@ app.get('/', (req, res) => {
   }
 })
 
-
 //ROUTES
+
+//API ROUTES
 app.use('/api/session', apiSessionRouter)
 app.use("/api/products", apiProductsRouter)
 app.use("/api/carts", apiCartsRouter)
+
+//VIEWS ROUTES
 app.use(sessionRouter)
 app.use("/products", productsRouter)
 app.use("/carts", cartsRouter)

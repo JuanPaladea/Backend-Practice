@@ -1,4 +1,6 @@
 import { Router } from "express";
+import auth from "../middlewares/auth.js";
+import { cartModel } from "../dao/models/cartsModel.js";
 
 const router = Router();
 
@@ -29,17 +31,16 @@ router.get('/register', async (req, res) => {
   )
 })
 
-router.get('/user', (req, res) => {
-  
-  if (!req.session.user) {
-    res.redirect('/login')
-  }
+router.get('/user', auth, async (req, res) => {
+  const userId = req.session.user._id
+  const cart = await cartModel.findOne({user: userId}).lean()
   res.render(
     "user",
     {
       layout: "default",
       title: 'Backend Juan Paladea | Usuario',
-      user: req.session.user
+      user: req.session.user,
+      cart: cart
     }
   )
 })
