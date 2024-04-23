@@ -1,6 +1,7 @@
 import { Router } from "express";
 import userManagerDB from "../dao/utils/userManagerDB.js";
 import CartManagerDB from "../dao/utils/cartManagerDB.js";
+import { createHash, isValidPassword } from "../utils.js";
 
 const router = Router();
 
@@ -17,7 +18,15 @@ router.get('/users', async (req, res) => {
 })
 
 router.post("/register", async (req, res) => {
-  const user = req.body
+  const {firstName, lastName, email, age, password} = req.body
+  const user = {
+    firstName,
+    lastName,
+    email,
+    age,
+    password: createHash(password)
+  }
+
   try {
     const response = await userManagerService.registerUser(user)
     const cart = await cartManagerService.addCart(response._id)
@@ -32,16 +41,17 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
   try {
     req.session.failLogin = false
+
     const user = await userManagerService.findUserEmail(email);
-    
     if (!user) {
       req.session.failLogin = true;
       return res.redirect('/login');
     }
 
-    if (password !== user.password) {
+    if (!isValidPassword(user, password)) {
       req.session.failLogin = true
       return res.redirect('/login')
     }

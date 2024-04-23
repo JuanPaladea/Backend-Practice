@@ -1,3 +1,4 @@
+import { isValidPassword } from "../../utils.js";
 import {userModel} from "../models/usersModel.js";
 
 export default class userManagerDB {
@@ -12,7 +13,7 @@ export default class userManagerDB {
 
   async registerUser(user) {
     try {
-      if (user.email == "adminCoder@coder.com" && user.password == "adminCod3r123") {
+      if (user.email == "adminCoder@coder.com" && isValidPassword(user, 'adminCod3r123')) {
         const result = await userModel.create(user)
         result.role = "admin"
         result.save()
