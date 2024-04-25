@@ -26,11 +26,11 @@ router.post("/register", async (req, res) => {
     age,
     password: createHash(password)
   }
-
+  
   try {
     const response = await userManagerService.registerUser(user)
     const cart = await cartManagerService.addCart(response._id)
-
+    
     //ADD CART TO USER
     await userManagerService.updateUser(response._id, cart._id)
     res.redirect('/')
@@ -39,12 +39,19 @@ router.post("/register", async (req, res) => {
   }
 });
 
+router.get("/failRegister", (req, res) => {
+  res.status(400).send({
+      status: "error",
+      message: "Failed Register"
+  });
+});
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
+  
   try {
     req.session.failLogin = false
-
+    
     const user = await userManagerService.findUserEmail(email);
     if (!user) {
       req.session.failLogin = true;
@@ -64,6 +71,13 @@ router.post("/login", async (req, res) => {
     req.session.failLogin = true;
     res.redirect('/login');
   }
+});
+
+router.get("/failLogin", (req, res) => {
+  res.status(400).send({
+      status: "error",
+      message: "Failed Login"
+  });
 });
 
 router.post("/logout", (req, res) => {
