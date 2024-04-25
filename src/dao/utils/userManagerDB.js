@@ -1,4 +1,4 @@
-import { isValidPassword } from "../../utils.js";
+import { isValidPassword } from "../../utils/bcrypt.js";
 import {userModel} from "../models/usersModel.js";
 
 export default class userManagerDB {

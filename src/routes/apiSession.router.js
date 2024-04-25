@@ -1,7 +1,7 @@
 import { Router } from "express";
 import userManagerDB from "../dao/utils/userManagerDB.js";
 import CartManagerDB from "../dao/utils/cartManagerDB.js";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword } from "../utils/bcrypt.js";
 
 const router = Router();
 
