@@ -77,7 +77,7 @@ router.get('/:pid', auth, async (req, res) => {
   }
 })
 
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   const product = req.body.product
   try {
     await productManagerService.addProduct(product)

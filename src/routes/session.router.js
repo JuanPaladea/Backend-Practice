@@ -1,5 +1,6 @@
 import { Router } from "express";
 import auth from "../middlewares/auth.js";
+import logged from "../middlewares/logged.js";
 import { cartModel } from "../dao/models/cartsModel.js";
 
 const router = Router();
@@ -18,10 +19,7 @@ router.get('/login', async (req, res) => {
   )
 })
 
-router.get('/register', async (req, res) => {
-  if (req.session.user) {
-    res.redirect('/user')
-  }
+router.get('/register', logged, async (req, res) => {
   res.render(
     'register',
     {
