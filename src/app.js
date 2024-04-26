@@ -13,6 +13,8 @@ import session from 'express-session';
 import { Server } from "socket.io";
 import { __dirname } from './utils/utils.js';
 import { cartModel } from './dao/models/cartsModel.js';
+import initializatePassport from './config/passportConfig.js';
+import passport from 'passport';
 
 dotenv.config();
 const app = express();
@@ -22,7 +24,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
-app.use(express.static(`${__dirname}/../public`));
+app.use(express.static(`${__dirname}/../../public`));
 
 app.engine("handlebars", handlebars.engine());
 app.set("views",`${__dirname}/../views`);
@@ -41,6 +43,10 @@ app.use(session(
       saveUninitialized: true
   }
 ))
+
+initializatePassport();
+app.use(passport.initialize())
+app.use(passport.session())
 
 //BIENVENIDA
 app.get('/', async (req, res) => {
