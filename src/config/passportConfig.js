@@ -1,6 +1,6 @@
 import passport from "passport";
 import GitHubStrategy from 'passport-github2';
-import GoogleStrategy from 'passport-google-oidc';
+import GoogleStrategy from 'passport-google-oauth20';
 import local from 'passport-local'
 import { userModel } from "../dao/models/usersModel.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
@@ -116,21 +116,20 @@ const initializatePassport = () => {
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-          console.log(profile)
-          // const user = await userModel.findOne({username: profile._json.login})
-          // if(!user) {
-          //     const newUser = {
-          //         username: profile._json.login,
-          //         name: profile._json.name,
-          //         password: ''
-          //     }
-          //     const registeredUser = await userManagerService.registerUser(newUser)
-          //     const cart = await cartManagerService.addCart(registeredUser._id)
-          //     const result = await userManagerService.updateUser(registeredUser._id, cart._id);
-          //     done(null, result);
-          // } else {
-          //     done(null, user);
-          // }
+          const user = await userModel.findOne({username: profile._json.name})
+          if(!user) {
+              const newUser = {
+                  username: profile._json.name,
+                  name: profile._json.name,
+                  password: ''
+              }
+              const registeredUser = await userManagerService.registerUser(newUser)
+              const cart = await cartManagerService.addCart(registeredUser._id)
+              const result = await userManagerService.updateUser(registeredUser._id, cart._id);
+              done(null, result);
+          } else {
+              done(null, user);
+          }
       } catch (error) {
           return done(error);
       }

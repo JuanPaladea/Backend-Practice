@@ -72,7 +72,7 @@ router.get("/githubcallback", passport.authenticate('github', {failureRedirect: 
   res.redirect('/');
 });
 
-router.get("/google", passport.authenticate('google', {scope: ['user:email']}), (req, res) => {
+router.get("/google", passport.authenticate('google', {scope: ['email', 'profile']}), (req, res) => {
   res.send({
       status: 'success',
       message: 'Success'
