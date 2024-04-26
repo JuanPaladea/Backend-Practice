@@ -4,6 +4,9 @@ import mongoosePaginate from 'mongoose-paginate-v2';
 const usersCollection = 'users'
 
 const usersSchema = new mongoose.Schema({
+  username: {
+    type: String
+  },
   firstName: {
     type: String
   },

@@ -5,10 +5,7 @@ import { cartModel } from "../dao/models/cartsModel.js";
 
 const router = Router();
 
-router.get('/login', async (req, res) => {
-  if (req.session.user) {
-    res.redirect('/user')
-  }
+router.get('/login', logged, async (req, res) => {
   res.render(
     "login",
     {
