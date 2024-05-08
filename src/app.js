@@ -22,10 +22,12 @@ const app = express();
 //MONGOOSE
 mongoose.connect(process.env.MONGODB_URI)
 
+//MIDLEWARES
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(express.static(`${__dirname}/../../public`));
 
+//HANDLEBARS
 app.engine("handlebars", handlebars.engine());
 app.set("views",`${__dirname}/../views`);
 app.set("view engine", "handlebars");
