@@ -2,26 +2,24 @@ import passport from "passport";
 import GitHubStrategy from 'passport-github2';
 import GoogleStrategy from 'passport-google-oauth20';
 import local from 'passport-local'
+import dotenv from 'dotenv';
+
 import { userModel } from "../dao/models/usersModel.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import userManagerDB from "../dao/utils/userManagerDB.js";
 import CartManagerDB from "../dao/utils/cartManagerDB.js";
-import dotenv from 'dotenv';
-import jwt, { ExtractJwt } from 'passport-jwt';
 
 dotenv.config()
 const userManagerService = new userManagerDB()
 const cartManagerService = new CartManagerDB()
 
 const localStrategy = local.Strategy;
-const JWTStratergy = jwt.Strategy;
 
 const initializatePassport = () => {
   const GHCLIENT_ID = process.env.GHCLIENT_ID
   const GHCLIENT_SECRET = process.env.GHCLIENT_SECRET
   const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
   const GOOGLE_SECRET = process.env.GOOGLE_SECRET
-  const SECRET_KEY_JWT = process.env.SECRET_KEY_JWT
 
   passport.use('register', new localStrategy(
     {
@@ -34,8 +32,7 @@ const initializatePassport = () => {
       try {
         const user = await userManagerService.findUserEmail(username);
         if (user) {
-          console.log('User already exist')
-          return done(null, false)
+          return done(null, false, {message: 'User already exist!'})
         }
 
         const newUser = {
@@ -82,20 +79,6 @@ const initializatePassport = () => {
     }
   ))
 
-  passport.use('jwt',new JWTStratergy(
-    {
-      jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
-      secretOrKey: 'coderSecret'
-    },
-    async (jwt_payload, done) => {
-      try {
-        return done(null, jwt_payload);
-      } catch (err) {
-        return done(err);
-      }
-    }
-  ))
-
   passport.use('github', new GitHubStrategy(
     {
     clientID: GHCLIENT_ID,
@@ -133,7 +116,7 @@ const initializatePassport = () => {
     async (accessToken, refreshToken, profile, done) => {
       try {
         const user = await userModel.findOne({username: profile._json.name})
-        if(!user) {
+        if (!user) {
           const newUser = {
             username: profile._json.name,
             name: profile._json.name,
@@ -158,15 +141,6 @@ const initializatePassport = () => {
       const user = await userModel.findById(id);
       done(null, user);
   })
-}
-
-const cookieExtractor = (req) => {
-  let token = null;
-  if (req && req.cookies) {
-      token = req.cookies.coderCookieToken ?? null;
-  }
-
-  return token;
 }
 
 export default initializatePassport

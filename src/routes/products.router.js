@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ProductManagerDB from "../dao/utils/productManagerDB.js";
 import auth from "../middlewares/auth.js";
+import isAdmin from "../middlewares/isAdmin.js";
 
 const router = Router();
 
@@ -45,7 +46,7 @@ router.get('/', auth, async (req, res) => {
   }
 })
 
-router.get('/add', auth, async (req, res) => {
+router.get('/add', auth, isAdmin, async (req, res) => {
   try {
     res.render(
       "addProduct",
@@ -77,7 +78,7 @@ router.get('/:pid', auth, async (req, res) => {
   }
 })
 
-router.post('/add', auth, async (req, res) => {
+router.post('/add', auth, isAdmin, async (req, res) => {
   const product = req.body.product
   try {
     await productManagerService.addProduct(product)

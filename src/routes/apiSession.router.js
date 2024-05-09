@@ -15,10 +15,24 @@ router.get('/users', async (req, res) => {
   }
 })
 
+router.get('/current', (req, res) => {
+  if (req.session.user) {
+    res.status(200).send({
+      status: 'success',
+      user: req.session.user
+    })
+  } else {
+    res.status(400).send({
+      status: 'error',
+      message: 'user not found'
+    })
+  }
+})
+
 router.post(
   '/register',
   passport.authenticate('register', { failureRedirect: '/api/session/failRegister' }),
-  async (req, res) => {
+  (req, res) => {
     res.redirect('/login')
   }
 );

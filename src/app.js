@@ -1,20 +1,21 @@
 import express from 'express'
 import handlebars from "express-handlebars";
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import { Server } from "socket.io";
+import passport from 'passport';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+
+import { __dirname } from './utils/utils.js';
+import { cartModel } from './dao/models/cartsModel.js';
+import initializatePassport from './config/passportConfig.js';
 import apiCartsRouter from "./routes/apiCarts.router.js"
 import apiProductsRouter from "./routes/apiProducts.router.js"
 import productsRouter from "./routes/products.router.js"
 import cartsRouter from "./routes/carts.router.js"
 import apiSessionRouter from "./routes/apiSession.router.js"
 import sessionRouter from "./routes/session.router.js"
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import MongoStore from 'connect-mongo';
-import session from 'express-session';
-import { Server } from "socket.io";
-import { __dirname } from './utils/utils.js';
-import { cartModel } from './dao/models/cartsModel.js';
-import initializatePassport from './config/passportConfig.js';
-import passport from 'passport';
 
 dotenv.config();
 const app = express();
@@ -46,6 +47,7 @@ app.use(session(
   }
 ))
 
+//PASSPORT
 initializatePassport();
 app.use(passport.initialize())
 app.use(passport.session())
