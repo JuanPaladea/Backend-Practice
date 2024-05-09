@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 import passport from 'passport';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import cookieParser from 'cookie-parser';
 
 import { __dirname } from './utils/utils.js';
 import { cartModel } from './dao/models/cartsModel.js';
@@ -27,6 +28,7 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(express.static(`${__dirname}/../../public`));
+app.use(cookieParser());
 
 //HANDLEBARS
 app.engine("handlebars", handlebars.engine());

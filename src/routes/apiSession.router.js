@@ -1,10 +1,14 @@
 import { Router } from "express";
 import userManagerDB from "../dao/utils/userManagerDB.js";
 import passport from "passport";
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 
+dotenv.config()
 const userManagerService = new userManagerDB()
+const JWT_SECRET = process.env.JWT_SECRET
 
 router.get('/users', async (req, res) => {
   try {
@@ -15,19 +19,12 @@ router.get('/users', async (req, res) => {
   }
 })
 
-router.get('/current', (req, res) => {
-  if (req.session.user) {
-    res.status(200).send({
-      status: 'success',
-      user: req.session.user
-    })
-  } else {
-    res.status(400).send({
-      status: 'error',
-      message: 'user not found'
-    })
-  }
-})
+router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.status(200).send({
+    status: 'success',
+    user: req.user,
+  });
+});
 
 router.post(
   '/register',
@@ -63,6 +60,14 @@ router.post(
       role: req.user.role 
     }
 
+    const token = jwt.sign({
+      _id: req.user._id,
+      email: req.user.email,
+      role: req.user.role
+    }, JWT_SECRET, { expiresIn: '1h' });
+
+    res.cookie('jwt', token);
+    console.log(token)
     res.redirect('/')
   }
 )
