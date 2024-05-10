@@ -62,12 +62,14 @@ router.post(
 
     const token = jwt.sign({
       _id: req.user._id,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
       email: req.user.email,
+      age: req.user.age,
       role: req.user.role
     }, JWT_SECRET, { expiresIn: '1h' });
-
-    res.cookie('jwt', token);
     console.log(token)
+    res.cookie('jwt', token);
     res.redirect('/')
   }
 )

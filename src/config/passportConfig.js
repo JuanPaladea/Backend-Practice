@@ -83,19 +83,23 @@ const initializatePassport = () => {
   ))
 
   passport.use('jwt', new JWTStratergy(
-      {
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: JWT_SECRET
-      },
-      async (jwt_payload, done) => {
-        try {
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: JWT_SECRET
+    },
+    async (jwt_payload, done) => {
+      try {
+        const user = await userManagerService.findUserEmail(jwt_payload.email)
+        if (user) {
+          return done(null, user)
+        } else {
           return done(null, jwt_payload);
-        } catch (err) {
-          return done(err);
         }
+      } catch (err) {
+        return done(err);
       }
-    )
-  )
+    }
+  ))
 
   passport.use('github', new GitHubStrategy(
     {
