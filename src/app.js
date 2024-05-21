@@ -1,7 +1,6 @@
 import express from 'express'
 import handlebars from "express-handlebars";
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import { Server } from "socket.io";
 import passport from 'passport';
 import session from 'express-session';
@@ -17,12 +16,12 @@ import productsRouter from "./routes/products.router.js"
 import cartsRouter from "./routes/carts.router.js"
 import apiSessionRouter from "./routes/apiSession.router.js"
 import sessionRouter from "./routes/session.router.js"
+import { MONGODB_URI, SECRET_SESSION } from './utils/config.js';
 
-dotenv.config();
 const app = express();
 
 //MONGOOSE
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(MONGODB_URI)
 
 //MIDLEWARES
 app.use(express.urlencoded({extended: true}))
@@ -39,11 +38,11 @@ app.use(session(
   {
     store: MongoStore.create(
       {
-        mongoUrl: process.env.MONGODB_URI,
+        mongoUrl: MONGODB_URI,
         mongoOption: { useUnifiedTopology: true},
         ttl: 40000
       }),
-      secret: 'secretPhrase',
+      secret: SECRET_SESSION,
       resave: true,
       saveUninitialized: true
   }

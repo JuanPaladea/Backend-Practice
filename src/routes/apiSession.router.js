@@ -1,14 +1,13 @@
 import { Router } from "express";
-import userManagerDB from "../dao/utils/userManagerDB.js";
 import passport from "passport";
-import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+
+import userManagerDB from "../dao/utils/userManagerDB.js";
+import { JWT_SECRET } from "../utils/config.js";
 
 const router = Router();
 
-dotenv.config()
 const userManagerService = new userManagerDB()
-const JWT_SECRET = process.env.JWT_SECRET
 
 router.get('/users', async (req, res) => {
   try {
@@ -68,7 +67,7 @@ router.post(
       age: req.user.age,
       role: req.user.role
     }, JWT_SECRET, { expiresIn: '1h' });
-    console.log(token)
+
     res.cookie('jwt', token);
     res.redirect('/')
   }
