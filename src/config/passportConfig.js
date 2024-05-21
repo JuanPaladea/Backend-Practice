@@ -2,25 +2,21 @@ import passport from "passport";
 import GitHubStrategy from 'passport-github2';
 import GoogleStrategy from 'passport-google-oauth20';
 import local from 'passport-local'
-import dotenv from 'dotenv';
+import jwt, { ExtractJwt } from "passport-jwt";
 
 import { userModel } from "../dao/models/usersModel.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import userManagerDB from "../dao/utils/userManagerDB.js";
 import CartManagerDB from "../dao/utils/cartManagerDB.js";
+import { GHCLIENT_ID, GHCLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_SECRET, JWT_SECRET } from "../utils/config.js";
 
-dotenv.config()
 const userManagerService = new userManagerDB()
 const cartManagerService = new CartManagerDB()
 
 const localStrategy = local.Strategy;
+const JWTStratergy = jwt.Strategy;
 
 const initializatePassport = () => {
-  const GHCLIENT_ID = process.env.GHCLIENT_ID
-  const GHCLIENT_SECRET = process.env.GHCLIENT_SECRET
-  const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
-  const GOOGLE_SECRET = process.env.GOOGLE_SECRET
-
   passport.use('register', new localStrategy(
     {
       passReqToCallback: true,
@@ -75,6 +71,25 @@ const initializatePassport = () => {
       } catch (error) {
       console.log(error.message)
       return done(error.message)
+      }
+    }
+  ))
+
+  passport.use('jwt', new JWTStratergy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: JWT_SECRET
+    },
+    async (jwt_payload, done) => {
+      try {
+        const user = await userManagerService.findUserEmail(jwt_payload.email)
+        if (user) {
+          return done(null, user)
+        } else {
+          return done(null, jwt_payload);
+        }
+      } catch (err) {
+        return done(err);
       }
     }
   ))

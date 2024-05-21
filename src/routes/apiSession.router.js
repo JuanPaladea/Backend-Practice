@@ -1,6 +1,9 @@
 import { Router } from "express";
-import userManagerDB from "../dao/utils/userManagerDB.js";
 import passport from "passport";
+import jwt from 'jsonwebtoken';
+
+import userManagerDB from "../dao/utils/userManagerDB.js";
+import { JWT_SECRET } from "../utils/config.js";
 
 const router = Router();
 
@@ -15,19 +18,12 @@ router.get('/users', async (req, res) => {
   }
 })
 
-router.get('/current', (req, res) => {
-  if (req.session.user) {
-    res.status(200).send({
-      status: 'success',
-      user: req.session.user
-    })
-  } else {
-    res.status(400).send({
-      status: 'error',
-      message: 'user not found'
-    })
-  }
-})
+router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.status(200).send({
+    status: 'success',
+    user: req.user,
+  });
+});
 
 router.post(
   '/register',
@@ -63,6 +59,16 @@ router.post(
       role: req.user.role 
     }
 
+    const token = jwt.sign({
+      _id: req.user._id,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      email: req.user.email,
+      age: req.user.age,
+      role: req.user.role
+    }, JWT_SECRET, { expiresIn: '1h' });
+
+    res.cookie('jwt', token);
     res.redirect('/')
   }
 )
