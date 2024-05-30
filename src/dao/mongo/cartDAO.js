@@ -1,6 +1,6 @@
 import cartModel from "./models/cartsModel.js";
 
-export default class cartDAO {  
+class cartDAO {  
   async addCart(userId) {
     try {
       const cartExist = await cartModel.findOne({user: userId})
@@ -17,6 +17,15 @@ export default class cartDAO {
   async getCart(id) {
     try {
       const cart = await cartModel.findById(id).populate('products.product').populate('user').lean();
+      return cart;
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getCartWithUserId(userId) {
+    try {
+      const cart = await cartModel.findOne({user: userId}).populate('products.product').populate('user').lean();
       return cart;
     } catch (error) {
       throw error
@@ -104,3 +113,5 @@ export default class cartDAO {
     }
   }
 }
+
+export default new cartDAO();

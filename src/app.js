@@ -6,6 +6,7 @@ import passport from 'passport';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
+import flash from 'connect-flash';
 
 import { __dirname } from './utils/utils.js';
 import cartService from './services/cartService.js';
@@ -29,6 +30,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(express.static(`${__dirname}/../../public`));
 app.use(cookieParser());
+app.use(flash())
 
 //HANDLEBARS
 app.engine("handlebars", handlebars.engine());
@@ -58,17 +60,17 @@ app.use(passport.session())
 app.get('/', auth, async (req, res) => {
   try {
     const userId = req.session.user._id
-    const cart = await cartService.getCart(userId)
+    const cart = await cartService.getCartWithUserId(userId)
     res.render(
       "home", {
         layout: "default",
         title: 'Backend Juan Paladea',
         user: req.session.user,
-        cart: cart
+        cart: cart 
       }
     )
   } catch (error) {
-    res.status(400).send({status: 'error', error: 'ha ocurrido un error', error})
+    res.status(400).send({status: 'error', message: error.message})
   }
 })
 

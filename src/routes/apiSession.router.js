@@ -29,26 +29,26 @@ router.get('/current',
 
 router.post(
   '/register',
-  passport.authenticate('register', { failureRedirect: '/api/session/failRegister' }),
+  passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}),
   (req, res) => {
     res.status(200).send({
       status: 'success',
       message: 'User registered',
-      user: req.user,
     });
   }
 );
 
 router.get("/failRegister", (req, res) => {
+  const message = req.flash('error')[0];
   res.status(400).send({
     status: "error",
-    message: "Failed Register"
+    message: message || "Failed Register"
   });
 });
 
 router.post(
   '/login',
-  passport.authenticate('login', {failureRedirect: '/api/session/failLogin'}),
+  passport.authenticate('login', {failureRedirect: '/api/session/failLogin', failureFlash: true}),
   (req, res) => {
     if (!req.user) {
       res.status(401).send({
@@ -84,10 +84,11 @@ router.post(
 )
 
 router.get("/failLogin", (req, res) => {
+  const message = req.flash('error')[0];
   res.status(400).send({
       status: "error",
-      message: "Failed Login"
-  });
+      message: message || "Failed Login"
+    });
 });
 
 router.get("/github", passport.authenticate('github', {scope: ['user:email']}), (req, res) => {

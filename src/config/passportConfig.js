@@ -19,28 +19,29 @@ const initializatePassport = () => {
     {
       usernameField: 'email',
       passwordField: 'password',
-      passReqToCallback: true
+      passReqToCallback: true,
+      failureFlash: true
     },
     async (req, email, password, done) => {
       const { firstName, lastName, age} = req.body;
       if (!firstName || !lastName || !age || !password || !email) {
-        done(null, false, {message: 'All fields are required!'})
+        return done(null, false, {message: 'All fields are required!'})
+      }
+      if (age < 18) {
+        return done(null, false, {message: 'You must be over 18 years old!'})
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        done(null, false, {message: 'Invalid email!'})
+        return done(null, false, {message: 'Invalid email!'})
       }
       // add password validation, the password must have at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character
       if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(password)) {
-        done(null, false, {message: 'Invalid password!, the password must have at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character'})
-      }
-      if (age < 18) {
-        done(null, false, {message: 'You must be over 18 years old!'})
+        return done(null, false, {message: 'Invalid password!, the password must have at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character'})
       }
 
       try {
         const existingUser = await userService.findUserEmail(email);
         if (existingUser) {
-          done(null, false, {message: 'User already exist!'})
+          return done(null, false, {message: 'User already exist!'})
         }
 
         const newUser = {
@@ -56,9 +57,9 @@ const initializatePassport = () => {
         const cart = await cartService.addCart(registeredUser._id)
         const result = await userService.updateUser(registeredUser._id, cart._id);
 
-        done(null, result)
+        return done(null, result)
       } catch (error) {
-        done(error.message)
+        return done(error)
       }
     }
   ))
@@ -66,28 +67,29 @@ const initializatePassport = () => {
   passport.use('login', new localStrategy(
     {
       usernameField: 'email',
-      passwordField: 'password'
+      passwordField: 'password',
+      failureFlash: true
     },
-    async (email, password, done) => {
-      if (!email || !password) {
-        done(null, false, {message: 'All fields are required!'})
+    async (username, password, done) => {
+      if (!username || !password) {
+        return done(null, false, {message: 'All fields are required!'})
       }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        done(null, false, {message: 'Invalid email!'})
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username)) {
+        return done(null, false, {message: 'Invalid email!'})
       }
       try {
-        const user = await userService.findUserEmail(email);
+        const user = await userService.findUserEmail(username);
         if (!user) {
-          done(null, false, {message: 'User not found!'})
+          return done(null, false, {message: 'User not found!'})
         }
-
+        console.log(user)
         if(!isValidPassword(user, password)) {
-          done(null, false, {message: 'Invalid password!'})
+          return done(null, false, {message: 'Invalid password!'})
         }
         
-        done(null, user)
+        return done(null, user)
       } catch (error) {
-        done(error.message)
+        return done(error)
       }
     }
   ))
@@ -101,12 +103,12 @@ const initializatePassport = () => {
       try {
         const user = await userService.findUserEmail(jwt_payload.email)
         if (user) {
-          done(null, user)
+          return done(null, user)
         } else {
-          done(null, jwt_payload);
+          return done(null, jwt_payload);
         }
       } catch (error) {
-        done(error);
+        return done(error);
       }
     }
   ))
@@ -129,12 +131,12 @@ const initializatePassport = () => {
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)
           const result = await userService.updateUser(registeredUser._id, cart._id);
-          done(null, result);
+          return done(null, result);
         } else {
-          done(null, user);
+          return done(null, user);
         }
       } catch (error) {
-        done(error);
+        return done(error);
       }
     }
   ));
@@ -157,12 +159,12 @@ const initializatePassport = () => {
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)
           const result = await userService.updateUser(registeredUser._id, cart._id);
-          done(null, result);
+          return done(null, result);
         } else {
-          done(null, user);
+          return done(null, user);
         }
       } catch (error) {
-        done(error);
+        return done(error);
       }
     })
   )
@@ -172,9 +174,9 @@ const initializatePassport = () => {
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await userService.getUserById(id);
-      done(null, user);
+      return done(null, user);
     } catch (error) {
-      done(error);
+      return done(error);
     }
   });
 }

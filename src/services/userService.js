@@ -1,14 +1,14 @@
 import userDAO from "../dao/mongo/userDAO.js";
 import userDTO from "../dao/dto/userDTO.js";
 
-export default class userService {
+class userService {
   async getUsers() {
     try {
       const users = await userDAO.getUsers();
       if (!users) {
         throw new Error("No users found");
       }
-      return new userDTO(users);
+      return users
     } catch (error) {
       throw error;
     }
@@ -53,12 +53,15 @@ export default class userService {
   async findUserEmail(email) {
     try {
       const user = await userDAO.findUserEmail(email);
-      if (!user) {
-        throw new Error("User not found");
+      if (user) {
+        return new userDTO(user);
+      } else {
+        return null;
       }
-      return new userDTO(user);
     } catch (error) {
       throw error;
     }
   }
 }
+
+export default new userService();

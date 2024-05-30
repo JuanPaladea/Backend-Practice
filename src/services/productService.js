@@ -1,14 +1,14 @@
 import productDAO from "../dao/mongo/productDAO.js";
 import productDTO from "../dao/dto/productDTO.js";
 
-export default class productService {
+class productService {
   async getProducts(limit, page, query, sort) {
     try {
       const products = await productDAO.getProducts(limit, page, query, sort);
       if (!products) {
         throw new Error("No products found");
       }
-      return new productDTO(products);
+      return products
     } catch (error) {
       throw error;
     }
@@ -62,3 +62,5 @@ export default class productService {
     }
   }
 }
+
+export default new productService();

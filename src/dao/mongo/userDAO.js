@@ -1,7 +1,7 @@
 import { isValidPassword } from "../../utils/bcrypt.js";
 import userModel from "./models/usersModel.js";
 
-export default class userDAO {
+class userDAO {
   async getUsers() {
     try {
       const users = await userModel.find({}).populate('cart').populate('cart.products.product')
@@ -53,3 +53,5 @@ export default class userDAO {
     }
   } 
 }
+
+export default new userDAO();

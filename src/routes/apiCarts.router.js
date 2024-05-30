@@ -9,7 +9,7 @@ router.post('/',  async (req, res) => {
     const cart = await cartService.addCart(userId);
     res.status(201).send({status:'success', message:'carrito creado', cart});
   } catch (error){
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 
@@ -19,7 +19,7 @@ router.get('/:cid', async (req, res) => {
     const cart = await cartService.getCart(cartId);
     res.status(200).send({status:'success', message:'carrito encontrado', cart});
   } catch (error) {
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 
@@ -28,7 +28,7 @@ router.get('/',  async (req, res) => {
     const carts = await cartService.getAllCarts();
     res.status(200).send({status:'success', message:'carritos encontrados', carts});
   } catch(error) {
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 
@@ -48,7 +48,7 @@ router.post('/:cid/products/:pid', async (req, res) => {
     res.status(201).send({status:'success', message:`producto ${productId} agregado al carrito`, cart});
   } catch (error){
     console.error(error)
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 
@@ -65,7 +65,7 @@ router.put('/:cid/products/:pid', async (req, res) => {
     const cart = await cartService.updateProductQuantity(cartId, productId, quantity)
     res.status(200).send({status:'success', message:'cantidad de producto actualizada', cart});
   } catch (error) {
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 
@@ -76,7 +76,7 @@ router.delete("/:cid", async (req, res) => {
     const cart = await cartService.deleteAllProductsFromCart(cartId);
     res.status(200).send({status:'success', message:'carrito eliminado', cart});
   } catch (error) {
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 
@@ -87,7 +87,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
     const cart = await cartService.deleteProductFromCart(cartId, productId)
     res.status(200).send({status:'success', message:`producto ${productId} eliminado del carrito`, cart});
   } catch (error) {
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 

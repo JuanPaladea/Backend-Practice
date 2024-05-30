@@ -1,11 +1,11 @@
 export default class userDTO {
   constructor(user) {
-    this.username = user.username;
+    this._id = user._id;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
+    this.password = user.password;
     this.email = user.email;
     this.age = user.age;
-    this.role = user.role;
-    this.cart = user.cart;
+    this.role = user.role || 'usuario';
   }
 }

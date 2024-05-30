@@ -5,7 +5,6 @@ import auth from "../middlewares/auth.js";
 
 const router = Router();
 
-
 router.get('/:cid', auth, async (req, res) => {
   const cartId = req.params.cid
   try {

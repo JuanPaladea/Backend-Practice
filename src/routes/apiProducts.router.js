@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
     const products = await productService.getProducts(limit, page, query, sort);
     res.status(200).send({status: 'success', message: 'productos encontrados', products})
   } catch (error) {
-    res.status(400).send({status: 'error', error: 'ha ocurrido un error', error})
+    res.status(400).send({status: 'error', message: error.message})
   }
 })
 
@@ -35,7 +35,7 @@ router.get('/:productId', async (req, res) => {
     const product = await productService.getProductById(productId);
     res.status(200).send({status: 'success', message: 'producto encontrado', product})
   } catch (error) {
-    res.status(400).send({status: 'error', error: 'ha ocurrido un error', error})
+    res.status(400).send({status: 'error', message: error.message})
   }
 })
 
@@ -66,7 +66,7 @@ router.post('/', async (req, res) => {
     })
     res.status(201).send({status:'success', message:'producto agregado', product})
   } catch (error){
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 
@@ -84,7 +84,7 @@ router.put('/:productId', async (req, res) => {
     const product = await productService.updateProduct(productId, productData);
     res.status(200).send({status:'success', message:'producto actualizado', product})
   } catch (error){
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 
@@ -95,7 +95,7 @@ router.delete('/:productId', async (req, res) => {
     const product = await productService.deleteProduct(productId);
     res.status(200).send({status:'success', message:'producto eliminado', product})
   } catch (error){
-    res.status(400).send({status:'error', error:'ha ocurrido un error', error})
+    res.status(400).send({status:'error', message: error.message})
   }
 })
 
