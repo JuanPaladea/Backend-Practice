@@ -14,11 +14,11 @@ export default class productService {
     }
   }
 
-  async addProduct(productData) {
+  async getProductById(id) {
     try {
-      const product = await productDAO.addProduct(productData);
+      const product = await productDAO.getProductById(id);
       if (!product) {
-        throw new Error("Error adding product");
+        throw new Error("Product not found");
       }
       return new productDTO(product);
     } catch (error) {
@@ -26,11 +26,11 @@ export default class productService {
     }
   }
 
-  async getProductById(id) {
+  async addProduct(productData) {
     try {
-      const product = await productDAO.getProductById(id);
+      const product = await productDAO.addProduct(productData);
       if (!product) {
-        throw new Error("Product not found");
+        throw new Error("Error adding product");
       }
       return new productDTO(product);
     } catch (error) {

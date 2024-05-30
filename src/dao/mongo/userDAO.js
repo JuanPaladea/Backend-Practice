@@ -11,6 +11,15 @@ export default class userDAO {
     }
   }
 
+  async getUserById(userId) {
+    try {
+      const user = await userModel.findById(userId).populate('cart').populate('cart.products.product')
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
   async registerUser(user) {
     try {
       if (user.email == "adminCoder@coder.com" && isValidPassword(user, 'adminCod3r123')) {

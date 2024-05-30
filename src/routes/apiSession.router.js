@@ -2,41 +2,47 @@ import { Router } from "express";
 import passport from "passport";
 import jwt from 'jsonwebtoken';
 
-import userManagerDB from "../dao/utils/userManagerDB.js";
+import userService from "../services/userService.js";
 import { JWT_SECRET } from "../utils/config.js";
 
 const router = Router();
 
-const userManagerService = new userManagerDB()
-
 router.get('/users', async (req, res) => {
   try {
-    const result = await userManagerService.getUsers()
-    res.send({users: result})
+    const users = await userService.getUsers()
+    res.status(200).send({status: 'success', message: 'usuarios encontrados', users})
   } catch (error) {
-    console.error(error)
+    res.status(400).send({status: 'error', error: 'ha ocurrido un error', error})
   }
 })
 
-router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.status(200).send({
-    status: 'success',
-    user: req.user,
-  });
-});
+router.get('/current', 
+  passport.authenticate('jwt', { session: false }), 
+  (req, res) => {
+    res.status(200).send({
+      status: 'success',
+      message: 'User found',
+      user: req.user,
+    });
+  }
+);
 
 router.post(
   '/register',
   passport.authenticate('register', { failureRedirect: '/api/session/failRegister' }),
   (req, res) => {
-    res.redirect('/login')
+    res.status(200).send({
+      status: 'success',
+      message: 'User registered',
+      user: req.user,
+    });
   }
 );
 
 router.get("/failRegister", (req, res) => {
   res.status(400).send({
-      status: "error",
-      message: "Failed Register"
+    status: "error",
+    message: "Failed Register"
   });
 });
 
@@ -45,10 +51,10 @@ router.post(
   passport.authenticate('login', {failureRedirect: '/api/session/failLogin'}),
   (req, res) => {
     if (!req.user) {
-      return res.send(401).send({
+      res.status(401).send({
         status: 'error',
         message: 'Error login!'
-      })
+      });
     }
     req.session.user = {
       _id: req.user._id,
@@ -57,7 +63,7 @@ router.post(
       email: req.user.email,
       age: req.user.age,
       role: req.user.role 
-    }
+    };
 
     const token = jwt.sign({
       _id: req.user._id,
@@ -69,7 +75,11 @@ router.post(
     }, JWT_SECRET, { expiresIn: '1h' });
 
     res.cookie('jwt', token);
-    res.redirect('/')
+    res.status(200).send({
+      status: 'success',
+      message: 'User logged in',
+      token: token
+    });
   }
 )
 
@@ -81,9 +91,9 @@ router.get("/failLogin", (req, res) => {
 });
 
 router.get("/github", passport.authenticate('github', {scope: ['user:email']}), (req, res) => {
-  res.send({
-      status: 'success',
-      message: 'Success'
+  res.status(200).send({
+    status: 'success',
+    message: 'Success'
   });
 });
 
@@ -93,9 +103,9 @@ router.get("/githubcallback", passport.authenticate('github', {failureRedirect: 
 });
 
 router.get("/google", passport.authenticate('google', {scope: ['email', 'profile']}), (req, res) => {
-  res.send({
-      status: 'success',
-      message: 'Success'
+  res.status(200).send({
+    status: 'success',
+    message: 'Success'
   });
 });
 
@@ -106,7 +116,17 @@ router.get("/googlecallback", passport.authenticate('google', {failureRedirect: 
 
 router.post("/logout", (req, res) => {
   req.session.destroy(error => {
-      res.redirect('/login');
+    if (error) {
+      res.status(400).send({
+        status: 'error',
+        message: 'Error logging out'
+      });
+    }
+    res.clearCookie('jwt');
+    res.status(200).send({
+      status: 'success',
+      message: 'User logged out'
+    });
   })
 });
 

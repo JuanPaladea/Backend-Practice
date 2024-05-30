@@ -8,7 +8,7 @@ import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 
 import { __dirname } from './utils/utils.js';
-import { cartModel } from './dao/models/cartsModel.js';
+import cartService from './services/cartService.js';
 import initializatePassport from './config/passportConfig.js';
 import apiCartsRouter from "./routes/apiCarts.router.js"
 import apiProductsRouter from "./routes/apiProducts.router.js"
@@ -17,6 +17,7 @@ import cartsRouter from "./routes/carts.router.js"
 import apiSessionRouter from "./routes/apiSession.router.js"
 import sessionRouter from "./routes/session.router.js"
 import { MONGODB_URI, SECRET_SESSION } from './utils/config.js';
+import auth from './middlewares/auth.js';
 
 const app = express();
 
@@ -54,10 +55,10 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //BIENVENIDA
-app.get('/', async (req, res) => {
-  if (req.session.user) {
+app.get('/', auth, async (req, res) => {
+  try {
     const userId = req.session.user._id
-    const cart = await cartModel.findOne({user: userId}).lean()
+    const cart = await cartService.getCart(userId)
     res.render(
       "home", {
         layout: "default",
@@ -66,8 +67,8 @@ app.get('/', async (req, res) => {
         cart: cart
       }
     )
-  } else {
-    res.redirect('/login')
+  } catch (error) {
+    res.status(400).send({status: 'error', error: 'ha ocurrido un error', error})
   }
 })
 

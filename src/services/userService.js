@@ -14,6 +14,18 @@ export default class userService {
     }
   }
 
+  async getUserById(userId) {
+    try {
+      const user = await userDAO.getUserById(userId);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      return new userDTO(user);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async registerUser(user) {
     try {
       const newUser = await userDAO.registerUser(user);

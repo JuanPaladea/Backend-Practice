@@ -5,26 +5,32 @@ const usersCollection = 'users'
 
 const usersSchema = new mongoose.Schema({
   username: {
-    type: String
+    type: String,
+    required: true,
   },
   firstName: {
-    type: String
+    type: String,
+    required: true,
   },
   lastName: {
-    type: String
+    type: String,
+    required: true,
   },
   email: {
-    type: String
+    type: String,
+    required: true,
   },
   age: {
-    type: Number
+    type: Number,
+    required: true,
   },
   password: {
-    type: String
+    type: String,
+    required: true,
   },
   role: {
     type: String,
-    default: 'usuario'
+    default: 'usuario',
   },
   cart: {
     type: mongoose.Schema.Types.ObjectId,

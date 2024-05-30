@@ -6,7 +6,7 @@ const cartsCollection = 'carts'
 const cartsSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users'
+    ref: 'users',
   },
   products: {
     type: [

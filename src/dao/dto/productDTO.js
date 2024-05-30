@@ -1,11 +1,9 @@
 export default class productDTO {
-  constructor({title, description, code, price, stock, category, thumbnails}) {
-    this.title = title
-    this.description = description
-    this.code = code
-    this.price = price
-    this.stock = stock
-    this.category = category
-    this.thumbnails = thumbnails
+  constructor(product) {
+    this.name = product.name;
+    this.price = product.price;
+    this.description = product.description;
+    this.stock = product.stock;
+    this.image = product.image;
   }
 }

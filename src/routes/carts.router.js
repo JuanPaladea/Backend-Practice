@@ -1,15 +1,15 @@
 import { Router } from "express";
-import CartManagerDB from "../dao/utils/cartManagerDB.js";
+
+import cartService from "../services/cartService.js";
 import auth from "../middlewares/auth.js";
 
 const router = Router();
 
-const cartManagerService = new CartManagerDB()
 
 router.get('/:cid', auth, async (req, res) => {
   const cartId = req.params.cid
   try {
-    const cart = await cartManagerService.getCart(cartId)
+    const cart = await cartService.getCart(cartId)
     res.render(
       "cart",
     {
@@ -20,7 +20,7 @@ router.get('/:cid', auth, async (req, res) => {
       products: cart.products
     })
   } catch (error) {
-    console.error(error)
+    res.status(400).send({status: 'error', error: 'Error al obtener el carrito', error})
   }
 })
 

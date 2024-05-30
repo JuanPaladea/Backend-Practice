@@ -53,54 +53,22 @@ export default class cartDAO {
     }
   }
 
-  async addProductToCart(cartid, productId, quantity = 1) {
+  async addProductToCart(cartiD, productId, quantity) {
     try {
-      const cart = await cartModel.findOne({_id: cartid});
-      if (!cart) {
-        throw new Error('Cart does not exist')
-      }
-
-      const existingProduct = await cartModel.findOne({"products.product": productId})
-
+      const existingProduct = await cartModel.findOne({_id: cartiD, "products.product": productId});
       if (existingProduct) {
         const updatedCart = cartModel.updateOne(
-          {"products.product": productId},
-          {$inc : {"products.$.quantity": 1}}  
-        )
+          {_id: cartiD, "products.product": productId},
+          {$inc : {"products.$.quantity": quantity}}  
+        );
         return updatedCart;
       } 
     
       const updatedCart = await cartModel.updateOne(
-        {_id: cartid},
+        {_id: cartiD},
         {$push: {products: [{product: productId, quantity: quantity}]}}  
       )
       return updatedCart;
-    } catch (error) {
-      throw error
-    }
-  }
-
-  async deleteCart(id) {
-    try {
-      const cart = await cartModel.deleteOne({_id: id})
-      if (!cart) {
-        throw new Error('Cart does not exist')
-      }
-
-      return cart;
-    } catch (error) {
-      throw error
-    }
-  }
-
-  async deleteAllProductsFromCart(cartId) {
-    try {
-      const cart = await cartModel.findByIdAndUpdate(cartId, { products: []})
-      if (!cart) {
-        throw new Error('Cart does not exist')
-      }
-
-      return cart;
     } catch (error) {
       throw error
     }
@@ -112,9 +80,24 @@ export default class cartDAO {
         {_id: cartId},
         { $pull: { products: {product: productId}}},
       )
-      if (!cart) {
-        throw new Error('Cart does not exist')
-      }
+      return cart;
+    } catch (error) {
+      throw error
+    }
+  }
+  
+  async deleteAllProductsFromCart(cartId) {
+    try {
+      const cart = await cartModel.findByIdAndUpdate(cartId, { products: []})
+      return cart;
+    } catch (error) {
+      throw error
+    }
+  }
+  
+  async deleteCart(id) {
+    try {
+      const cart = await cartModel.deleteOne({_id: id})
       return cart;
     } catch (error) {
       throw error

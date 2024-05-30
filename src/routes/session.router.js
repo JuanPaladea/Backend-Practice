@@ -1,7 +1,7 @@
 import { Router } from "express";
 import auth from "../middlewares/auth.js";
 import logged from "../middlewares/logged.js";
-import { cartModel } from "../dao/models/cartsModel.js";
+import cartService from "../services/cartService.js";
 
 const router = Router();
 
@@ -28,16 +28,20 @@ router.get('/register', logged, async (req, res) => {
 
 router.get('/user', auth, async (req, res) => {
   const userId = req.session.user._id
-  const cart = await cartModel.findOne({user: userId}).lean()
-  res.render(
-    "user",
-    {
-      layout: "default",
-      title: 'Backend Juan Paladea | Usuario',
-      user: req.session.user,
-      cart: cart
-    }
-  )
+  try {
+    const cart = await cartService.getCart(userId)
+    res.render(
+      "user",
+      {
+        layout: "default",
+        title: 'Backend Juan Paladea | Usuario',
+        user: req.session.user,
+        cart: cart
+      }
+    )
+  } catch (error) {
+    res.status(400).send({status: 'error', error: 'Error al obtener el usuario', error})
+  }
 })
 
 export default router
