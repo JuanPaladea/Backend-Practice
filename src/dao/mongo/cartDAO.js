@@ -1,59 +1,55 @@
-import {cartModel} from "../models/cartsModel.js";
+import cartModel from "./models/cartsModel.js";
 
-export default class CartManagerDB {  
-  
+export default class cartDAO {  
   async addCart(userId) {
     try {
       const cartExist = await cartModel.findOne({user: userId})
       if (cartExist) {
-        return cartExist
-      } else {
-        const cart = await cartModel.create({user: userId})
-        return cart
-      }
+        return cartExist;
+      } 
+      const cart = await cartModel.create({user: userId})
+      return cart;
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
 
   async getCart(id) {
     try {
       const cart = await cartModel.findById(id).populate('products.product').populate('user').lean();
-      if (!cart) {
-        console.error('Carrito no encontrado')
-        return
-      }
       return cart;
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
 
   async getAllCarts() {
     try {
       const carts = await cartModel.find().populate('products.product').populate('user').lean();
-      return carts
+      return carts;
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
 
   async updateCart(cartId, products) {
     try {
-      return await cartModel.findByIdAndUpdate(cartId, {products: products})
+      const cart = cartModel.findByIdAndUpdate(cartId, {products: products})
+      return cart;
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
 
   async updateProductQuantity(cartId, productId, quantity) {
     try {
-      return cartModel.updateOne(
+      const cart = cartModel.updateOne(
         {"_id": cartId, "products.product": productId},
         {$set: {"products.$.quantity": quantity}}
       )
+      return cart;
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
 
@@ -61,50 +57,67 @@ export default class CartManagerDB {
     try {
       const cart = await cartModel.findOne({_id: cartid});
       if (!cart) {
-        return console.error(error)
+        throw new Error('Cart does not exist')
       }
 
       const existingProduct = await cartModel.findOne({"products.product": productId})
+
       if (existingProduct) {
-        await cartModel.updateOne(
+        const updatedCart = cartModel.updateOne(
           {"products.product": productId},
           {$inc : {"products.$.quantity": 1}}  
         )
-      } else {
-        await cartModel.updateOne(
-          {_id: cartid},
-          {$push: {products: [{product: productId, quantity: quantity}]}}  
-        )
-      }
+        return updatedCart;
+      } 
+    
+      const updatedCart = await cartModel.updateOne(
+        {_id: cartid},
+        {$push: {products: [{product: productId, quantity: quantity}]}}  
+      )
+      return updatedCart;
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
 
   async deleteCart(id) {
     try {
-      return await cartModel.deleteOne({_id: id})
+      const cart = await cartModel.deleteOne({_id: id})
+      if (!cart) {
+        throw new Error('Cart does not exist')
+      }
+
+      return cart;
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
 
   async deleteAllProductsFromCart(cartId) {
     try {
-      await cartModel.findByIdAndUpdate(cartId, { products: []})
+      const cart = await cartModel.findByIdAndUpdate(cartId, { products: []})
+      if (!cart) {
+        throw new Error('Cart does not exist')
+      }
+
+      return cart;
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
 
   async deleteProductFromCart(cartId, productId) {
     try {
-      return await cartModel.findOneAndUpdate(
+      const cart = await cartModel.findOneAndUpdate(
         {_id: cartId},
         { $pull: { products: {product: productId}}},
       )
+      if (!cart) {
+        throw new Error('Cart does not exist')
+      }
+      return cart;
     } catch (error) {
-      console.error(error)
+      throw error
     }
   }
 }

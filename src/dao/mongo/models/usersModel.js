@@ -34,4 +34,6 @@ const usersSchema = new mongoose.Schema({
 
 usersSchema.plugin(mongoosePaginate)
 
-export const userModel = mongoose.model(usersCollection, usersSchema)
+const userModel = mongoose.model(usersCollection, usersSchema)
+
+export default userModel
