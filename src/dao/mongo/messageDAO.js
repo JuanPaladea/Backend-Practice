@@ -3,7 +3,7 @@ import messageModel from "./models/messageModel";
 class messageDAO {
   async getMessages() {
     try {
-      const messages = await messageModel.find()
+      const messages = await messageModel.find({})
       return messages;
     } catch (error) {
       throw error

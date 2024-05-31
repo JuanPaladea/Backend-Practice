@@ -27,13 +27,15 @@ const initializatePassport = () => {
       if (!firstName || !lastName || !age || !password || !email) {
         return done(null, false, {message: 'All fields are required!'})
       }
+      if (req.body.role) {
+        return done(null, false, {message: 'You cannot set your role!'})
+      }
       if (age < 18) {
         return done(null, false, {message: 'You must be over 18 years old!'})
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return done(null, false, {message: 'Invalid email!'})
       }
-      // add password validation, the password must have at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character
       if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(password)) {
         return done(null, false, {message: 'Invalid password!, the password must have at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character'})
       }
