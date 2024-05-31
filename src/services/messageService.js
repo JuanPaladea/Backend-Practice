@@ -4,7 +4,7 @@ import messageDTO from "../dao/dto/messageDTO";
 class messageService {
   async getMessages() {
     try {
-      const messages = await messageDAO.getMessages();
+      const messages = await messageDAO.getMessages().sort({ date: -1 }).lean();
       if (!messages) {
         throw new Error("No messages found");
       }

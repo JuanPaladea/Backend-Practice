@@ -20,6 +20,7 @@ import cartsRouter from "./routes/carts.router.js"
 import sessionRouter from "./routes/session.router.js"
 import { MONGODB_URI, SECRET_SESSION } from './utils/config.js';
 import authRedirect from './middlewares/authRedirect.js';
+import messageService from './services/messageService.js';
 
 const app = express();
 
@@ -96,3 +97,19 @@ const httpServer = app.listen(port, () => {
 
 // SOCKET SERVER
 const socketServer = new Server(httpServer);
+
+socketServer.on("connection", async (socket) => {
+  console.log("New connection", socket.id);
+  
+  const messages = await messageService.getMessages();
+
+  socket.emit("messages", messages);
+
+  socket.on("newMessage", (data) => {
+    socketServer.emit("messages", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected", socket.id);
+  });
+})
