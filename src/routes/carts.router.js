@@ -19,7 +19,7 @@ router.get('/:cid', auth, async (req, res) => {
       products: cart.products
     })
   } catch (error) {
-    res.status(400).send({status: 'error', error: 'Error al obtener el carrito', error})
+    res.status(400).send({status: 'error', message: error.message})
   }
 })
 

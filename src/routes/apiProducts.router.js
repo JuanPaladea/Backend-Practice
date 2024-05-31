@@ -1,9 +1,11 @@
 import { Router } from "express";
 import productService from "../services/productService.js";
+import auth from "../middlewares/auth.js";
+import isAdmin from "../middlewares/isAdmin.js";
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const limit = +req.query.limit || 10;
     const page = +req.query.page || 1;
@@ -29,7 +31,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/:productId', async (req, res) => {
+router.get('/:productId', auth, async (req, res) => {
   let productId = req.params.productId;
   try {
     const product = await productService.getProductById(productId);
@@ -39,7 +41,7 @@ router.get('/:productId', async (req, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, isAdmin, async (req, res) => {
   const price = +req.body.price;
   const stock = +req.body.stock;
   const { title, description, code, category, thumbnails } = req.body;
@@ -70,7 +72,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.put('/:productId', async (req, res) => {
+router.put('/:productId', auth, isAdmin, async (req, res) => {
   const productId = req.params.productId;
   const productData = req.body;
   if (!productData) {
@@ -88,7 +90,7 @@ router.put('/:productId', async (req, res) => {
   }
 })
 
-router.delete('/:productId', async (req, res) => {
+router.delete('/:productId', auth, isAdmin, async (req, res) => {
   const productId = req.params.productId;
   
   try {

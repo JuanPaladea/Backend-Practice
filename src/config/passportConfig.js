@@ -124,9 +124,8 @@ const initializatePassport = () => {
         const user = await userModel.findOne({username: profile._json.login})
         if (!user) {
           const newUser = {
-            username: profile._json.login,
-            name: profile._json.name,
-            password: ''
+            firstName: profile._json.name,
+            email: profile._json.email,
           }
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)
@@ -150,11 +149,12 @@ const initializatePassport = () => {
     async (accessToken, refreshToken, profile, done) => {
       try {
         const user = await userModel.findOne({username: profile._json.name})
+        console.log(profile)
         if (!user) {
           const newUser = {
-            username: profile._json.name,
-            name: profile._json.name,
-            password: ''
+            email: profile._json.email,
+            firstName: profile._json.given_name,
+            lastName: profile._json.family_name,
           }
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)

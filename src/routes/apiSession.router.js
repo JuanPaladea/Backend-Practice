@@ -7,25 +7,24 @@ import { JWT_SECRET } from "../utils/config.js";
 
 const router = Router();
 
-router.get('/users', async (req, res) => {
+router.get('/users', auth, async (req, res) => {
   try {
     const users = await userService.getUsers()
     res.status(200).send({status: 'success', message: 'usuarios encontrados', users})
   } catch (error) {
-    res.status(400).send({status: 'error', error: 'ha ocurrido un error', error})
+    res.status(400).send({status: 'error', message: error.message})
   }
 })
 
-router.get('/current', 
-  passport.authenticate('jwt', { session: false }), 
-  (req, res) => {
-    res.status(200).send({
-      status: 'success',
-      message: 'User found',
-      user: req.user,
-    });
-  }
-);
+router.get('/current', auth, async (req, res) => { 
+  try {
+    const user = await userService.getUserById(req.session.user._id);
+    res.status(200).send({status: 'success', message: 'User found', user});
+  } catch (error) {
+    res.status(400).send({status: 'error', message: error.message});
+
+  };
+});
 
 router.post(
   '/register',
