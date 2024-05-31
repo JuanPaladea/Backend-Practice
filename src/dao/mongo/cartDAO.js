@@ -41,15 +41,6 @@ class cartDAO {
     }
   }
 
-  async updateCart(cartId, products) {
-    try {
-      const cart = cartModel.findByIdAndUpdate(cartId, {products: products})
-      return cart;
-    } catch (error) {
-      throw error
-    }
-  }
-
   async updateProductQuantity(cartId, productId, quantity) {
     try {
       const cart = cartModel.updateOne(

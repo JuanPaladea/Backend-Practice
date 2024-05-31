@@ -12,7 +12,7 @@ class cartService {
       if (newCart) {
         throw new Error('Error creating cart');
       }
-      return new cartDTO(newCart);
+      return newCart
     } catch (error) {
       throw error;
     }

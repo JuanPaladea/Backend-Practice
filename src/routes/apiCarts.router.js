@@ -90,8 +90,8 @@ router.delete("/:cid", auth, async (req, res) => {
   if (cart.user !== userId) {
     return res.status(401).send({status:'error', message:'No tienes permisos para eliminar este carrito'})
   }
-
   try {
+
     const cart = await cartService.deleteAllProductsFromCart(cartId);
     res.status(200).send({status:'success', message:'carrito eliminado', cart});
   } catch (error) {
@@ -104,14 +104,67 @@ router.delete("/:cid/products/:pid", auth, async (req, res) => {
   const productId = req.params.pid
   const userId = req.session.user._id;
 
+  try {
   const cart = await cartService.getCart(cartId);
   if (cart.user !== userId) {
     return res.status(401).send({status:'error', message:'No tienes permisos para eliminar productos de este carrito'})
   }
   
+  const deletedCart = await cartService.deleteProductFromCart(cartId, productId)
+  res.status(200).send({status:'success', message:`producto ${productId} eliminado del carrito`, deletedCart});
+  } catch (error) {
+    res.status(400).send({status:'error', message: error.message})
+  }
+})
+
+router.post('/:cid/purchase', auth, async (req, res) => {
+  const cartId = req.params.cid;
+  const userId = req.session.user._id;
+
   try {
-    const cart = await cartService.deleteProductFromCart(cartId, productId)
-    res.status(200).send({status:'success', message:`producto ${productId} eliminado del carrito`, cart});
+  // Check if cart belong to the user
+  const cart = await cartService.getCart(cartId);
+  console.log(cart)
+  if (cart.user !== userId) {
+    return res.status(401).send({status:'error', message:'No tienes permisos para comprar este carrito'})
+  }
+  // Check if cart has products
+  if (!cart.products.length) {
+    return res.status(400).send({status:'error', message:'No hay productos en el carrito'})
+  }
+  // Check if products have enough stock and remove them from the cart if they don't and add them to a variable
+  let productsRemoved = [];
+  for (let product of cart.products) {
+    const productStock = await productService.getProductById(product._id);
+    if (productStock.stock < product.quantity) {
+      productsRemoved.push(product);
+      await cartService.deleteProductFromCart(cartId, product._id);
+    }
+  }
+  // Calculate the total amount of the current cart
+  let totalAmount = 0;
+  for (let product of cart.products) {
+    totalAmount += product.price * product.quantity;
+  }
+
+  //Auto-generate code and autoincrement
+  let code = 0;
+  let tickets = await ticketService.getTickets();
+  if (tickets.length) {
+    code = tickets[tickets.length - 1].code + 1;
+  }
+
+  // delete all products from cart and generate ticket
+  await cartService.deleteAllProductsFromCart(cartId);
+  const ticket = await ticketService.createTicket({ code, totalAmount, products: cart.products, user: userId });
+  // If there were products with no stock add them again to the cart after the purchase is done
+  for (let product of productsRemoved) {
+    await cartService.addProductToCart(cartId, product._id, product.quantity)
+  }
+  
+  // Display the ticket and if there were products with no stock, display them too
+  const currentCart = await cartService.getCart(cartId);
+  res.status(200).send({status:'success', message:'compra realizada', ticket, productsRemoved, currentCart});
   } catch (error) {
     res.status(400).send({status:'error', message: error.message})
   }

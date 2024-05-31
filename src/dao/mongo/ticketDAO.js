@@ -19,28 +19,19 @@ class ticketDAO {
     }
   }
 
+  async getTicketsByUserId(userId) {
+    try {
+      const tickets = await ticketModel.find({ userId: userId })
+      return tickets
+    } catch (error) {
+      throw error
+    }
+  }
+
   async createTicket(ticket) {
     try {
       const newTicket = await ticketModel.create(ticket)
       return newTicket
-    } catch (error) {
-      throw error
-    }
-  }
-
-  async updateTicket(ticketId, ticket) {
-    try {
-      const updatedTicket = await ticketModel.findByIdAndUpdate(ticketId, ticket)
-      return updatedTicket
-    } catch (error) {
-      throw error
-    }
-  }
-
-  async deleteTicket(ticketId) {
-    try {
-      const deletedTicket = await ticketModel.findByIdAndDelete(ticketId)
-      return deletedTicket
     } catch (error) {
       throw error
     }

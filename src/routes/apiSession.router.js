@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import userService from "../services/userService.js";
 import { JWT_SECRET } from "../utils/config.js";
+import auth from "../middlewares/auth.js";
 
 const router = Router();
 

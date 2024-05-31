@@ -5,8 +5,13 @@ const ticketCollection = 'tickets'
 const ticketSchema = new mongoose.Schema({
   code: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
+  products: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'products'
+  }],
   purchaseDateTime: {
     type: Date,
     default: Date.now
@@ -16,8 +21,9 @@ const ticketSchema = new mongoose.Schema({
     required: true
   },
   purchaser: {
-    type: String,
-    required: true
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'users'
   }
 })
 
