@@ -20,7 +20,7 @@ router.get('/users', auth, isAdmin, async (req, res) => {
 
 router.get('/current', auth, async (req, res) => { 
   try {
-    const user = req.session.user;
+    const user = await userService.getUserById(req.session._id);
     res.status(200).send({status: 'success', message: 'User found', user});
   } catch (error) {
     res.status(400).send({status: 'error', message: error.message});
