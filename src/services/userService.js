@@ -8,7 +8,7 @@ class userService {
       if (!users) {
         throw new Error("No users found");
       }
-      return users
+      return users.map((user) => new userDTO(user));
     } catch (error) {
       throw error;
     }

@@ -8,7 +8,7 @@ class productService {
       if (!products) {
         throw new Error("No products found");
       }
-      return products
+      return products.map((product) => new productDTO(product));
     } catch (error) {
       throw error;
     }

@@ -8,7 +8,7 @@ class ticketService {
       if (!tickets) {
         throw new Error("No tickets found");
       }
-      return tickets;
+      return tickets.map((ticket) => new ticketDTO(ticket));
     } catch (error) {
       throw error;
     }
