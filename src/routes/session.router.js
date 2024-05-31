@@ -1,7 +1,7 @@
 import { Router } from "express";
-import auth from "../middlewares/auth.js";
 import logged from "../middlewares/logged.js";
 import cartService from "../services/cartService.js";
+import authRedirect from "../middlewares/authRedirect.js";
 
 const router = Router();
 
@@ -26,7 +26,7 @@ router.get('/register', logged, async (req, res) => {
   )
 })
 
-router.get('/user', auth, async (req, res) => {
+router.get('/user', authRedirect, async (req, res) => {
   const userId = req.session.user._id
   try {
     const cart = await cartService.getCart(userId)

@@ -5,10 +5,11 @@ import jwt from 'jsonwebtoken';
 import userService from "../services/userService.js";
 import { JWT_SECRET } from "../utils/config.js";
 import auth from "../middlewares/auth.js";
+import isAdmin from "../middlewares/isAdmin.js";
 
 const router = Router();
 
-router.get('/users', auth, async (req, res) => {
+router.get('/users', auth, isAdmin, async (req, res) => {
   try {
     const users = await userService.getUsers()
     res.status(200).send({status: 'success', message: 'usuarios encontrados', users})
@@ -19,7 +20,7 @@ router.get('/users', auth, async (req, res) => {
 
 router.get('/current', auth, async (req, res) => { 
   try {
-    const user = await userService.getUserById(req.session.user._id);
+    const user = req.session.user;
     res.status(200).send({status: 'success', message: 'User found', user});
   } catch (error) {
     res.status(400).send({status: 'error', message: error.message});

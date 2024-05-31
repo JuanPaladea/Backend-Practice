@@ -1,5 +1,5 @@
-import ticketDAO from "../dao/mongo/ticketDAO";
-import ticketDTO from "../dao/dto/ticketDTO";
+import ticketDAO from "../dao/mongo/ticketDAO.js";
+import ticketDTO from "../dao/dto/ticketDTO.js";
 
 class ticketService {
   async getTickets() {

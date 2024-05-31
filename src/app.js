@@ -13,12 +13,13 @@ import cartService from './services/cartService.js';
 import initializatePassport from './config/passportConfig.js';
 import apiCartsRouter from "./routes/apiCarts.router.js"
 import apiProductsRouter from "./routes/apiProducts.router.js"
+import apiSessionRouter from "./routes/apiSession.router.js"
+import apiTicketsRouter from "./routes/apiTickets.router.js"
 import productsRouter from "./routes/products.router.js"
 import cartsRouter from "./routes/carts.router.js"
-import apiSessionRouter from "./routes/apiSession.router.js"
 import sessionRouter from "./routes/session.router.js"
 import { MONGODB_URI, SECRET_SESSION } from './utils/config.js';
-import auth from './middlewares/auth.js';
+import authRedirect from './middlewares/authRedirect.js';
 
 const app = express();
 
@@ -57,7 +58,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //BIENVENIDA
-app.get('/', auth, async (req, res) => {
+app.get('/', authRedirect, async (req, res) => {
   try {
     const userId = req.session.user._id
     const cart = await cartService.getCartWithUserId(userId)
@@ -80,6 +81,7 @@ app.get('/', auth, async (req, res) => {
 app.use('/api/session', apiSessionRouter)
 app.use("/api/products", apiProductsRouter)
 app.use("/api/carts", apiCartsRouter)
+app.use("/api/tickets", apiTicketsRouter)
 
 //VIEWS ROUTES
 app.use(sessionRouter)

@@ -88,7 +88,7 @@ class cartDAO {
   
   async deleteAllProductsFromCart(cartId) {
     try {
-      const cart = await cartModel.findByIdAndUpdate(cartId, { products: []})
+      const cart = await cartModel.findByIdAndUpdate(cartId, { products: []}, {new: true})
       return cart;
     } catch (error) {
       throw error

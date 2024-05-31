@@ -6,24 +6,24 @@ import isAdmin from "../middlewares/isAdmin.js";
 const router = Router();
 
 router.get('/', auth, async (req, res) => {
+  const limit = +req.query.limit || 8;
+  const page = +req.query.page || 1;
+  const { query = null, sort = null } = req.query;
+  
+  if (typeof limit !== 'number' || typeof page !== 'number') {
+    return res.status(400).send({error: 'limit and page must be numbers'})
+  }
+  if (limit < 1 || page < 1) {
+    return res.status(400).send({error: 'limit and page must be greater than 0'})
+  }
+  if (query) {
+    query = JSON.parse(query);
+  }
+  if (sort) {
+    sort = JSON.parse(sort)
+  }
+  
   try {
-    const limit = +req.query.limit || 10;
-    const page = +req.query.page || 1;
-    const { query = null, sort = null } = req.query;
-
-    if (typeof limit !== 'number' || typeof page !== 'number') {
-      return res.status(400).send({error: 'limit and page must be numbers'})
-    }
-    if (limit < 1 || page < 1) {
-      return res.status(400).send({error: 'limit and page must be greater than 0'})
-    }
-    if (query) {
-      query = JSON.parse(query);
-    }
-    if (sort) {
-      sort = JSON.parse(sort)
-    }
-
     const products = await productService.getProducts(limit, page, query, sort);
     res.status(200).send({status: 'success', message: 'productos encontrados', products})
   } catch (error) {
@@ -33,6 +33,7 @@ router.get('/', auth, async (req, res) => {
 
 router.get('/:productId', auth, async (req, res) => {
   let productId = req.params.productId;
+
   try {
     const product = await productService.getProductById(productId);
     res.status(200).send({status: 'success', message: 'producto encontrado', product})
@@ -42,10 +43,10 @@ router.get('/:productId', auth, async (req, res) => {
 })
 
 router.post('/', auth, isAdmin, async (req, res) => {
-  const price = +req.body.price;
-  const stock = +req.body.stock;
-  const { title, description, code, category, thumbnails } = req.body;
-
+  const price = +req.body.product.price;
+  const stock = +req.body.product.stock;
+  const { title, description, code, category, thumbnails } = req.body.product;
+  
   if (!title || !description || !code || !price || !stock || !category) {
     return res.status(400).send({status:'error', error:'faltan datos'})
   }

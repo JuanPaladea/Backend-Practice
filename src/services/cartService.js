@@ -6,10 +6,10 @@ class cartService {
     try {
       const cart = await cartDAO.getCartWithUserId(userId);
       if (cart) {
-        throw new Error('Cart already exists for this user');
+        return cart
       }
       const newCart = await cartDAO.addCart(userId);
-      if (newCart) {
+      if (!newCart) {
         throw new Error('Error creating cart');
       }
       return newCart

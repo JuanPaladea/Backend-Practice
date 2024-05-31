@@ -79,12 +79,12 @@ const initializatePassport = () => {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username)) {
         return done(null, false, {message: 'Invalid email!'})
       }
+      
       try {
         const user = await userService.findUserEmail(username);
         if (!user) {
           return done(null, false, {message: 'User not found!'})
         }
-        console.log(user)
         if(!isValidPassword(user, password)) {
           return done(null, false, {message: 'Invalid password!'})
         }

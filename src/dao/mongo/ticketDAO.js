@@ -3,7 +3,7 @@ import ticketModel from './models/ticketModel.js'
 class ticketDAO {
   async getTickets() {
     try {
-      const tickets = await ticketModel.find({})
+      const tickets = await ticketModel.find().populate('purchaser').populate('products.product').lean()
       return tickets
     } catch (error) {
       throw error
