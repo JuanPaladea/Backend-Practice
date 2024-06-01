@@ -3,7 +3,7 @@ import messageModel from "./models/messageModel.js";
 class messageDAO {
   async getMessages() {
     try {
-      const messages = await messageModel.find({})
+      const messages = await messageModel.find({}).sort({ date: -1 }).lean();
       return messages;
     } catch (error) {
       throw error

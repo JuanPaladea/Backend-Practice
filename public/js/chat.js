@@ -4,9 +4,6 @@ const messagesContainer = document.getElementById('messages-container');
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-button');
 
-socket.on('messages', renderMessages);
-sendButton.addEventListener('click', sendMessage);
-
 const renderMessages = async () => {
   try {
     const response = await axios.get('/api/messages');
@@ -14,21 +11,32 @@ const renderMessages = async () => {
     messagesContainer.innerHTML = '';
     messages.forEach((message) => {
       const messageElement = document.createElement('div');
-      messageElement.innerText = message.message;
+      messageElement.innerHTML = `
+        <div class="flex items-end">
+          <div class="flex flex-col text-xs max-w-xs mx-2 order-2 items-start py-2">
+            <div><span class='px-4 py-2 rounded-lg inline-block rounded-tr-none bg-blue-600 text-white'>${message.email || message.firstName}</span></div>
+            <div><span class='px-4 py-2 rounded-lg inline-block rounded-tl-none bg-gray-300 text-gray-600'>${message.message}</span></div>
+          </div>
+        </div>
+      `;
       messagesContainer.appendChild(messageElement);
     });
   } catch (error) {
     console.error(error);
   }
 }
+renderMessages();
 
 const sendMessage = async () => {
   try {
-    const messageInput = messageInput.value;
-    const message = await axios.post('/api/messages', { message });
+    const messageText = messageInput.value;
+    await axios.post('/api/messages', { message: messageText});
     messageInput.value = '';
-    socket.emit('newMessage', message.data);
+    socket.emit('newMessage');
   } catch (error) {
     console.error(error);
   }
 }
+
+socket.on('newMessage', renderMessages);
+sendButton.addEventListener('click', sendMessage);

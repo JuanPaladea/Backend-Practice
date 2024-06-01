@@ -21,10 +21,7 @@ class cartService {
   async getCart(id) {
     try {
       const cart = await cartDAO.getCart(id);
-      if (!cart) {
-        throw new Error('Cart not found');
-      }
-      return new cartDTO(cart);
+      return cart
     } catch (error) {
       throw error;
     }
@@ -33,10 +30,7 @@ class cartService {
   async getCartWithUserId(userId) {
     try {
       const cart = await cartDAO.getCartWithUserId(userId);
-      if (!cart) {
-        throw new Error('Cart not found');
-      }
-      return new cartDTO(cart);
+      return cart
     } catch (error) {
       throw error;
     }

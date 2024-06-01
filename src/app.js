@@ -9,18 +9,18 @@ import cookieParser from 'cookie-parser';
 import flash from 'connect-flash';
 
 import { __dirname } from './utils/utils.js';
-import cartService from './services/cartService.js';
 import initializatePassport from './config/passportConfig.js';
 import apiCartsRouter from "./routes/apiCarts.router.js"
 import apiProductsRouter from "./routes/apiProducts.router.js"
 import apiSessionRouter from "./routes/apiSession.router.js"
 import apiTicketsRouter from "./routes/apiTickets.router.js"
+import apiMessagesRouter from "./routes/apiMessages.router.js"
+import homeRouter from "./routes/home.router.js"
 import productsRouter from "./routes/products.router.js"
 import cartsRouter from "./routes/carts.router.js"
 import sessionRouter from "./routes/session.router.js"
+import chatRouter from "./routes/chat.router.js"
 import { MONGODB_URI, SECRET_SESSION } from './utils/config.js';
-import authRedirect from './middlewares/authRedirect.js';
-import messageService from './services/messageService.js';
 
 const app = express();
 
@@ -58,36 +58,21 @@ initializatePassport();
 app.use(passport.initialize())
 app.use(passport.session())
 
-//BIENVENIDA
-app.get('/', authRedirect, async (req, res) => {
-  try {
-    const userId = req.session.user._id
-    const cart = await cartService.getCartWithUserId(userId)
-    res.render(
-      "home", {
-        layout: "default",
-        title: 'Backend Juan Paladea',
-        user: req.session.user,
-        cart: cart 
-      }
-    )
-  } catch (error) {
-    res.status(400).send({status: 'error', message: error.message})
-  }
-})
-
 //ROUTES
 
 //API ROUTES
 app.use('/api/session', apiSessionRouter)
+app.use('/api/messages', apiMessagesRouter)
 app.use("/api/products", apiProductsRouter)
 app.use("/api/carts", apiCartsRouter)
 app.use("/api/tickets", apiTicketsRouter)
 
 //VIEWS ROUTES
+app.use(homeRouter)
 app.use(sessionRouter)
 app.use("/products", productsRouter)
 app.use("/carts", cartsRouter)
+app.use('/chat', chatRouter)
 
 //PORT LISTEN
 const port = 8080;
@@ -96,17 +81,13 @@ const httpServer = app.listen(port, () => {
 })
 
 // SOCKET SERVER
-const socketServer = new Server(httpServer);
+export const socketServer = new Server(httpServer);
 
 socketServer.on("connection", async (socket) => {
   console.log("New connection", socket.id);
-  
-  const messages = await messageService.getMessages();
 
-  socket.emit("messages", messages);
-
-  socket.on("newMessage", (data) => {
-    socketServer.emit("messages", data);
+  socket.on("newMessage", async () => {
+    socketServer.emit("newMessage");
   });
 
   socket.on("disconnect", () => {
