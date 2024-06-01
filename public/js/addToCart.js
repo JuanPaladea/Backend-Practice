@@ -8,6 +8,6 @@ addToCartButton.addEventListener('click', async () => {
     const cartResponse = await axios.post(`/api/carts/${cartId}/products/${productId}`)
     alert(cartResponse.data.status + ' ' + cartResponse.data.message)
   } catch (error) {
-    console.error(error);
+    alert('Error adding product to cart', error.message)
   }
 });

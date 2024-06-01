@@ -7,9 +7,9 @@ deleteButtons.forEach(deleteButton => {
     console.log(cartId, productId);
     try { 
       const response = await axios.delete(`/api/carts/${cartId}/products/${productId}`);
-      alert(response.data);
+      alert(response.data.status + ' ' + response.data.message);
     } catch (error) {
-      console.error(error);
+      alert('Error deleting product from cart', error.message);
     }
     location.reload()
   });

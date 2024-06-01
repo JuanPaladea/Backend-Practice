@@ -20,9 +20,9 @@ productForm.addEventListener('submit', async (e) => {
 
   try {
     const response = await axios.post('/api/products/', {product})
-    alert({response})
+    alert(response.data.status + ' ' + response.data.message)
   } catch (error) {
-    console.error(error)
+    alert('Error adding product', error.message)
   }
 
   productTitle.value = '';

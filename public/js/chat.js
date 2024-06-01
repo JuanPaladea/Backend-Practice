@@ -22,7 +22,7 @@ const renderMessages = async () => {
       messagesContainer.appendChild(messageElement);
     });
   } catch (error) {
-    console.error(error);
+    alert('Error loading messages', error.message);
   }
 }
 renderMessages();
@@ -34,7 +34,7 @@ const sendMessage = async () => {
     messageInput.value = '';
     socket.emit('newMessage');
   } catch (error) {
-    console.error(error);
+    alert('Error sending message', error.message);
   }
 }
 
