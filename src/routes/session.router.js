@@ -40,7 +40,7 @@ router.get('/user', authRedirect, async (req, res) => {
       }
     )
   } catch (error) {
-    res.status(400).send({status: 'error', error: 'Error al obtener el usuario', error})
+    res.status(400).send({status: 'error', error: error.message})
   }
 })
 

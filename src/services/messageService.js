@@ -1,10 +1,10 @@
-import messageDAO from "../dao/mongo/messageDAO";
-import messageDTO from "../dao/dto/messageDTO";
+import messageDAO from "../dao/mongo/messageDAO.js";
+import messageDTO from "../dao/dto/messageDTO.js";
 
 class messageService {
   async getMessages() {
     try {
-      const messages = await messageDAO.getMessages().sort({ date: -1 }).lean();
+      const messages = await messageDAO.getMessages()
       if (!messages) {
         throw new Error("No messages found");
       }
