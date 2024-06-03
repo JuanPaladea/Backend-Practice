@@ -23,6 +23,10 @@ const usersSchema = new mongoose.Schema({
     type: String,
     default: 'usuario',
   },
+  verified: {
+    type: Boolean,
+    default: false
+  },
   cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'carts'

@@ -44,6 +44,15 @@ class userDAO {
     }
   } 
 
+  async verifyUser(userId) {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, {verified: true})
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
   async findUserEmail(email) {
     try {
       const user = await userModel.findOne({email: email})
