@@ -7,6 +7,7 @@ import { JWT_SECRET } from "../utils/config.js";
 import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
+import { isValidPassword } from "../utils/bcrypt.js";
 
 const router = Router();
 
@@ -33,19 +34,9 @@ router.post(
   '/register',
   passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}),
   (req, res) => {
-    req.session.user = {
-      _id: req.user._id,
-      firstName: req.user.firstName,
-      lastName: req.user.lastName,
-      email: req.user.email,
-      verified: req.user.verified,
-      age: req.user.age,
-      role: req.user.role 
-    };
-
     res.status(200).send({
       status: 'success',
-      message: 'User registered, please verify your email!',
+      message: 'User registered, please login to verify your email!',
     });
   }
 );
@@ -82,6 +73,7 @@ router.post(
       _id: req.user._id,
       firstName: req.user.firstName,
       lastName: req.user.lastName,
+      verified: req.user.verified,
       email: req.user.email,
       age: req.user.age,
       role: req.user.role
@@ -104,17 +96,25 @@ router.get("/failLogin", (req, res) => {
     });
   });
   
-router.get('/verify/:id', auth, async (req, res) => {
+router.post('/verify/:id', auth, async (req, res) => {
   const userId = req.params.id;
-  if (userId !== req.session.user._id) {
-    res.status(401).send({status: 'error', message: 'You cant verify another user'});
-    return;
+  const inputEmail = req.body.email;
+  const inputPassword = req.body.password;
+
+  if (!inputEmail || !inputPassword) {
+    return res.status(400).send({status: 'error', message: 'All fields are required'});
   }
+
   try {
     const user = await userService.getUserById(userId);
+    if (user.email !== inputEmail) {
+      return res.status(400).send({status: 'error', message: 'Invalid email'});
+    }
+    if (!isValidPassword(user, inputPassword)) {
+      return res.status(400).send({status: 'error', message: 'Invalid password'});
+    }
     if (user.verified) {
-      res.status(400).send({status: 'error', message: 'User already verified'});
-      return;
+      return res.status(400).send({status: 'error', message: 'User already verified'});
     }
     const result = await userService.verifyUser(userId);
     req.session.user.verified = result.verified;

@@ -45,4 +45,15 @@ router.get('/user', authRedirect, isVerified, async (req, res) => {
   }
 })
 
+router.get('/verify/:id', async (req, res) => {
+  res.render(
+    'verify',
+    {
+      layout: 'default',
+      title: 'Backend Juan Paladea | Verify',
+      id: req.params.id
+    }
+  )
+})
+
 export default router
