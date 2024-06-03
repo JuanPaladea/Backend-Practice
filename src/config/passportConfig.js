@@ -24,8 +24,8 @@ const initializatePassport = () => {
       failureFlash: true
     },
     async (req, email, password, done) => {
-      const { firstName, lastName, age} = req.body;
-      if (!firstName || !lastName || !age || !password || !email) {
+      const { firstName, lastName, age, email2, password2} = req.body;
+      if (!firstName || !lastName || !age || !password || !email ) {
         return done(null, false, {message: 'All fields are required!'})
       }
       if (req.body.role) {
@@ -39,6 +39,9 @@ const initializatePassport = () => {
       }
       if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(password)) {
         return done(null, false, {message: 'Invalid password!, the password must have at least 8 characters, one uppercase letter, one lowercase letter, one number'})
+      }
+      if (email !== email2 || password !== password2) {
+        return done(null, false, {message: 'Email or password does not match!'})
       }
 
       try {
@@ -145,6 +148,7 @@ const initializatePassport = () => {
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)
           const result = await userService.updateUser(registeredUser._id, cart._id);
+
           return done(null, result);
         } else {
           return done(null, user);

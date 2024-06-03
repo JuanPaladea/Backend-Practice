@@ -35,7 +35,7 @@ router.post(
   (req, res) => {
     res.status(200).send({
       status: 'success',
-      message: 'User registered, please login to verify your email!',
+      message: 'User registered, please check your email to verify your account.',
     });
   }
 );
@@ -89,12 +89,16 @@ router.post(
 
 router.get('/verify/:userId', async (req, res) => {
   const userId = req.params.userId;
+  if (req.session.user.verified) {
+    return res.status(400).send({status: 'error', message: 'User already verified'});
+  }
   try {
-    const user = await userService.verifyUser(userId);
-    req.session.user.verified = {
-      verified: user.verified
+    const user = await userService.getUserById(userId);
+    if (user.verified) {
+      return res.status(400).send({status: 'error', message: 'User already verified'});
     }
-    res.status(200).send({status: 'success', message: 'User verified', user});
+    const userVerify = await userService.verifyUser(userId);
+    res.status(200).send({status: 'success', message: 'User verified', userVerify});
   } catch (error) {
     res.status(400).send({status: 'error', message: error.message});
   }
