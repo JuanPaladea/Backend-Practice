@@ -68,7 +68,7 @@ const initializatePassport = () => {
           `<div>
           <h1>¡Bienvenido a Backend JP!</h1>
           <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
-          <a href="http://localhost:8080/verify/${registeredUser._id}">Verificar cuenta</a>
+          <a href="http://localhost:8080/api/session/verify/${registeredUser._id}">Verificar cuenta</a>
           </div>`
         })
 

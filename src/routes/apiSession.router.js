@@ -7,7 +7,6 @@ import { JWT_SECRET } from "../utils/config.js";
 import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
-import { isValidPassword } from "../utils/bcrypt.js";
 
 const router = Router();
 
@@ -88,41 +87,26 @@ router.post(
   }
 )
 
-router.get("/failLogin", (req, res) => {
-  const message = req.flash('error')[0];
-  res.status(400).send({
-      status: "error",
-      message: message || "Failed Login"
-    });
-  });
-  
-router.post('/verify/:id', auth, async (req, res) => {
-  const userId = req.params.id;
-  const inputEmail = req.body.email;
-  const inputPassword = req.body.password;
-
-  if (!inputEmail || !inputPassword) {
-    return res.status(400).send({status: 'error', message: 'All fields are required'});
-  }
-
+router.get('/verify/:userId', async (req, res) => {
+  const userId = req.params.userId;
   try {
-    const user = await userService.getUserById(userId);
-    if (user.email !== inputEmail) {
-      return res.status(400).send({status: 'error', message: 'Invalid email'});
+    const user = await userService.verifyUser(userId);
+    req.session.user.verified = {
+      verified: user.verified
     }
-    if (!isValidPassword(user, inputPassword)) {
-      return res.status(400).send({status: 'error', message: 'Invalid password'});
-    }
-    if (user.verified) {
-      return res.status(400).send({status: 'error', message: 'User already verified'});
-    }
-    const result = await userService.verifyUser(userId);
-    req.session.user.verified = result.verified;
-    res.status(200).send({status: 'success', message: 'User verified', result});
+    res.status(200).send({status: 'success', message: 'User verified', user});
   } catch (error) {
     res.status(400).send({status: 'error', message: error.message});
   }
-});  
+});
+
+router.get("/failLogin", (req, res) => {
+  const message = req.flash('error')[0];
+  res.status(400).send({
+    status: "error",
+    message: message || "Failed Login"
+  });
+});
   
 router.get("/github", passport.authenticate('github', {scope: ['user:email']}), (req, res) => {
   res.status(200).send({
