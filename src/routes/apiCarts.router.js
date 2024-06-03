@@ -4,9 +4,10 @@ import productService from "../services/productService.js";
 import ticketService from "../services/ticketService.js";
 import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
+import isVerified from "../middlewares/isVerified.js";
 const router = Router();
 
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, isVerified, async (req, res) => {
   const userId = req.session.user._id
 
   try {
@@ -17,7 +18,7 @@ router.post('/', auth, async (req, res) => {
   }
 })
 
-router.get('/:cid', auth, isAdmin, async (req, res) => {
+router.get('/:cid', auth, isVerified, isAdmin, async (req, res) => {
   const cartId = req.params.cid;
 
   try {
@@ -28,7 +29,7 @@ router.get('/:cid', auth, isAdmin, async (req, res) => {
   }
 })
 
-router.get('/', auth, isAdmin, async (req, res) => {
+router.get('/', auth, isVerified, isAdmin, async (req, res) => {
   try {
     const carts = await cartService.getAllCarts();
     res.status(200).send({status:'success', message:'carritos encontrados', carts});
@@ -37,7 +38,7 @@ router.get('/', auth, isAdmin, async (req, res) => {
   }
 })
 
-router.post('/:cid/products/:pid', auth, async (req, res) => {
+router.post('/:cid/products/:pid', auth, isVerified, async (req, res) => {
   const cartId = req.params.cid;
   const productId = req.params.pid;
   const userId = req.session.user._id;
@@ -64,7 +65,7 @@ router.post('/:cid/products/:pid', auth, async (req, res) => {
   }
 })
 
-router.put('/:cid/products/:pid', auth, async (req, res) => {
+router.put('/:cid/products/:pid', auth, isVerified, async (req, res) => {
   const cartId = req.params.cid
   const productId = req.params.pid
   const quantity = +req.body.quantity;
@@ -87,7 +88,7 @@ router.put('/:cid/products/:pid', auth, async (req, res) => {
   }
 })
 
-router.delete("/:cid", auth, async (req, res) => {
+router.delete("/:cid", auth, isVerified, async (req, res) => {
   const cartId = req.params.cid;
   const userId = req.session.user._id;
 
@@ -104,7 +105,7 @@ router.delete("/:cid", auth, async (req, res) => {
   }
 })
 
-router.delete("/:cid/products/:pid", auth, async (req, res) => {
+router.delete("/:cid/products/:pid", auth, isVerified, async (req, res) => {
   const cartId = req.params.cid;
   const productId = req.params.pid
   const userId = req.session.user._id;
@@ -122,7 +123,7 @@ router.delete("/:cid/products/:pid", auth, async (req, res) => {
   }
 })
 
-router.post('/:cid/purchase', auth, async (req, res) => {
+router.post('/:cid/purchase', auth, isVerified, async (req, res) => {
   const cartId = req.params.cid;
   const userId = req.session.user._id;
 

@@ -2,6 +2,7 @@ import { Router } from "express";
 import logged from "../middlewares/logged.js";
 import cartService from "../services/cartService.js";
 import authRedirect from "../middlewares/authRedirect.js";
+import isVerified from "../middlewares/isVerified.js";
 
 const router = Router();
 
@@ -26,7 +27,7 @@ router.get('/register', logged, async (req, res) => {
   )
 })
 
-router.get('/user', authRedirect, async (req, res) => {
+router.get('/user', authRedirect, isVerified, async (req, res) => {
   const userId = req.session.user._id
   try {
     const cart = await cartService.getCart(userId)

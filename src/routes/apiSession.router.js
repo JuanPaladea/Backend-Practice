@@ -6,10 +6,11 @@ import userService from "../services/userService.js";
 import { JWT_SECRET } from "../utils/config.js";
 import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
+import isVerified from "../middlewares/isVerified.js";
 
 const router = Router();
 
-router.get('/users', auth, isAdmin, async (req, res) => {
+router.get('/users', auth, isVerified, isAdmin, async (req, res) => {
   try {
     const users = await userService.getUsers()
     res.status(200).send({status: 'success', message: 'usuarios encontrados', users})
@@ -18,7 +19,7 @@ router.get('/users', auth, isAdmin, async (req, res) => {
   }
 })
 
-router.get('/current', auth, async (req, res) => { 
+router.get('/current', auth, isVerified, async (req, res) => { 
   try {
     const user = await userService.getUserById(req.session.user._id);
     res.status(200).send({status: 'success', message: 'User found', user});
@@ -32,9 +33,19 @@ router.post(
   '/register',
   passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}),
   (req, res) => {
+    req.session.user = {
+      _id: req.user._id,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      email: req.user.email,
+      verified: req.user.verified,
+      age: req.user.age,
+      role: req.user.role 
+    };
+
     res.status(200).send({
       status: 'success',
-      message: 'User registered',
+      message: 'User registered, please verify your email!',
     });
   }
 );
@@ -62,10 +73,11 @@ router.post(
       firstName: req.user.firstName,
       lastName: req.user.lastName,
       email: req.user.email,
+      verified: req.user.verified,
       age: req.user.age,
       role: req.user.role 
     };
-
+    
     const token = jwt.sign({
       _id: req.user._id,
       firstName: req.user.firstName,
@@ -90,8 +102,28 @@ router.get("/failLogin", (req, res) => {
       status: "error",
       message: message || "Failed Login"
     });
-});
-
+  });
+  
+router.get('/verify/:id', auth, async (req, res) => {
+  const userId = req.params.id;
+  if (userId !== req.session.user._id) {
+    res.status(401).send({status: 'error', message: 'You cant verify another user'});
+    return;
+  }
+  try {
+    const user = await userService.getUserById(userId);
+    if (user.verified) {
+      res.status(400).send({status: 'error', message: 'User already verified'});
+      return;
+    }
+    const result = await userService.verifyUser(userId);
+    req.session.user.verified = result.verified;
+    res.status(200).send({status: 'success', message: 'User verified', result});
+  } catch (error) {
+    res.status(400).send({status: 'error', message: error.message});
+  }
+});  
+  
 router.get("/github", passport.authenticate('github', {scope: ['user:email']}), (req, res) => {
   res.status(200).send({
     status: 'success',

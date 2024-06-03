@@ -38,6 +38,18 @@ class userService {
     }
   }
 
+  async verifyUser(userId) {
+    try {
+      const user = await userDAO.verifyUser(userId);
+      if (!user) {
+        throw new Error("Error verifying user");
+      }
+      return new userDTO(user);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async updateUser(userId, cartId) {
     try {
       const user = await userDAO.updateUser(userId, cartId);

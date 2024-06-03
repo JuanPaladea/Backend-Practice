@@ -2,10 +2,11 @@ import { Router } from "express";
 
 import messageService from "../services/messageService.js";
 import auth from "../middlewares/auth.js";
+import isVerified from "../middlewares/isVerified.js";
 
 const router = Router();
 
-router.get("/", auth, async (req, res) => {
+router.get("/", auth, isVerified, async (req, res) => {
   try {
     const messages = await messageService.getMessages();
     res.status(200).send({ status: "success", messages });
@@ -14,7 +15,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, isVerified, async (req, res) => {
   const { message } = req.body;
   const {email, firstName} = req.session.user;
 
