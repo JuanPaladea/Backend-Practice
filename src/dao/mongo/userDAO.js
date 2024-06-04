@@ -37,16 +37,25 @@ class userDAO {
 
   async updateUser(userId, cartId) {
     try {
-      const user = await userModel.findByIdAndUpdate(userId, {cart: cartId})
+      const user = await userModel.findByIdAndUpdate(userId, {cart: cartId}, {new: true})
       return user
     } catch (error) {
       throw error
     }
   } 
 
+  async updatePassword(userId, password) {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, {password: password}, {new: true})
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
   async verifyUser(userId) {
     try {
-      const user = await userModel.findByIdAndUpdate(userId, {verified: true})
+      const user = await userModel.findByIdAndUpdate(userId, {verified: true}, {new: true})
       return user
     } catch (error) {
       throw error

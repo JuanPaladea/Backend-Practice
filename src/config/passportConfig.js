@@ -8,9 +8,7 @@ import userModel from "../dao/mongo/models/usersModel.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import cartService from "../services/cartService.js";
 import userService from "../services/userService.js";
-import { EMAIL, GHCLIENT_ID, GHCLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_SECRET, JWT_SECRET } from "../utils/config.js";
-import transport from "../utils/mailer.js";
-
+import { GHCLIENT_ID, GHCLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_SECRET, JWT_SECRET } from "../utils/config.js";
 
 const localStrategy = local.Strategy;
 const JWTStratergy = jwt.Strategy;
@@ -62,18 +60,6 @@ const initializatePassport = () => {
         const registeredUser = await userService.registerUser(newUser)
         const cart = await cartService.addCart(registeredUser._id)
         const result = await userService.updateUser(registeredUser._id, cart._id);
-        
-        transport.sendMail({
-          from: `BackEnd JP <${process.env.EMAIL}>`,
-          to: email,
-          subject: 'Bienvenido al Backend JP - Verificación de cuenta',
-          html: 
-          `<div>
-          <h1>¡Bienvenido a Backend JP!</h1>
-          <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
-          <a href="http://localhost:8080/api/session/verify/${registeredUser._id}">Verificar cuenta</a>
-          </div>`
-        })
 
         return done(null, result)
       } catch (error) {

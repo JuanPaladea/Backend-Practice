@@ -60,7 +60,6 @@ router.post('/:cid/products/:pid', auth, isVerified, async (req, res) => {
     const response = await cartService.addProductToCart(cartId, productId, quantity);
     res.status(201).send({status:'success', message:`producto ${productId} agregado al carrito`, response});
   } catch (error){
-    console.error(error)
     res.status(400).send({status:'error', message: error.message})
   }
 })

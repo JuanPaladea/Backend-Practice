@@ -56,4 +56,29 @@ router.get('/verify/:id', async (req, res) => {
   )
 })
 
+router.get('/forgotpassword', async (req, res) => {
+  res.render(
+    'forgotpassword',
+    {
+      layout: 'default',
+      title: 'Backend Juan Paladea | Forgot Password'
+    }
+  )
+})
+
+router.get('/resetpassword', async (req, res) => {
+  const token = req.query.token
+  if (!token) {
+    res.status(400).send({status: 'error', message: 'Token not found'})
+  }
+  res.render(
+    'resetpassword',
+    {
+      layout: 'default',
+      title: 'Backend Juan Paladea | Reset Password',
+      token: token
+    }
+  )
+});
+
 export default router

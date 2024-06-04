@@ -62,6 +62,18 @@ class userService {
     }
   }
 
+  async updatePassword(userId, password) {
+    try {
+      const user = await userDAO.updatePassword(userId, password);
+      if (!user) {
+        throw new Error("Error updating password");
+      }
+      return new userDTO(user);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findUserEmail(email) {
     try {
       const user = await userDAO.findUserEmail(email);
