@@ -52,6 +52,7 @@ router.post(
       <a href="http://localhost:8080/api/session/verify?token=${token}">Verificar cuenta</a>
       </div>`
     })
+    
     res.status(200).send({
       status: 'success',
       message: 'User registered, please check your email to verify your account.',
@@ -122,6 +123,7 @@ router.get('/verify', async (req, res) => {
       message: 'Token not found'
     });
   }
+
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await userService.getUserById(decoded._id);
@@ -137,6 +139,7 @@ router.get('/verify', async (req, res) => {
         message: 'User already verified'
       });
     }
+    
     const result = await userService.verifyUser(user._id);
     req.session.user = {
       _id: result._id,
@@ -147,9 +150,10 @@ router.get('/verify', async (req, res) => {
       age: result.age,
       role: result.role
     };
+
     res.status(200).send({
       status: 'success',
-      message: 'User verified',
+      message: 'User verified, you are now logged in!',
     });
   } catch (error) {
     res.status(400).send({
@@ -167,6 +171,7 @@ router.post('/forgotpassword', async (req, res) => {
       message: 'Email is required'
     });
   }
+
   try {
     const user = await userService.findUserEmail(email);
     if (!user) {
@@ -226,6 +231,7 @@ router.post('/resetpassword', async (req, res) => {
       message: 'Passwords do not match'
     });
   }
+
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await userService.getUserById(decoded._id);
@@ -245,6 +251,7 @@ router.post('/resetpassword', async (req, res) => {
       age: result.age,
       role: result.role
     };
+
     res.status(200).send({
       status: 'success',
       message: 'Password updated'

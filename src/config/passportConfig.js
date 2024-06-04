@@ -154,7 +154,6 @@ const initializatePassport = () => {
     async (accessToken, refreshToken, profile, done) => {
       try {
         const user = await userModel.findOne({username: profile._json.name})
-        console.log(profile)
         if (!user) {
           const newUser = {
             email: profile._json.email,
@@ -164,6 +163,7 @@ const initializatePassport = () => {
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)
           const result = await userService.updateUser(registeredUser._id, cart._id);
+          
           return done(null, result);
         } else {
           return done(null, user);

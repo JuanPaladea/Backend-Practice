@@ -161,7 +161,7 @@ router.post('/:cid/purchase', auth, isVerified, async (req, res) => {
     let code = 0;
     let tickets = await ticketService.getTickets();
     if (tickets.length) {
-      code = tickets[tickets.length - 1].code + 1;
+      code = +tickets[tickets.length - 1].code + 1;
     }
 
     // Generate ticket with the currentCart and delete all products from the cart
