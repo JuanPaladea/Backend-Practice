@@ -130,6 +130,7 @@ const initializatePassport = () => {
           const newUser = {
             firstName: profile._json.name,
             email: profile._json.email,
+            verified: true
           }
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)
@@ -159,6 +160,7 @@ const initializatePassport = () => {
             email: profile._json.email,
             firstName: profile._json.given_name,
             lastName: profile._json.family_name,
+            verified: true
           }
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)
