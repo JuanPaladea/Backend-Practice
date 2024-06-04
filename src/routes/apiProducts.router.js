@@ -48,7 +48,7 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
   const stock = +req.body.product.stock;
   const { title, description, code, category, thumbnails } = req.body.product;
   
-  if (!title || !description || !code || !price || !stock || !category) {
+  if (!title || !description || !code || !price || !stock || !category || !thumbnails) {
     return res.status(400).send({status:'error', error:'faltan datos'})
   }
   if (typeof price !== 'number' || typeof stock !== 'number') {
