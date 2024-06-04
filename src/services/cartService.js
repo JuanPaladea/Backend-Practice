@@ -6,13 +6,13 @@ class cartService {
     try {
       const cart = await cartDAO.getCartWithUserId(userId);
       if (cart) {
-        return cart
+        return new cartDTO(cart);
       }
       const newCart = await cartDAO.addCart(userId);
       if (!newCart) {
         throw new Error('Error creating cart');
       }
-      return newCart
+      return new cartDTO(newCart);
     } catch (error) {
       throw error;
     }
@@ -21,7 +21,7 @@ class cartService {
   async getCart(id) {
     try {
       const cart = await cartDAO.getCart(id);
-      return cart
+      return new cartDTO(cart);
     } catch (error) {
       throw error;
     }
@@ -30,7 +30,7 @@ class cartService {
   async getCartWithUserId(userId) {
     try {
       const cart = await cartDAO.getCartWithUserId(userId);
-      return cart
+      return new cartDTO(cart);
     } catch (error) {
       throw error;
     }
