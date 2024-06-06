@@ -1,5 +1,8 @@
 import productDAO from "../dao/mongo/productDAO.js";
 import productDTO from "../dao/dto/productDTO.js";
+import CustomError from "./errors/customError.js";
+import { errorCodes } from "./errors/enums.js";
+import { generateProductsErrorInfo } from "./errors/productsInfo.js";
 
 class productService {
   async getProducts(limit, page, query, sort) {
@@ -29,7 +32,12 @@ class productService {
     try {
       const product = await productDAO.getProductById(id);
       if (!product) {
-        throw new Error("Product not found");
+        CustomError.createError({
+          name: "Product Error",
+          cause: generateProductsErrorInfo(errorCodes.NOT_FOUND_ERROR, { id }),
+          message: "The product was not found",
+          code: errorCodes.NOT_FOUND_ERROR,
+        });
       }
       return new productDTO(product);
     } catch (error) {

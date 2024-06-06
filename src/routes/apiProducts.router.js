@@ -3,6 +3,10 @@ import productService from "../services/productService.js";
 import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
+import { generateProducts } from "../utils/faker.js";
+import CustomError from "../services/errors/customError.js";
+import { generateProductsErrorInfo } from "../services/errors/productsInfo.js";
+import { errorCodes } from "../services/errors/enums.js";
 
 const router = Router();
 
@@ -48,17 +52,22 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
   const stock = +req.body.product.stock;
   const { title, description, code, category, thumbnails } = req.body.product;
   
-  if (!title || !description || !code || !price || !stock || !category || !thumbnails) {
-    return res.status(400).send({status:'error', error:'faltan datos'})
-  }
-  if (typeof price !== 'number' || typeof stock !== 'number') {
-    return res.status(400).send({status:'error', error:'price y stock deben ser números'})
-  }
-  if (price < 0 || stock < 0) {
-    return res.status(400).send({status:'error', error:'price y stock deben ser mayores a 0'})
-  }
-
   try {
+    if (!title || !description || !code || !price || !stock || !category || !thumbnails) {
+      CustomError.createError({
+        name: "Product Error",
+        cause: generateProductsErrorInfo(errorCodes.MISSING_DATA_ERROR, req.body.product),
+        message: "One or more fields are missing",
+        code: errorCodes.MISSING_DATA_ERROR,
+      });
+    }
+    if (typeof price !== 'number' || typeof stock !== 'number') {
+      return res.status(400).send({status:'error', error:'price y stock deben ser números'})
+    }
+    if (price < 0 || stock < 0) {
+      return res.status(400).send({status:'error', error:'price y stock deben ser mayores a 0'})
+    }
+
     const product = await productService.addProduct({
       title,
       description,
@@ -70,6 +79,9 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
     })
     res.status(201).send({status:'success', message:'producto agregado', product})
   } catch (error){
+    if (error instanceof CustomError) {
+      return res.status(400).send({status:'error', message: error.message, cause: error.cause})
+    }
     res.status(400).send({status:'error', message: error.message})
   }
 })
@@ -101,6 +113,12 @@ router.delete('/:productId', auth, isVerified, isAdmin, async (req, res) => {
   } catch (error){
     res.status(400).send({status:'error', message: error.message})
   }
+})
+
+router.get('/mock/mockingproducts', (req, res) => {
+  const quantity = req.query.quantity || 100;
+  const products = generateProducts(quantity);
+  res.status(200).send({status: 'success', message: 'productos generados', products})
 })
 
 export default router

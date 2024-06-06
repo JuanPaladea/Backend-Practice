@@ -12,6 +12,7 @@
   "author": "Juan Paladea",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "connect-flash": "^0.1.1",
