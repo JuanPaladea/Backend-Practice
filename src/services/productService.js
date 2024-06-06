@@ -8,7 +8,18 @@ class productService {
       if (!products) {
         throw new Error("No products found");
       }
-      return products
+      return {
+        products: products.docs.map((product) => new productDTO(product)),
+        totalDocs: products.totalDocs,
+        totalPages: products.totalPages,
+        page: products.page,
+        limit: products.limit,
+        nextPage: products.nextPage,
+        prevPage: products.prevPage,
+        pagingCounter: products.pagingCounter,
+        hasPrevPage: products.hasPrevPage,
+        hasNextPage: products.hasNextPage,
+      };
     } catch (error) {
       throw error;
     }
