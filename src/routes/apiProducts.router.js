@@ -5,7 +5,7 @@ import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
 import { generateProducts } from "../utils/faker.js";
 import CustomError from "../services/errors/customError.js";
-import { generateProductsErrorInfo } from "../services/errors/productsInfo.js";
+import { generateProductsErrorInfo } from "../services/errors/info/productsInfo.js";
 import { errorCodes } from "../services/errors/enums.js";
 
 const router = Router();
@@ -77,11 +77,10 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
       category,
       thumbnails
     })
+
     res.status(201).send({status:'success', message:'producto agregado', product})
   } catch (error){
-    if (error instanceof CustomError) {
-      return res.status(400).send({status:'error', message: error.message, cause: error.cause})
-    }
+    console.error(error?.cause)
     res.status(400).send({status:'error', message: error.message})
   }
 })

@@ -1,4 +1,4 @@
-import { errorCodes } from "./enums.js"
+import { errorCodes } from "../enums.js"
 
 
 export const generateProductsErrorInfo = (code, product) => {

@@ -2,7 +2,7 @@ import productDAO from "../dao/mongo/productDAO.js";
 import productDTO from "../dao/dto/productDTO.js";
 import CustomError from "./errors/customError.js";
 import { errorCodes } from "./errors/enums.js";
-import { generateProductsErrorInfo } from "./errors/productsInfo.js";
+import { generateProductsErrorInfo } from "./errors/info/productsInfo.js";
 
 class productService {
   async getProducts(limit, page, query, sort) {
