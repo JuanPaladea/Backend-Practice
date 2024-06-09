@@ -1,6 +1,5 @@
 import { errorCodes } from "../enums.js"
 
-
 export const generateProductsErrorInfo = (code, product) => {
   switch (code) {
     case errorCodes.MISSING_DATA_ERROR:
@@ -30,8 +29,7 @@ export const generateProductsErrorInfo = (code, product) => {
       Please try again later.`;
     
     case errorCodes.NOT_FOUND_ERROR:
-      return `The product was not found with the id ${product.id}. 
-      Please try again later.`;
+      return `The product was not found with the id ${product.id}.`;
 
     default:
       return `An error occurred. 
