@@ -33,7 +33,7 @@ router.get('/', authRedirect, isVerified, async (req, res) => {
       status: 'success',
       title: 'Backend Juan Paladea | Productos',
       user: req.session.user,
-      products: products.docs,
+      products: products.products,
       totalPages: products.totalPages,
       prevPage: products.prevPage,
       nextPage: products.nextPage,

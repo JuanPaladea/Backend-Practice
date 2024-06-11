@@ -3,6 +3,10 @@ import productService from "../services/productService.js";
 import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
+import { generateProducts } from "../utils/faker.js";
+import CustomError from "../services/errors/customError.js";
+import { generateProductsErrorInfo } from "../services/errors/info/productsInfo.js";
+import { errorCodes } from "../services/errors/enums.js";
 
 const router = Router();
 
@@ -44,48 +48,57 @@ router.get('/:productId', auth, isVerified, async (req, res) => {
 })
 
 router.post('/', auth, isVerified, isAdmin, async (req, res) => {
-  const price = +req.body.product.price;
-  const stock = +req.body.product.stock;
-  const { title, description, code, category, thumbnails } = req.body.product;
+  const product = req.body.product;
   
-  if (!title || !description || !code || !price || !stock || !category || !thumbnails) {
-    return res.status(400).send({status:'error', error:'faltan datos'})
-  }
-  if (typeof price !== 'number' || typeof stock !== 'number') {
-    return res.status(400).send({status:'error', error:'price y stock deben ser números'})
-  }
-  if (price < 0 || stock < 0) {
-    return res.status(400).send({status:'error', error:'price y stock deben ser mayores a 0'})
-  }
-
   try {
-    const product = await productService.addProduct({
-      title,
-      description,
-      code,
-      price,
-      stock,
-      category,
-      thumbnails
-    })
-    res.status(201).send({status:'success', message:'producto agregado', product})
+    if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.thumbnails) {
+      CustomError.createError({
+        name: "Product Error",
+        cause: generateProductsErrorInfo(errorCodes.MISSING_DATA_ERROR, req.body.product),
+        message: "One or more fields are missing",
+        code: errorCodes.MISSING_DATA_ERROR,
+      });
+    }
+    if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.code !== 'number' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string' || !Array.isArray(product.thumbnails)) {
+      CustomError.createError({
+        name: "Product Error",
+        cause: generateProductsErrorInfo(errorCodes.INVALID_TYPES_ERROR, req.body.product),
+        message: "One or more fields have the wrong type",
+        code: errorCodes.INVALID_TYPES_ERROR,
+      });
+    }
+
+    const newProduct = await productService.addProduct(product)
+
+    res.status(201).send({status:'success', message:'producto agregado', newProduct})
   } catch (error){
+    console.error(error?.cause)
     res.status(400).send({status:'error', message: error.message})
   }
 })
 
 router.put('/:productId', auth, isVerified, isAdmin, async (req, res) => {
   const productId = req.params.productId;
-  const productData = req.body;
-  if (!productData) {
-    return res.status(400).send({status:'error', error:'faltan datos'})
-  }
-  if (typeof productData.price !== 'number' || typeof productData.stock !== 'number') {
-    return res.status(400).send({status:'error', error:'price debe ser un número'})
-  }
-
+  const product = req.body.product;
   try {
-    const product = await productService.updateProduct(productId, productData);
+    if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.thumbnails) {
+      CustomError.createError({
+        name: "Product Error",
+        cause: generateProductsErrorInfo(errorCodes.MISSING_DATA_ERROR, req.body.product),
+        message: "One or more fields are missing",
+        code: errorCodes.MISSING_DATA_ERROR,
+      });
+    }
+    if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.code !== 'number' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string' || !Array.isArray(product.thumbnails)) {
+      CustomError.createError({
+        name: "Product Error",
+        cause: generateProductsErrorInfo(errorCodes.INVALID_TYPES_ERROR, req.body.product),
+        message: "One or more fields have the wrong type",
+        code: errorCodes.INVALID_TYPES_ERROR,
+      });
+    }
+
+    const updatedProduct = await productService.updateProduct(productId, updatedProduct);
     res.status(200).send({status:'success', message:'producto actualizado', product})
   } catch (error){
     res.status(400).send({status:'error', message: error.message})
@@ -101,6 +114,12 @@ router.delete('/:productId', auth, isVerified, isAdmin, async (req, res) => {
   } catch (error){
     res.status(400).send({status:'error', message: error.message})
   }
+})
+
+router.get('/mock/mockingproducts', (req, res) => {
+  const quantity = req.query.quantity || 100;
+  const products = generateProducts(quantity);
+  res.status(200).send({status: 'success', message: 'productos generados', products})
 })
 
 export default router
