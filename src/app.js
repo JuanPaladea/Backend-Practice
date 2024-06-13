@@ -21,13 +21,14 @@ import cartsRouter from "./routes/carts.router.js"
 import sessionRouter from "./routes/session.router.js"
 import chatRouter from "./routes/chat.router.js"
 import { MONGODB_URI, SECRET_SESSION } from './utils/config.js';
+import { addLogger } from './utils/logger.js';
 
 const app = express();
 
 //MONGOOSE
 mongoose.connect(MONGODB_URI)
 
-//MIDLEWARES
+//MIDDLEWARES
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(express.static(`${__dirname}/../../public`));
@@ -39,6 +40,8 @@ app.engine("handlebars", handlebars.engine());
 app.set("views",`${__dirname}/../views`);
 app.set("view engine", "handlebars");
 
+
+//MONGO SESSION
 app.use(session(
   {
     store: MongoStore.create(
@@ -61,11 +64,11 @@ app.use(passport.session())
 //ROUTES
 
 //API ROUTES
-app.use('/api/session', apiSessionRouter)
-app.use('/api/messages', apiMessagesRouter)
 app.use("/api/products", apiProductsRouter)
 app.use("/api/carts", apiCartsRouter)
+app.use('/api/session', apiSessionRouter)
 app.use("/api/tickets", apiTicketsRouter)
+app.use('/api/messages', apiMessagesRouter)
 
 //VIEWS ROUTES
 app.use(homeRouter)
@@ -73,6 +76,7 @@ app.use(sessionRouter)
 app.use("/products", productsRouter)
 app.use("/carts", cartsRouter)
 app.use('/chat', chatRouter)
+app.use(addLogger)
 
 //PORT LISTEN
 const port = 8080;
