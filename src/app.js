@@ -29,6 +29,7 @@ const app = express();
 mongoose.connect(MONGODB_URI)
 
 //MIDDLEWARES
+app.use(addLogger)
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(express.static(`${__dirname}/../../public`));
@@ -39,7 +40,6 @@ app.use(flash())
 app.engine("handlebars", handlebars.engine());
 app.set("views",`${__dirname}/../views`);
 app.set("view engine", "handlebars");
-
 
 //MONGO SESSION
 app.use(session(
@@ -76,7 +76,6 @@ app.use(sessionRouter)
 app.use("/products", productsRouter)
 app.use("/carts", cartsRouter)
 app.use('/chat', chatRouter)
-app.use(addLogger)
 
 //PORT LISTEN
 const port = 8080;

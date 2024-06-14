@@ -59,6 +59,7 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
         code: errorCodes.MISSING_DATA_ERROR,
       });
     }
+
     if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.code !== 'number' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string' || !Array.isArray(product.thumbnails)) {
       CustomError.createError({
         name: "Product Error",
@@ -72,7 +73,6 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
 
     res.status(201).send({status:'success', message:'producto agregado', newProduct})
   } catch (error){
-    console.error(error?.cause)
     res.status(400).send({status:'error', message: error.message})
   }
 })
