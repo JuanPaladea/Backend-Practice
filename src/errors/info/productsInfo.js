@@ -25,14 +25,12 @@ export const generateProductsErrorInfo = (code, product) => {
       * thumbnails  : Needs to be an Array, received: ${product.thumbnails} || ${typeof product.thumbnails}`;
     
     case errorCodes.DATABASE_ERROR:
-      return `There was an error with the database. 
-      Please try again later.`;
+      return `There was an error with the database.`;
     
     case errorCodes.NOT_FOUND_ERROR:
-      return `The product was not found with the id ${product.id}.`;
+      return `The product was not found`;
 
     default:
-      return `An error occurred. 
-      Please try again later.`;
+      return `An error occurred.`;
   }
 }

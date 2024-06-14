@@ -4,9 +4,9 @@ import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
 import { generateProducts } from "../utils/faker.js";
-import CustomError from "../services/errors/customError.js";
-import { generateProductsErrorInfo } from "../services/errors/info/productsInfo.js";
-import { errorCodes } from "../services/errors/enums.js";
+import CustomError from "../errors/CustomError.js";
+import { generateProductsErrorInfo } from "../errors/info/productsInfo.js";
+import { errorCodes } from "../errors/enums.js";
 
 const router = Router();
 
@@ -15,23 +15,26 @@ router.get('/', auth, isVerified, async (req, res) => {
   const page = +req.query.page || 1;
   const { query = null, sort = null } = req.query;
   
-  if (typeof limit !== 'number' || typeof page !== 'number') {
-    return res.status(400).send({error: 'limit and page must be numbers'})
-  }
-  if (limit < 1 || page < 1) {
-    return res.status(400).send({error: 'limit and page must be greater than 0'})
-  }
-  if (query) {
-    query = JSON.parse(query);
-  }
-  if (sort) {
-    sort = JSON.parse(sort)
-  }
-  
   try {
+    if (typeof limit !== 'number' || typeof page !== 'number') {
+      req.logger.warning('limit and page must be numbers')
+      throw new Error('limit and page must be numbers')
+    }
+    if (limit < 1 || page < 1) {
+      req.logger.warning('limit and page must be greater than 0')
+      throw new Error('limit and page must be greater than 0')
+    }
+    if (query) {
+      query = JSON.parse(query);
+    }
+    if (sort) {
+      sort = JSON.parse(sort)
+    }
+  
     const products = await productService.getProducts(limit, page, query, sort);
     res.status(200).send({status: 'success', message: 'productos encontrados', products})
   } catch (error) {
+    req.logger.error(error)
     res.status(400).send({status: 'error', message: error.message})
   }
 })
@@ -43,6 +46,7 @@ router.get('/:productId', auth, isVerified, async (req, res) => {
     const product = await productService.getProductById(productId);
     res.status(200).send({status: 'success', message: 'producto encontrado', product})
   } catch (error) {
+    req.logger.error(error)
     res.status(400).send({status: 'error', message: error.message})
   }
 })
@@ -73,7 +77,8 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
 
     res.status(201).send({status:'success', message:'producto agregado', newProduct})
   } catch (error){
-    res.status(400).send({status:'error', message: error.message})
+    req.logger.error(error)
+    res.status(400).send({status:'error', error: error})
   }
 })
 
@@ -101,6 +106,7 @@ router.put('/:productId', auth, isVerified, isAdmin, async (req, res) => {
     const updatedProduct = await productService.updateProduct(productId, updatedProduct);
     res.status(200).send({status:'success', message:'producto actualizado', product})
   } catch (error){
+    req.logger.error(error)
     res.status(400).send({status:'error', message: error.message})
   }
 })
@@ -112,6 +118,7 @@ router.delete('/:productId', auth, isVerified, isAdmin, async (req, res) => {
     const product = await productService.deleteProduct(productId);
     res.status(200).send({status:'success', message:'producto eliminado', product})
   } catch (error){
+    req.logger.error(error)
     res.status(400).send({status:'error', message: error.message})
   }
 })
