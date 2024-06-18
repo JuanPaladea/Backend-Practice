@@ -11,6 +11,7 @@ router.get("/", auth, isVerified, async (req, res) => {
     const messages = await messageService.getMessages();
     res.status(200).send({ status: "success", messages });
   } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({ status: "error", message: error.message });
   }
 });
@@ -20,17 +21,20 @@ router.post("/", auth, isVerified, async (req, res) => {
   const {email, firstName} = req.session.user;
 
   if (!email || !firstName) {
-    return res.status(400).send({ status: "error", message: "falta el usuario" });
+    req.logger.warning(`${req.method} ${req.path} - Unauthorized`)
+    throw new Error("Unauthorized");
   }
  
   if (!message) {
-    return res.status(400).send({ status: "error", message: "falta el mensaje" });
+    req.logger.warning(`${req.method} ${req.path} - Message is required`)
+    throw new Error("Message is required");
   }
 
   try {
     const newMessage = await messageService.addMessage({ email, firstName, message });
     res.status(201).send({ status: "success", message: newMessage });
   } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({ status: "error", message: error.message });
   }
 });

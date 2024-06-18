@@ -50,7 +50,8 @@ const prodLogger = winston.createLogger({
         winston.format.json(),
         winston.format.printf(({ level, message, timestamp }) => {
           return `${timestamp} ${level.toUpperCase()}: ${message}`;
-        })      ),
+        })      
+      ),
     }),
     new winston.transports.File({
       filename: './src/logs/errors.log',

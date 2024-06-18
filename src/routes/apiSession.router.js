@@ -17,6 +17,7 @@ router.get('/users', auth, isVerified, isAdmin, async (req, res) => {
     const users = await userService.getUsers()
     res.status(200).send({status: 'success', message: 'usuarios encontrados', users})
   } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status: 'error', message: error.message})
   }
 })
@@ -26,8 +27,8 @@ router.get('/current', auth, isVerified, async (req, res) => {
     const user = await userService.getUserById(req.session.user._id);
     res.status(200).send({status: 'success', message: 'User found', user});
   } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status: 'error', message: error.message});
-
   };
 });
 
@@ -62,6 +63,7 @@ router.post(
 
 router.get("/failRegister", (req, res) => {
   const message = req.flash('error')[0];
+  req.logger.error(`${req.method} ${req.path} - ${message}`)
   res.status(400).send({
     status: "error",
     message: message || "Failed Register"
@@ -109,6 +111,7 @@ router.post(
 
 router.get("/failLogin", (req, res) => {
   const message = req.flash('error')[0];
+  req.logger.error(`${req.method} ${req.path} - ${message}`)
   res.status(400).send({
     status: "error",
     message: message || "Failed Login"
@@ -156,6 +159,7 @@ router.get('/verify', async (req, res) => {
       message: 'User verified, you are now logged in!',
     });
   } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({
       status: 'error',
       message: error.message
@@ -202,6 +206,7 @@ router.post('/forgotpassword', async (req, res) => {
       message: 'Email sent to reset password'
     });
   } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({
       status: 'error',
       message: error.message
@@ -257,6 +262,7 @@ router.post('/resetpassword', async (req, res) => {
       message: 'Password updated'
     });
   } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({
       status: 'error',
       message: error.message

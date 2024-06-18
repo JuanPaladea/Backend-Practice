@@ -17,11 +17,11 @@ router.get('/', auth, isVerified, async (req, res) => {
   
   try {
     if (typeof limit !== 'number' || typeof page !== 'number') {
-      req.logger.warning('limit and page must be numbers')
+      req.logger.warning(`${req.method} ${req.path} - limit and page must be numbers`)
       throw new Error('limit and page must be numbers')
     }
     if (limit < 1 || page < 1) {
-      req.logger.warning('limit and page must be greater than 0')
+      req.logger.warning(`${req.method} ${req.path} - limit and page must be greater than 0`)
       throw new Error('limit and page must be greater than 0')
     }
     if (query) {
@@ -34,7 +34,7 @@ router.get('/', auth, isVerified, async (req, res) => {
     const products = await productService.getProducts(limit, page, query, sort);
     res.status(200).send({status: 'success', message: 'productos encontrados', products})
   } catch (error) {
-    req.logger.error(error)
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status: 'error', message: error.message})
   }
 })
@@ -46,7 +46,7 @@ router.get('/:productId', auth, isVerified, async (req, res) => {
     const product = await productService.getProductById(productId);
     res.status(200).send({status: 'success', message: 'producto encontrado', product})
   } catch (error) {
-    req.logger.error(error)
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status: 'error', message: error.message})
   }
 })
@@ -56,6 +56,7 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
   
   try {
     if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.thumbnails) {
+      req.logger.warning(`${req.method} ${req.path} - One or more fields are missing`)
       CustomError.createError({
         name: "Product Error",
         cause: generateProductsErrorInfo(errorCodes.MISSING_DATA_ERROR, req.body.product),
@@ -65,6 +66,7 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
     }
 
     if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.code !== 'number' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string' || !Array.isArray(product.thumbnails)) {
+      req.logger.warning(`${req.method} ${req.path} - One or more fields have the wrong type`)
       CustomError.createError({
         name: "Product Error",
         cause: generateProductsErrorInfo(errorCodes.INVALID_TYPES_ERROR, req.body.product),
@@ -77,7 +79,7 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
 
     res.status(201).send({status:'success', message:'producto agregado', newProduct})
   } catch (error){
-    req.logger.error(error)
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status:'error', error: error})
   }
 })
@@ -87,6 +89,7 @@ router.put('/:productId', auth, isVerified, isAdmin, async (req, res) => {
   const product = req.body.product;
   try {
     if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.thumbnails) {
+      req.logger.warning(`${req.method} ${req.path} - One or more fields are missing`)
       CustomError.createError({
         name: "Product Error",
         cause: generateProductsErrorInfo(errorCodes.MISSING_DATA_ERROR, req.body.product),
@@ -95,6 +98,7 @@ router.put('/:productId', auth, isVerified, isAdmin, async (req, res) => {
       });
     }
     if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.code !== 'number' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string' || !Array.isArray(product.thumbnails)) {
+      req.logger.warning(`${req.method} ${req.path} - One or more fields have the wrong type`)
       CustomError.createError({
         name: "Product Error",
         cause: generateProductsErrorInfo(errorCodes.INVALID_TYPES_ERROR, req.body.product),
@@ -106,7 +110,7 @@ router.put('/:productId', auth, isVerified, isAdmin, async (req, res) => {
     const updatedProduct = await productService.updateProduct(productId, updatedProduct);
     res.status(200).send({status:'success', message:'producto actualizado', product})
   } catch (error){
-    req.logger.error(error)
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status:'error', message: error.message})
   }
 })
@@ -118,7 +122,7 @@ router.delete('/:productId', auth, isVerified, isAdmin, async (req, res) => {
     const product = await productService.deleteProduct(productId);
     res.status(200).send({status:'success', message:'producto eliminado', product})
   } catch (error){
-    req.logger.error(error)
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status:'error', message: error.message})
   }
 })

@@ -1,0 +1,16 @@
+2024-06-18 14:42:58 ERROR: Invalid password!
+2024-06-18 14:49:58 ERROR: Invalid password!
+2024-06-18 14:50:04 ERROR: Invalid password!
+2024-06-18 14:50:12 ERROR: Invalid password!
+2024-06-18 14:50:54 ERROR: undefined
+2024-06-18 14:52:27 ERROR: Cast to ObjectId failed for value "6617ed15f8782713d833e62" (type string) at path "_id" for model "products"
+2024-06-18 14:55:18 WARNING: No tienes permisos para realizar esta acción
+2024-06-18 14:56:04 WARNING: No tienes permisos para realizar esta acción
+2024-06-18 14:59:04 WARNING: No tienes permisos para realizar esta acción
+2024-06-18 14:59:49 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-06-18 15:16:22 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-06-18 15:16:44 ERROR: GET /6617ed15f8782713d833e62 - Cast to ObjectId failed for value "6617ed15f8782713d833e62" (type string) at path "_id" for model "products"
+2024-06-18 15:19:50 WARNING: GET / - limit and page must be greater than 0
+2024-06-18 15:19:50 ERROR: GET / - limit and page must be greater than 0
+2024-06-18 15:20:34 WARNING: GET / - limit and page must be greater than 0
+2024-06-18 15:20:34 ERROR: GET / - limit and page must be greater than 0
