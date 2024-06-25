@@ -15,22 +15,22 @@ router.get('/', auth, isVerified, async (req, res) => {
   const page = +req.query.page || 1;
   const { query = null, sort = null } = req.query;
   
+  if (typeof limit !== 'number' || typeof page !== 'number') {
+    req.logger.warning(`${req.method} ${req.path} - limit and page must be numbers`)
+    return res.status(400).send({status: 'error', message: 'limit and page must be numbers'})
+  }
+  if (limit < 1 || page < 1) {
+    req.logger.warning(`${req.method} ${req.path} - limit and page must be greater than 0`)
+    return res.status(400).send({status: 'error', message: 'limit and page must be greater than 0'})
+  }
+  if (query) {
+    query = JSON.parse(query);
+  }
+  if (sort) {
+    sort = JSON.parse(sort)
+  }
+
   try {
-    if (typeof limit !== 'number' || typeof page !== 'number') {
-      req.logger.warning(`${req.method} ${req.path} - limit and page must be numbers`)
-      throw new Error('limit and page must be numbers')
-    }
-    if (limit < 1 || page < 1) {
-      req.logger.warning(`${req.method} ${req.path} - limit and page must be greater than 0`)
-      throw new Error('limit and page must be greater than 0')
-    }
-    if (query) {
-      query = JSON.parse(query);
-    }
-    if (sort) {
-      sort = JSON.parse(sort)
-    }
-  
     const products = await productService.getProducts(limit, page, query, sort);
     res.status(200).send({status: 'success', message: 'productos encontrados', products})
   } catch (error) {
@@ -76,7 +76,6 @@ router.post('/', auth, isVerified, isAdmin, async (req, res) => {
     }
 
     const newProduct = await productService.addProduct(product)
-
     res.status(201).send({status:'success', message:'producto agregado', newProduct})
   } catch (error){
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)

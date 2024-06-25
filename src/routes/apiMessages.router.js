@@ -22,12 +22,12 @@ router.post("/", auth, isVerified, async (req, res) => {
 
   if (!email || !firstName) {
     req.logger.warning(`${req.method} ${req.path} - Unauthorized`)
-    throw new Error("Unauthorized");
+    return res.status(401).send({ status: "error", message: "Unauthorized" });
   }
  
   if (!message) {
     req.logger.warning(`${req.method} ${req.path} - Message is required`)
-    throw new Error("Message is required");
+    return res.status(400).send({ status: "error", message: "Message is required" });
   }
 
   try {

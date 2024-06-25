@@ -45,21 +45,19 @@ router.post('/:cid/products/:pid', auth, isVerified, async (req, res) => {
   const cartId = req.params.cid;
   const productId = req.params.pid;
   const userId = req.session.user._id;
+  const quantity = +req.body.quantity || 1;
+
+  if (typeof quantity !== 'number' || quantity <= 0) {
+    req.logger.warning(`${req.method} ${req.path} - Invalid quantity ${quantity}`)
+    return res.status(400).send({status:'error', message:'Invalid quantity'})
+  }
 
   try {
     const cart = await cartService.getCart(cartId);
 
     if (cart.user._id.toString() !== userId) {
       req.logger.warning(`${req.method} ${req.path} - No tienes permisos para modificar este carrito`)
-      throw new Error('No tienes permisos para modificar este carrito')
-    }
-
-    const quantity = +req.body.quantity || 1;
-    if (quantity) {
-      if (typeof quantity !== 'number' || quantity <= 0) {
-        req.logger.warning(`${req.method} ${req.path} - Invalid quantity ${quantity}`)
-        throw new Error('Invalid quantity')
-      }
+      return res.status(400).send({status:'error', message:'No tienes permisos para modificar este carrito'})
     }
 
     const response = await cartService.addProductToCart(cartId, productId, quantity);
@@ -76,18 +74,19 @@ router.put('/:cid/products/:pid', auth, isVerified, async (req, res) => {
   const quantity = +req.body.quantity;
   const userId = req.session.user._id;
   
+  if (!quantity || typeof quantity !== 'number' || quantity <= 0) {
+    req.logger.warning(`${req.method} ${req.path} - Invalid quantity`)
+    return res.status(400).send({status:'error', message:'Invalid quantity'})
+  }
+
   try {
     const cart = await cartService.getCart(cartId);
+
     if (cart.user._id.toString() !== userId) {
       req.logger.warning(`${req.method} ${req.path} - No tienes permisos para modificar este carrito`)
-      throw new Error('No tienes permisos para modificar este carrito')
+      return res.status(400).send({status:'error', message:'No tienes permisos para modificar este carrito'})
     }
     
-    if (!quantity || typeof quantity !== 'number' || quantity <= 0) {
-      req.logger.warning(`${req.method} ${req.path} - Invalid quantity`)
-      throw new Error('Invalid quantity')
-    }
-
     const response = await cartService.updateProductQuantity(cartId, productId, quantity)
     res.status(200).send({status:'success', message:'cantidad de producto actualizada', response});
   } catch (error) {
@@ -102,9 +101,10 @@ router.delete("/:cid", auth, isVerified, async (req, res) => {
 
   try {
     const cart = await cartService.getCart(cartId);
+
     if (cart.user._id.toString() !== userId) {
       req.logger.warning(`${req.method} ${req.path} - No tienes permisos para eliminar este carrito`)
-      throw new Error('No tienes permisos para eliminar este carrito')
+      return res.status(400).send({status:'error', message:'No tienes permisos para eliminar este carrito'})
     }
 
     const response = await cartService.deleteAllProductsFromCart(cartId);
@@ -122,9 +122,10 @@ router.delete("/:cid/products/:pid", auth, isVerified, async (req, res) => {
 
   try {
     const cart = await cartService.getCart(cartId);
+
     if (cart.user._id.toString() !== userId) {
       req.logger.warning(`${req.method} ${req.path} - No tienes permisos para eliminar este producto del carrito`)
-      throw new Error('No tienes permisos para eliminar este producto del carrito')
+      return res.status(400).send({status:'error', message:'No tienes permisos para eliminar este producto del carrito'})
     }
     
     const deletedCart = await cartService.deleteProductFromCart(cartId, productId)
@@ -145,12 +146,12 @@ router.post('/:cid/purchase', auth, isVerified, async (req, res) => {
 
     if (cart.user._id.toString() !== userId) {
       req.logger.warning(`${req.method} ${req.path} - No tienes permisos para realizar esta acción`)
-      throw new Error('No tienes permisos para realizar esta acción')
+      return res.status(400).send({status:'error', message:'No tienes permisos para realizar esta acción'})
     }
     // Check if cart has products
     if (!cart.products.length) {
       req.logger.warning(`${req.method} ${req.path} - El carrito no tiene productos`)
-      throw new Error('El carrito no tiene productos')
+      return res.status(400).send({status:'error', message:'El carrito no tiene productos'})
     }
     // Check if products have enough stock and remove them from the cart if they don't and add them to a variable
     let itemsRemoved = [];

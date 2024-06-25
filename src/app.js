@@ -54,14 +54,14 @@ app.use(session(
       secret: SECRET_SESSION,
       resave: true,
       saveUninitialized: true
-  }
-))
+    }
+  ))
 
 //PASSPORT
 initializatePassport();
 app.use(passport.initialize())
 app.use(passport.session())
-
+  
 //ROUTES
 
 //API ROUTES
