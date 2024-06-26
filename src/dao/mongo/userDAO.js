@@ -22,7 +22,7 @@ class userDAO {
 
   async registerUser(user) {
     try {
-      if (user.email == "adminCoder@coder.com" && isValidPassword(user, 'adminCod3r123')) {
+      if (user.email == "adminCoder@coder.com" && isValidPassword(user, ' ')) {
         const newUser = await userModel.create(user)
         newUser.role = "admin"
         newUser.save()
@@ -47,6 +47,15 @@ class userDAO {
   async updatePassword(userId, password) {
     try {
       const user = await userModel.findByIdAndUpdate(userId, {password: password}, {new: true})
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async updateRole(userId, role) {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, {role: role}, {new: true})
       return user
     } catch (error) {
       throw error

@@ -8,7 +8,7 @@ import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
 import transport from "../utils/mailer.js";
-import { createHash } from "../utils/bcrypt.js";
+import { createHash, isValidPassword } from "../utils/bcrypt.js";
 
 const router = Router();
 
@@ -17,6 +17,7 @@ router.get('/users', auth, isVerified, isAdmin, async (req, res) => {
     const users = await userService.getUsers()
     res.status(200).send({status: 'success', message: 'usuarios encontrados', users})
   } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status: 'error', message: error.message})
   }
 })
@@ -26,8 +27,8 @@ router.get('/current', auth, isVerified, async (req, res) => {
     const user = await userService.getUserById(req.session.user._id);
     res.status(200).send({status: 'success', message: 'User found', user});
   } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status: 'error', message: error.message});
-
   };
 });
 
@@ -53,19 +54,14 @@ router.post(
       </div>`
     })
     
-    res.status(200).send({
-      status: 'success',
-      message: 'User registered, please check your email to verify your account.',
-    });
+    res.status(200).send({status: 'success', message: 'User registered, please check your email to verify your account.',});
   }
 );
 
 router.get("/failRegister", (req, res) => {
   const message = req.flash('error')[0];
-  res.status(400).send({
-    status: "error",
-    message: message || "Failed Register"
-  });
+  req.logger.error(`${req.method} ${req.path} - ${message}`)
+  res.status(400).send({status: "error", message: message || "Failed Register"});
 });
 
 router.post(
@@ -73,11 +69,9 @@ router.post(
   passport.authenticate('login', {failureRedirect: '/api/session/failLogin', failureFlash: true}),
   (req, res) => {
     if (!req.user) {
-      res.status(401).send({
-        status: 'error',
-        message: 'Error login!'
-      });
+      return res.status(401).send({status: 'error', message: 'Error login!'});
     }
+
     req.session.user = {
       _id: req.user._id,
       firstName: req.user.firstName,
@@ -99,45 +93,34 @@ router.post(
     }, JWT_SECRET, { expiresIn: '1h' });
 
     res.cookie('jwt', token);
-    res.status(200).send({
-      status: 'success',
-      message: 'User logged in',
-      token: token
-    });
+    res.status(200).send({status: 'success', message: 'User logged in', token: token});
   }
 )
 
 router.get("/failLogin", (req, res) => {
   const message = req.flash('error')[0];
-  res.status(400).send({
-    status: "error",
-    message: message || "Failed Login"
-  });
+  req.logger.error(`${req.method} ${req.path} - ${message}`)
+  res.status(400).send({status: "error", message: message || "Failed Login"});
 });
 
 router.get('/verify', async (req, res) => {
   const token = req.query.token;
   if (!token) {
-    res.status(400).send({
-      status: 'error',
-      message: 'Token not found'
-    });
+    req.logger.warning(`${req.method} ${req.path} - Token not found`)
+    return res.status(400).send({status: 'error', message: 'Token not found'});
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await userService.getUserById(decoded._id);
     if (!user) {
-      res.status(404).send({
-        status: 'error',
-        message: 'User not found'
-      });
+      req.logger.warning(`${req.method} ${req.path} - User not found`)
+      return res.status(404).send({status: 'error', message: 'User not found'});
     }
+
     if (user.verified) {
-      res.status(400).send({
-        status: 'error',
-        message: 'User already verified'
-      });
+      req.logger.info(`${req.method} ${req.path} - User already verified`)
+      return res.status(400).send({status: 'error', message: 'User already verified'});
     }
     
     const result = await userService.verifyUser(user._id);
@@ -151,35 +134,29 @@ router.get('/verify', async (req, res) => {
       role: result.role
     };
 
-    res.status(200).send({
-      status: 'success',
-      message: 'User verified, you are now logged in!',
-    });
+    res.status(200).send({status: 'success', message: 'User verified, you are now logged in!'});
   } catch (error) {
-    res.status(400).send({
-      status: 'error',
-      message: error.message
-    });
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status: 'error', message: error.message});
   }
 })
 
 router.post('/forgotpassword', async (req, res) => {
   const email = req.body.email;
+
   if (!email) {
-    res.status(400).send({
-      status: 'error',
-      message: 'Email is required'
-    });
+    req.logger.warning(`${req.method} ${req.path} - Email is required`)
+    return res.status(400).send({status: 'error', message: 'Email is required'});
   }
 
   try {
     const user = await userService.findUserEmail(email);
+
     if (!user) {
-      res.status(404).send({
-        status: 'error',
-        message: 'User not found'
-      });
+      req.logger.warning(`${req.method} ${req.path} - User not found`)
+      return res.status(404).send({status: 'error', message: 'User not found'});
     }
+
     const token = jwt.sign({
       _id: user._id,
       email: user.email
@@ -197,15 +174,10 @@ router.post('/forgotpassword', async (req, res) => {
       </div>`
     });
 
-    res.status(200).send({
-      status: 'success',
-      message: 'Email sent to reset password'
-    });
+    res.status(200).send({status: 'success', message: 'Email sent to reset password'});
   } catch (error) {
-    res.status(400).send({
-      status: 'error',
-      message: error.message
-    });
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status: 'error', message: error.message});
   }
 })
 
@@ -213,34 +185,36 @@ router.post('/resetpassword', async (req, res) => {
   const token = req.query.token;
   const password = req.body.password;
   const password2 = req.body.password2;
+
   if (!token) {
-    res.status(400).send({
-      status: 'error',
-      message: 'Token not found'
-    });
+    req.logger.warning(`${req.method} ${req.path} - Token not found`)
+    return res.status(400).send({status: 'error', message: 'Token not found'});
   }
+
   if (!password || !password2) {
-    res.status(400).send({
-      status: 'error',
-      message: 'Password is required'
-    });
+    req.logger.warning(`${req.method} ${req.path} - Password is required`)
+    return res.status(400).send({status: 'error', message: 'Password is required'});
   }
+
   if (password !== password2) {
-    res.status(400).send({
-      status: 'error',
-      message: 'Passwords do not match'
-    });
+    req.logger.warning(`${req.method} ${req.path} - Passwords do not match`)
+    return res.status(400).send({status: 'error', message: 'Passwords do not match'});
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await userService.getUserById(decoded._id);
+
     if (!user) {
-      res.status(404).send({
-        status: 'error',
-        message: 'User not found'
-      });
+      req.logger.warning(`${req.method} ${req.path} - User not found`)
+      return res.status(404).send({status: 'error', message: 'User not found'});
     }
+
+    if (isValidPassword(user, password)) {
+      req.logger.warning(`${req.method} ${req.path} - Password is the same as the current one`)
+      return res.status(400).send({status: 'error', message: 'Password is the same as the current one'});
+    }
+
     const result = await userService.updatePassword(user._id, createHash(password));
     req.session.user = {
       _id: result._id,
@@ -252,23 +226,51 @@ router.post('/resetpassword', async (req, res) => {
       role: result.role
     };
 
-    res.status(200).send({
-      status: 'success',
-      message: 'Password updated'
-    });
+    res.status(200).send({status: 'success', message: 'Password updated'});
   } catch (error) {
-    res.status(400).send({
-      status: 'error',
-      message: error.message
-    });
+    if (error instanceof jwt.TokenExpiredError) {
+      req.logger.warning(`${req.method} ${req.path} - Token expired`)
+      return res.redirect('/forgotpassword', {status: 'error', message: 'Token expired'});
+    }
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status: 'error', message: error.message});
   }
 })
 
+router.get("/premium/:userId", auth, isVerified, async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const user = await userService.getUserById(userId);
+    if (!user) {
+      req.logger.warning(`${req.method} ${req.path} - User not found`)
+      return res.status(404).send({status: 'error', message: 'User not found'});
+    }
+
+    if (user.role === 'admin') {
+      req.logger.warning(`${req.method} ${req.path} - User is admin, can't change to premium/user`)
+      return res.status(400).send({status: 'error', message: "User is admin, can't change to premium/user"});
+    }
+
+    if (user.role === 'premium') {
+      const result = await userService.updateRole(userId, 'usuario');
+      req.session.user.role = 'usuario';
+      return res.status(200).send({status: 'success', message: 'User is now user', user: result});
+    }
+
+    if (user.role === 'usuario') {
+      const result = await userService.updateRole(userId, 'premium');
+      req.session.user.role = 'premium';
+      return res.status(200).send({status: 'success', message: 'User is now premium', user: result});
+    }
+    
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status: 'error', message: error.message});
+  }
+});
+
 router.get("/github", passport.authenticate('github', {scope: ['user:email']}), (req, res) => {
-  res.status(200).send({
-    status: 'success',
-    message: 'Success'
-  });
+  res.status(200).send({status: 'success', message: 'Success'});
 });
 
 router.get("/githubcallback", passport.authenticate('github', {failureRedirect: '/login'}), (req, res) => {
@@ -283,10 +285,7 @@ router.get("/githubcallback", passport.authenticate('github', {failureRedirect: 
 });
 
 router.get("/google", passport.authenticate('google', {scope: ['email', 'profile']}), (req, res) => {
-  res.status(200).send({
-    status: 'success',
-    message: 'Success'
-  });
+  res.status(200).send({status: 'success', message: 'Success'});
 });
 
 router.get("/googlecallback", passport.authenticate('google', {failureRedirect: '/login'}), (req, res) => {
@@ -303,18 +302,14 @@ router.get("/googlecallback", passport.authenticate('google', {failureRedirect: 
 
 router.post("/logout", (req, res) => {
   req.session.destroy(error => {
+    
     if (error) {
-      res.status(400).send({
-        status: 'error',
-        message: 'Error logging out'
-      });
+      req.logger.error(`${req.method} ${req.path} - Error logging out`) 
+      return res.status(400).send({status: 'error', message: 'Error logging out'});
     }
+
     res.clearCookie('jwt');
-    res.status(200).send({
-      status: 'success',
-      message: 'User logged out'
-    });
-  })
+    res.status(200).send({status: 'success', message: 'User logged out'});})
 });
 
 export default router

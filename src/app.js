@@ -15,19 +15,22 @@ import apiProductsRouter from "./routes/apiProducts.router.js"
 import apiSessionRouter from "./routes/apiSession.router.js"
 import apiTicketsRouter from "./routes/apiTickets.router.js"
 import apiMessagesRouter from "./routes/apiMessages.router.js"
+import loggerTestRouter from "./routes/loggerTest.router.js"
 import homeRouter from "./routes/home.router.js"
 import productsRouter from "./routes/products.router.js"
 import cartsRouter from "./routes/carts.router.js"
 import sessionRouter from "./routes/session.router.js"
 import chatRouter from "./routes/chat.router.js"
 import { MONGODB_URI, SECRET_SESSION } from './utils/config.js';
+import { addLogger } from './middlewares/logger.js';
 
-const app = express();
+export const app = express();
 
 //MONGOOSE
 mongoose.connect(MONGODB_URI)
 
-//MIDLEWARES
+//MIDDLEWARES
+app.use(addLogger)
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(express.static(`${__dirname}/../../public`));
@@ -39,6 +42,7 @@ app.engine("handlebars", handlebars.engine());
 app.set("views",`${__dirname}/../views`);
 app.set("view engine", "handlebars");
 
+//MONGO SESSION
 app.use(session(
   {
     store: MongoStore.create(
@@ -50,22 +54,23 @@ app.use(session(
       secret: SECRET_SESSION,
       resave: true,
       saveUninitialized: true
-  }
-))
+    }
+  ))
 
 //PASSPORT
 initializatePassport();
 app.use(passport.initialize())
 app.use(passport.session())
-
+  
 //ROUTES
 
 //API ROUTES
-app.use('/api/session', apiSessionRouter)
-app.use('/api/messages', apiMessagesRouter)
 app.use("/api/products", apiProductsRouter)
 app.use("/api/carts", apiCartsRouter)
+app.use('/api/session', apiSessionRouter)
 app.use("/api/tickets", apiTicketsRouter)
+app.use('/api/messages', apiMessagesRouter)
+app.use("/loggertest", loggerTestRouter)
 
 //VIEWS ROUTES
 app.use(homeRouter)

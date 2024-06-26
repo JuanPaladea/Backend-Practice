@@ -35,6 +35,11 @@ const productsSchema = new mongoose.Schema({
   thumbnails: {
     type: Array,
     default: []
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
+    default: "admin"
   }
 })
 

@@ -10,3 +10,4 @@ export const JWT_SECRET = process.env.JWT_SECRET
 export const SECRET_SESSION = process.env.SECRET_SESSION
 export const EMAIL = process.env.EMAIL
 export const PASSWORD = process.env.PASSWORD
+export const NODE_ENV = process.env.NODE_ENV

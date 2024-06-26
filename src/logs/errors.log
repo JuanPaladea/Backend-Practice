@@ -1,0 +1,125 @@
+2024-06-19 12:36:10 WARNING: GET / - limit and page must be greater than 0
+2024-06-19 12:36:10 ERROR: GET / - Cannot set headers after they are sent to the client
+2024-06-19 12:36:30 WARNING: GET / - limit and page must be greater than 0
+2024-06-19 12:36:37 WARNING: GET / - limit and page must be greater than 0
+2024-06-26 12:29:13 ERROR: GET /premium/667c2e189d8d921f26a24ae0 - userService.updateRole is not a function
+2024-06-26 12:44:54 WARNING: GET /users - No tienes permisos para realizar esta acción
+2024-06-26 14:00:11 ERROR: POST /667c2e189d8d921f26a24ae4/products/6617ed15f8782713d833e62d - Cannot read properties of undefined (reading 'toString')
+2024-06-26 14:00:20 ERROR: POST /667c2e189d8d921f26a24ae4/products/6617ed15f8782713d833e62d - Cannot read properties of undefined (reading 'toString')
+2024-06-26 14:01:38 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-06-26 14:02:39 ERROR: POST /667c2e189d8d921f26a24ae4/products/6617ed15f8782713d833e633 - Cannot read properties of undefined (reading 'toString')
+2024-06-26 14:02:46 ERROR: POST /667c2e189d8d921f26a24ae4/products/6617ed15f8782713d833e633 - Cannot read properties of undefined (reading 'toString')
+2024-06-26 14:03:33 ERROR: POST /667c2e189d8d921f26a24ae4/products/6617ed15f8782713d833e633 - Cannot read properties of undefined (reading 'toString')
+2024-06-26 14:06:49 WARNING: POST / - no tiene permisos para agregar productos
+2024-06-26 14:09:18 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:09:18 ERROR: POST / - One or more fields have the wrong type
+2024-06-26 14:13:48 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:13:48 ERROR: POST / - One or more fields have the wrong type
+2024-06-26 14:15:23 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:15:23 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas galletas de chocolate || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || string,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || string,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: https://imgur.com/rL4p3iZ || string
+2024-06-26 14:17:39 WARNING: POST / - One or more fields are missing
+2024-06-26 14:17:39 ERROR: POST / - One or more fields are missing
+2024-06-26 14:28:12 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:28:12 ERROR: POST / - One or more fields have the wrong type
+2024-06-26 14:29:04 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:29:04 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas galletas de chocolate || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || string,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || string,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: https://imgur.com/rL4p3iZ || string
+2024-06-26 14:33:24 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:33:24 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas galletas de chocolate || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || string,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || string,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: https://imgur.com/rL4p3iZ || string
+2024-06-26 14:37:49 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:37:49 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas galletas de chocolate || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || number,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || number,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: https://imgur.com/rL4p3iZ || object
+2024-06-26 14:42:15 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:42:15 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas galletas de chocolate || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || number,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || number,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: https://imgur.com/rL4p3iZ || string
+2024-06-26 14:44:49 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:44:49 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas toddys de chocolate || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || number,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || number,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: https://imgur.com/rL4p3iZ || object
+2024-06-26 14:47:24 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:47:24 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas galletas de chocolate || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || number,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || number,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: https://imgur.com/rL4p3iZ || object
+2024-06-26 14:48:02 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:48:02 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas galletas de chocolate || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || number,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || number,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: h,t,t,p,s,:,/,/,i,m,g,u,r,.,c,o,m,/,r,L,4,p,3,i,Z || object
+2024-06-26 14:49:16 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:49:16 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas galletas de chocoalte || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || number,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || number,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: https://imgur.com/rL4p3iZ || object
+2024-06-26 14:50:45 WARNING: POST / - One or more fields have the wrong type
+2024-06-26 14:50:45 ERROR: POST / - One or more fields have the wrong type. 
+      List of required types: 
+      * title       : Needs to be a String, received: Toddys || string,
+      * description : Needs to be a String, received: Deliciosas galletas de chocolate || string,
+      * code        : Needs to be a Number, received: TODDY123 || string,
+      * price       : Needs to be a Number greater than 0 , received: 7 || number,
+      * stock       : Needs to be a Number, greater than or equal to 0 received: 9 || number,
+      * category    : Needs to be a String, received: comidas || string,
+      * thumbnails  : Needs to be an Array, received: https://imgur.com/rL4p3iZ || string
+2024-06-26 15:10:33 WARNING: POST /667c2e189d8d921f26a24ae4/products/667c55711101c611700f0125 - No puedes agregar tus propios productos al carrito
+2024-06-26 15:11:34 WARNING: POST /667c2e189d8d921f26a24ae4/products/667c55711101c611700f0125 - No puedes agregar tus propios productos al carrito
+2024-06-26 15:12:04 WARNING: POST /667c2e189d8d921f26a24ae4/products/667c55711101c611700f0125 - No puedes agregar tus propios productos al carrito
+2024-06-26 15:12:14 WARNING: POST /667c2e189d8d921f26a24ae4/products/667c55711101c611700f0125 - No puedes agregar tus propios productos al carrito
