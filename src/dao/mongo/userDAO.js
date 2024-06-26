@@ -53,6 +53,15 @@ class userDAO {
     }
   }
 
+  async updateRole(userId, role) {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, {role: role}, {new: true})
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
   async verifyUser(userId) {
     try {
       const user = await userModel.findByIdAndUpdate(userId, {verified: true}, {new: true})

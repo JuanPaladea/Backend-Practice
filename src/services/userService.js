@@ -74,6 +74,18 @@ class userService {
     }
   }
 
+  async updateRole(userId, role) {
+    try {
+      const user = await userDAO.updateRole(userId, role);
+      if (!user) {
+        throw new Error("Error updating role");
+      }
+      return new userDTO(user);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findUserEmail(email) {
     try {
       const user = await userDAO.findUserEmail(email);

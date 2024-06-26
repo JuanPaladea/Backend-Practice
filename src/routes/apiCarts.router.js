@@ -60,6 +60,13 @@ router.post('/:cid/products/:pid', auth, isVerified, async (req, res) => {
       return res.status(400).send({status:'error', message:'No tienes permisos para modificar este carrito'})
     }
 
+    const product = await productService.getProductById(productId);
+
+    if (product.owner?.toString() == userId) {
+      req.logger.warning(`${req.method} ${req.path} - No puedes agregar tus propios productos al carrito`)
+      return res.status(400).send({status:'error', message:'No puedes agregar tus propios productos al carrito'})
+    }
+
     const response = await cartService.addProductToCart(cartId, productId, quantity);
     res.status(201).send({status:'success', message:`producto ${productId} agregado al carrito`, response});
   } catch (error){

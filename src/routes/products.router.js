@@ -10,7 +10,7 @@ router.get('/', authRedirect, isVerified, async (req, res) => {
   try {
     const limit = +req.query.limit || 8;
     const page = +req.query.page || 1;
-    const { query = null, sort = null } = req.query;
+    let { query = null, sort = null } = req.query;
 
     if (typeof limit !== 'number' || typeof page !== 'number') {
       return res.status(400).send({error: 'limit and page must be numbers'})
@@ -52,7 +52,11 @@ router.get('/', authRedirect, isVerified, async (req, res) => {
   }
 })
 
-router.get('/add', authRedirect, isVerified, isAdmin, async (req, res) => {
+router.get('/add', authRedirect, isVerified, async (req, res) => {
+  if (req.session.user.role !== 'admin' && req.session.user.role !== 'premium') {
+    return res.status(403).send({status: 'error', message: 'no tiene permisos para agregar productos'})
+  }
+  
   try {
     res.render(
       "addProduct",

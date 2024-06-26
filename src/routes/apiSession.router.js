@@ -8,7 +8,7 @@ import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
 import transport from "../utils/mailer.js";
-import { createHash } from "../utils/bcrypt.js";
+import { createHash, isValidPassword } from "../utils/bcrypt.js";
 
 const router = Router();
 
@@ -210,6 +210,11 @@ router.post('/resetpassword', async (req, res) => {
       return res.status(404).send({status: 'error', message: 'User not found'});
     }
 
+    if (isValidPassword(user, password)) {
+      req.logger.warning(`${req.method} ${req.path} - Password is the same as the current one`)
+      return res.status(400).send({status: 'error', message: 'Password is the same as the current one'});
+    }
+
     const result = await userService.updatePassword(user._id, createHash(password));
     req.session.user = {
       _id: result._id,
@@ -223,10 +228,46 @@ router.post('/resetpassword', async (req, res) => {
 
     res.status(200).send({status: 'success', message: 'Password updated'});
   } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      req.logger.warning(`${req.method} ${req.path} - Token expired`)
+      return res.redirect('/forgotpassword', {status: 'error', message: 'Token expired'});
+    }
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status: 'error', message: error.message});
   }
 })
+
+router.get("/premium/:userId", auth, isVerified, async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const user = await userService.getUserById(userId);
+    if (!user) {
+      req.logger.warning(`${req.method} ${req.path} - User not found`)
+      return res.status(404).send({status: 'error', message: 'User not found'});
+    }
+
+    if (user.role === 'admin') {
+      req.logger.warning(`${req.method} ${req.path} - User is admin, can't change to premium/user`)
+      return res.status(400).send({status: 'error', message: "User is admin, can't change to premium/user"});
+    }
+
+    if (user.role === 'premium') {
+      const result = await userService.updateRole(userId, 'usuario');
+      req.session.user.role = 'usuario';
+      return res.status(200).send({status: 'success', message: 'User is now user', user: result});
+    }
+
+    if (user.role === 'usuario') {
+      const result = await userService.updateRole(userId, 'premium');
+      req.session.user.role = 'premium';
+      return res.status(200).send({status: 'success', message: 'User is now premium', user: result});
+    }
+    
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status: 'error', message: error.message});
+  }
+});
 
 router.get("/github", passport.authenticate('github', {scope: ['user:email']}), (req, res) => {
   res.status(200).send({status: 'success', message: 'Success'});

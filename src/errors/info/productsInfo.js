@@ -18,7 +18,7 @@ export const generateProductsErrorInfo = (code, product) => {
       List of required types: 
       * title       : Needs to be a String, received: ${product.title} || ${typeof product.title},
       * description : Needs to be a String, received: ${product.description} || ${typeof product.description},
-      * code        : Needs to be a Number, received: ${product.code} || ${typeof product.code},
+      * code        : Needs to be a String, received: ${product.code} || ${typeof product.code},
       * price       : Needs to be a Number greater than 0 , received: ${product.price} || ${typeof product.price},
       * stock       : Needs to be a Number, greater than or equal to 0 received: ${product.stock} || ${typeof product.stock},
       * category    : Needs to be a String, received: ${product.category} || ${typeof product.category},
