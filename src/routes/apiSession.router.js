@@ -201,6 +201,11 @@ router.post('/resetpassword', async (req, res) => {
     return res.status(400).send({status: 'error', message: 'Passwords do not match'});
   }
 
+  if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(password)) {
+    req.logger.warning(`${req.method} ${req.path} - Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter and 1 number`)
+    return res.status(400).send({status: 'error', message: 'Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter and 1 number'});
+  }
+
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await userService.getUserById(decoded._id);

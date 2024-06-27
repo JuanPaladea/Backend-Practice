@@ -24,8 +24,6 @@ router.get('/', auth, isVerified, async (req, res) => {
     req.logger.warning(`${req.method} ${req.path} - limit and page must be greater than 0`)
     return res.status(400).send({status: 'error', message: 'limit and page must be greater than 0'})
   }
-
-  console.log(query, sort)
   
   try {
     if (query) {

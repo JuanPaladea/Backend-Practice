@@ -123,3 +123,9 @@
 2024-06-26 15:11:34 WARNING: POST /667c2e189d8d921f26a24ae4/products/667c55711101c611700f0125 - No puedes agregar tus propios productos al carrito
 2024-06-26 15:12:04 WARNING: POST /667c2e189d8d921f26a24ae4/products/667c55711101c611700f0125 - No puedes agregar tus propios productos al carrito
 2024-06-26 15:12:14 WARNING: POST /667c2e189d8d921f26a24ae4/products/667c55711101c611700f0125 - No puedes agregar tus propios productos al carrito
+2024-06-27 17:32:27 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-06-27 17:38:37 WARNING: GET /users - No tienes permisos para realizar esta acción
+2024-06-27 17:38:53 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-06-27 17:38:58 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-06-27 17:43:31 WARNING: POST /resetpassword - Password is the same as the current one
+2024-06-27 17:43:43 WARNING: POST /resetpassword - Passwords do not match

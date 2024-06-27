@@ -29,8 +29,9 @@ router.get('/register', logged, async (req, res) => {
 
 router.get('/user', authRedirect, isVerified, async (req, res) => {
   const userId = req.session.user._id
+
   try {
-    const cart = await cartService.getCart(userId)
+    const cart = await cartService.getCartWithUserId(userId)
     res.render(
       "user",
       {
@@ -42,6 +43,7 @@ router.get('/user', authRedirect, isVerified, async (req, res) => {
     )
   } catch (error) {
     res.status(400).send({status: 'error', error: error.message})
+    console.log(error)
   }
 })
 
