@@ -129,3 +129,6 @@
 2024-06-27 17:38:58 WARNING: GET / - No tienes permisos para realizar esta acción
 2024-06-27 17:43:31 WARNING: POST /resetpassword - Password is the same as the current one
 2024-06-27 17:43:43 WARNING: POST /resetpassword - Passwords do not match
+2024-07-04 11:15:10 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-07-04 12:15:15 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-07-04 12:18:13 WARNING: GET /premium/665a06a89f0653cac83f7446 - User is admin, can't change to premium/user

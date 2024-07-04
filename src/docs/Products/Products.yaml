@@ -1,0 +1,138 @@
+openapi: 3.0.0
+info:
+  title: Products API
+  version: 1.0.0
+  description: API endpoints for managing products
+paths:
+  /api/products:
+    get:
+      summary: Get all products
+      description: Retrieve a list of all products. Requires authentication and email verification.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of products.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Add a new product
+      description: Add a new product to the database. Requires authentication, email verification, and admin privileges.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Product created successfully.
+  /api/products/{productId}:
+    get:
+      summary: Get a single product
+      description: Retrieve details of a specific product by its ID. Requires authentication and email verification.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: The ID of the product to retrieve
+      responses:
+        '200':
+          description: Details of the specified product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    put:
+      summary: Update a product
+      description: Update the details of an existing product. Requires authentication, email verification, and admin privileges.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: The ID of the product to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Product updated successfully.
+    delete:
+      summary: Delete a product
+      description: Remove a product from the database. Requires authentication and email verification.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: The ID of the product to delete
+      responses:
+        '204':
+          description: Product deleted successfully.
+  /api/products/mock/mockingproducts:
+    get:
+      summary: Get mock products
+      description: Retrieve a list of mock products. No authentication required.
+      responses:
+        '200':
+          description: A list of mock products.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The product ID.
+        title:
+          type: string
+          description: The name of the product.
+        description:
+          type: string
+          description: The description of the product.
+        code:
+          type: string
+          description: The product code.
+        price:
+          type: number
+          description: The price of the product.
+        status: 
+          type: string
+          description: The status of the product.
+        stock: 
+          type: number
+          description: The stock of the product.
+        category:
+          type: string
+          description: The category of the product.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

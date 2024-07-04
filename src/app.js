@@ -7,6 +7,8 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 import flash from 'connect-flash';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 import { __dirname } from './utils/utils.js';
 import initializatePassport from './config/passportConfig.js';
@@ -28,6 +30,22 @@ export const app = express();
 
 //MONGOOSE
 mongoose.connect(MONGODB_URI)
+
+// SWAGGER
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Ecommerce API",
+      version: "1.0.0",
+      description: "Ecommerce API Information",
+    }
+  },
+  apis: [`./src/docs/**/*.yaml`]
+}
+
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 //MIDDLEWARES
 app.use(addLogger)
