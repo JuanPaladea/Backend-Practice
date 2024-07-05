@@ -9,7 +9,7 @@ const router = Router();
 router.get('/', auth, isVerified, getProducts)
 router.get('/:productId', auth, isVerified, getProduct)
 router.post('/', auth, isVerified, addProduct)
-router.put('/:productId', auth, isVerified, isAdmin, updateProduct)
+router.put('/:productId', auth, isVerified, updateProduct)
 router.delete('/:productId', auth, isVerified, deleteProduct)
 router.get('/mock/mockingproducts', getMockProducts)
 

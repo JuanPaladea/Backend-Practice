@@ -119,12 +119,40 @@ paths:
                 hasNextPage: true
         '401':
           description: Unauthorized access.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Unauthorized"
         '400': 
           description: Bad request.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "No products found."
 
     post:
       summary: Add a new product
-      description: Add a new product to the database. Requires authentication, email verification, and admin privileges.
+      description: Add a new product to the database. Requires authentication, email verification and admin or premium user privileges.
       requestBody:
         required: true
         content:
@@ -189,10 +217,52 @@ paths:
                   owner: "60f7b3b3b5f7b40015f7b3b3"
         '401':
           description: Unauthorized access.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Unauthorized"
         '403':
           description: Forbidden access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Forbidden"
         '400': 
           description: Bad request.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Invalid data"
 
   /api/products/{productId}:
     get: 
@@ -238,8 +308,36 @@ paths:
                   owner: "60f7b3b3b5f7b40015f7b3b3"
         '401':
           description: Unauthorized access.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Unauthorized"
         '404':
           description: Product not found.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Producto no encontrado"
 
     put:
       summary: Update a product by ID
@@ -316,8 +414,36 @@ paths:
                   owner: "60f7b3b3b5f7b40015f7b3b3"
         '401':
           description: Unauthorized access.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Unauthorized"
         '403':
           description: Forbidden access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Forbidden"
 
     delete:
       summary: Delete a product by ID
@@ -347,10 +473,52 @@ paths:
                 message: "producto eliminado"
         '401':
           description: Unauthorized access.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Unauthorized"
         '403':
           description: Forbidden access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Forbidden"
         '404':
           description: Product not found.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "error"
+                message: "Producto no encontrado"
 
   /api/products/mock/mockingproducts:
     get: 
