@@ -3,42 +3,201 @@ info:
   title: Products API
   version: 1.0.0
   description: API endpoints for managing products
+
 paths:
   /api/products:
     get:
       summary: Get all products
       description: Retrieve a list of all products. Requires authentication and email verification.
-      security:
-        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            default: 8
+          description: The maximum number of products to return
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: The page number of products to return
+        - in: query
+          name: query
+          required: false
+          schema:
+            type: string
+          description: The search query to filter products
+        - in: query
+          name: sort
+          required: false
+          schema:
+            type: string
+          description: The sorting criteria for products
+          
       responses:
         '200':
           description: A list of products.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+                  products:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Product'
+                    description: The list of products.
+                  totalDocs:
+                    type: integer
+                    description: The total number of products.
+                  totalPages:
+                    type: integer
+                    description: The total number of pages.
+                  page:
+                    type: integer
+                    description: The current page number.
+                  limit:
+                    type: integer
+                    description: The maximum number of products per page.
+                  nextPage:
+                    type: integer
+                    description: The next page number.
+                  prevPage:
+                    type: integer
+                    description: The previous page number.
+                  pagingCounter:
+                    type: integer
+                    description: The paging counter.
+                  hasPrevPage:
+                    type: boolean
+                    description: Indicates if there is a previous page.
+                  hasNextPage:
+                    type: boolean
+                    description: Indicates if there is a next page.
+              example: 
+                status: "success"
+                message: "productos encontrados"
+                products:
+                - _id: 6617ed15f8782713d833e62c
+                  title: Jugo de naranja"
+                  description: "Juguito de naranja premium"
+                  code: "ASD123"
+                  price: 100
+                  status: "true"
+                  stock: 7
+                  category: "bebidas"
+                  thumbnails: ["https://static.cotodigital3.com.ar/sitios/fotos/full/00522500/00522537.jpg?3.0.169", "https://example.com/jugo_naranja_2.jpg"]
+                  owner: "60f7b3b3b5f7b40015f7b3b3"
+                - _id: 6617ed15f8782713d833e62c
+                  title: Jugo de naranja"
+                  description: "Juguito de naranja premium"
+                  code: "ASD123"
+                  price: 100
+                  status: "true"
+                  stock: 7
+                  category: "bebidas"
+                  thumbnails: ["https://static.cotodigital3.com.ar/sitios/fotos/full/00522500/00522537.jpg?3.0.169", "https://example.com/jugo_naranja_2.jpg"]
+                  owner: "60f7b3b3b5f7b40015f7b3b3"
+                totalDocs: 27
+                totalPages: 4
+                page: 1
+                limit: 8
+                nextPage: 2
+                prevPage: null
+                pagingCounter: 1
+                hasPrevPage: false
+                hasNextPage: true
+        '401':
+          description: Unauthorized access.
+        '400': 
+          description: Bad request.
+
     post:
       summary: Add a new product
       description: Add a new product to the database. Requires authentication, email verification, and admin privileges.
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              type: object
+              properties:
+                product:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: The name of the product.
+                    description:
+                      type: string
+                      description: The description of the product.
+                    code:
+                      type: string
+                      description: The product code.
+                    price:
+                      type: number
+                      description: The price of the product.
+                    stock: 
+                      type: number
+                      description: The stock of the product.
+                    category:
+                      type: string
+                      description: The category of the product.
+                    thumbnails:
+                      type: array
+                      items:
+                        type: string
+                      description: URLs of the product thumbnails.
       responses:
         '201':
-          description: Product created successfully.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+                  product:
+                    $ref: '#/components/schemas/Product'
+              example: 
+                status: "success"
+                message: "producto agregado"
+                newProduct:
+                  _id: 6617ed15f8782713d833e62c
+                  title: Jugo de naranja"
+                  description: "Juguito de naranja premium"
+                  code: "ASD123"
+                  price: 100
+                  status: "true"
+                  stock: 7
+                  category: "bebidas"
+                  thumbnails: ["https://static.cotodigital3.com.ar/sitios/fotos/full/00522500/00522537.jpg?3.0.169", "https://example.com/jugo_naranja_2.jpg"]
+                  owner: "60f7b3b3b5f7b40015f7b3b3"
+        '401':
+          description: Unauthorized access.
+        '403':
+          description: Forbidden access.
+        '400': 
+          description: Bad request.
+
   /api/products/{productId}:
-    get:
-      summary: Get a single product
-      description: Retrieve details of a specific product by its ID. Requires authentication and email verification.
-      security:
-        - bearerAuth: []
+    get: 
+      summary: Get a product by ID
+      description: Retrieve a product by its ID. Requires authentication and email verification.
       parameters:
         - in: path
           name: productId
@@ -46,18 +205,45 @@ paths:
           schema:
             type: string
           description: The ID of the product to retrieve
+          example: 6617ed15f8782713d833e62c
       responses:
         '200':
-          description: Details of the specified product.
+          description: A product.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+                  product:
+                    $ref: '#/components/schemas/Product'
+              example: 
+                status: "success"
+                message: "producto encontrado"
+                product:
+                  _id: 6617ed15f8782713d833e62c
+                  title: Jugo de naranja"
+                  description: "Juguito de naranja premium"
+                  code: "ASD123"
+                  price: 100
+                  status: "true"
+                  stock: 7
+                  category: "bebidas"
+                  thumbnails: ["https://static.cotodigital3.com.ar/sitios/fotos/full/00522500/00522537.jpg?3.0.169", "https://example.com/jugo_naranja_2.jpg"]
+                  owner: "60f7b3b3b5f7b40015f7b3b3"
+        '401':
+          description: Unauthorized access.
+        '404':
+          description: Product not found.
+
     put:
-      summary: Update a product
-      description: Update the details of an existing product. Requires authentication, email verification, and admin privileges.
-      security:
-        - bearerAuth: []
+      summary: Update a product by ID
+      description: Update a product by its ID. Requires authentication, email verification, and admin privileges or beign owner of the product.
       parameters:
         - in: path
           name: productId
@@ -65,20 +251,77 @@ paths:
           schema:
             type: string
           description: The ID of the product to update
+          example: 6617ed15f8782713d833e62c
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              type: object
+              properties:
+                product:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: The name of the product.
+                    description:
+                      type: string
+                      description: The description of the product.
+                    code:
+                      type: string
+                      description: The product code.
+                    price:
+                      type: number
+                      description: The price of the product.
+                    stock: 
+                      type: number
+                      description: The stock of the product.
+                    category:
+                      type: string
+                      description: The category of the product.
+                    thumbnails:
+                      type: array
+                      items:
+                        type: string
+                      description: URLs of the product thumbnails.
       responses:
         '200':
-          description: Product updated successfully.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+                  updatedProduct:
+                    $ref: '#/components/schemas/Product'
+              example: 
+                status: "success"
+                message: "producto actualizado"
+                updatedProduct:
+                  _id: 6617ed15f8782713d833e62c
+                  title: Jugo de naranja"
+                  description: "Juguito de naranja premium"
+                  code: "ASD123"
+                  price: 100
+                  status: "true"
+                  stock: 7
+                  category: "bebidas"
+                  thumbnails: ["https://static.cotodigital3.com.ar/sitios/fotos/full/00522500/00522537.jpg?3.0.169", "https://example.com/jugo_naranja_2.jpg"]
+                  owner: "60f7b3b3b5f7b40015f7b3b3"
+        '401':
+          description: Unauthorized access.
+        '403':
+          description: Forbidden access.
+
     delete:
-      summary: Delete a product
-      description: Remove a product from the database. Requires authentication and email verification.
-      security:
-        - bearerAuth: []
+      summary: Delete a product by ID
+      description: Delete a product by its ID. Requires authentication, email verification, and admin privileges or beign the owner of the product.
       parameters:
         - in: path
           name: productId
@@ -87,22 +330,89 @@ paths:
             type: string
           description: The ID of the product to delete
       responses:
-        '204':
-          description: Product deleted successfully.
+        '200':
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+              example: 
+                status: "success"
+                message: "producto eliminado"
+        '401':
+          description: Unauthorized access.
+        '403':
+          description: Forbidden access.
+        '404':
+          description: Product not found.
+
   /api/products/mock/mockingproducts:
-    get:
+    get: 
       summary: Get mock products
-      description: Retrieve a list of mock products. No authentication required.
+      description: Retrieve a list of mock products for testing purposes.
+      parameters:
+        - in: query
+          name: quantity
+          required: false
+          schema:
+            type: integer
+            default: 10
+          description: The number of mock products to generate
       responses:
         '200':
           description: A list of mock products.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
+                type: object
+                properties:
+                  status: 
+                    type: string
+                    description: The status of the request.
+                  message: 
+                    type: string
+                    description: The message of the request.
+                  products:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Product'
+                    description: The list of mock products.
+              example: 
+                status: "success"
+                message: "productos generados"
+                products:
+                - _id: 6617ed15f8782713d833e62c
+                  title: Jugo de naranja"
+                  description: "Juguito de naranja premium"
+                  code: "ASD123"
+                  price: 100
+                  status: "true"
+                  stock: 7
+                  category: "bebidas"
+                  thumbnails: ["https://static.cotodigital3.com.ar/sitios/fotos/full/00522500/00522537.jpg?3.0.169", "https://example.com/jugo_naranja_2.jpg"]
+                  owner: "60f7b3b3b5f7b40015f7b3b3"
+                - _id: 6617ed15f8782713d833e62c
+                  title: Jugo de naranja"
+                  description: "Juguito de naranja premium"
+                  code: "ASD123"
+                  price: 100
+                  status: "true"
+                  stock: 7
+                  category: "bebidas"
+                  thumbnails: ["https://static.cotodigital3.com.ar/sitios/fotos/full/00522500/00522537.jpg?3.0.169", "https://example.com/jugo_naranja_2.jpg"]
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Product:
       type: object
@@ -131,8 +441,22 @@ components:
         category:
           type: string
           description: The category of the product.
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+        thumbnails:
+          type: array
+          items:
+            type: string
+          description: URLs of the product thumbnails.
+        owner:
+          type: string
+          description: The owner of the product.
+      example:
+        _id: 6617ed15f8782713d833e62c
+        title: Jugo de naranja"
+        description: "Juguito de naranja premium"
+        code: "ASD123"
+        price: 100
+        status: "true"
+        stock: 7
+        category: "bebidas"
+        thumbnails: ["https://static.cotodigital3.com.ar/sitios/fotos/full/00522500/00522537.jpg?3.0.169", "https://example.com/jugo_naranja_2.jpg"]
+        owner: "60f7b3b3b5f7b40015f7b3b3"

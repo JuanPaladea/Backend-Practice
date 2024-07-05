@@ -132,3 +132,8 @@
 2024-07-04 11:15:10 WARNING: GET / - No tienes permisos para realizar esta acción
 2024-07-04 12:15:15 WARNING: GET / - No tienes permisos para realizar esta acción
 2024-07-04 12:18:13 WARNING: GET /premium/665a06a89f0653cac83f7446 - User is admin, can't change to premium/user
+2024-07-04 18:03:47 ERROR: GET /60f7b3b3b5f7b40015f7b3b3 - No product found
+2024-07-04 18:04:33 ERROR: GET /60f7b3b3b5f7b40015f7b3b3 - No product found
+2024-07-04 20:01:56 WARNING: GET / - Unauthorized
+2024-07-04 20:24:46 ERROR: GET / - Unexpected token 'c', "createdAt:desc" is not valid JSON
+2024-07-04 20:24:53 ERROR: GET / - Unexpected token 'c', "createdAt:desc" is not valid JSON

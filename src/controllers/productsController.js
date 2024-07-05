@@ -98,13 +98,25 @@ export const updateProduct = async (req, res) => {
       req.logger.warning(`${req.method} ${req.path} - One or more fields are missing`)
       return res.status(400).send({status: 'error', message: 'One or more fields are missing'})
     }
+
     if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.code !== 'number' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string' || !Array.isArray(product.thumbnails)) {
       req.logger.warning(`${req.method} ${req.path} - One or more fields have the wrong type`)
       return res.status(400).send({status: 'error', message: 'One or more fields have the wrong type'})
     }
 
-    const updatedProduct = await productService.updateProduct(productId, updatedProduct);
-    res.status(200).send({status:'success', message:'producto actualizado', product})
+    if (req.session.user.role === 'admin') {
+      const updatedProduct = await productService.updateProduct(productId, product);
+      return res.status(200).send({status:'success', message:'producto actualizado', updatedProduct})
+    }
+
+    const productToUpdate = await productService.getProductById(productId);
+    if (productToUpdate.owner.toString() !== req.session.user._id.toString()) {
+      req.logger.warning(`${req.method} ${req.path} - no tiene permisos para actualizar este producto`)
+      return res.status(403).send({status: 'error', message: 'no tiene permisos para actualizar este producto'})
+    }
+    
+    const updatedProduct = await productService.updateProduct(productId, product);
+    res.status(200).send({status:'success', message:'producto actualizado', updatedProduct})
   } catch (error){
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status:'error', message: error.message})
