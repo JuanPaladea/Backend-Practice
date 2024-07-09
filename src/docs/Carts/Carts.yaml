@@ -1,0 +1,636 @@
+openapi: 3.0.0
+info:
+  title: Carts
+  version: 1.0.0
+  description: Carts API
+
+paths:
+  /api/carts:
+    get:
+      summary: Get all carts
+      description: Get all carts, requires authentication, only admin users can access this route
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  carts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cart'
+              example:
+                status: success
+                message: carritos encontrados
+                carts:
+                  - _id: 5f7b7b7b7b7b7b7b7b7b7b7b
+        '401': 
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: The user is not verified, please check your email to verify your account
+        '403': 
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: No tienes permisos para realizar esta acción
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: carritos no encontrados
+
+    post:
+      summary: Create a cart
+      description: Create a cart, requires authentication
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+                  user:
+                    type: string
+              example:
+                status: success
+                message: carrito creado
+                cart:
+                  _id: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+                user:
+                  _id: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Error creating cart
+        '401': 
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: No tienes permisos para realizar esta acción
+
+  /api/carts/{cartId}:
+    get:
+      summary: Get a cart by id
+      description: Get a cart by id, requires authentication
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          description: Cart id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+              example:
+                status: success
+                message: carrito encontrado
+                cart:
+                  _id: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+        '401': 
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: No tienes permisos para realizar esta acción
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: carrito no encontrado
+
+    delete:
+      summary: Delete a cart
+      description: Delete a cart, requires authentication. Can't delete the cart if it belongs to another user
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          description: Cart id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: success
+                message: carrito eliminado
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Error deleting cart
+        '401': 
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: No tienes permisos para realizar esta acción
+
+  /api/carts/{cartId}/products/{productId}:
+    post:
+      summary: Add a product to a cart
+      description: Add a product to a cart, requires authentication. Can't add the product if the cart belongs to another user or if the product belong to the user
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          description: Cart id
+          schema:
+            type: string
+        - in: path
+          name: productId
+          required: true
+          description: Product id
+          schema:
+            type: string
+        - in: body
+          name: quantity
+          required: false
+          description: Product quantity
+          schema:
+            type: number
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+              example:
+                status: success
+                message: producto agregado al carrito
+                cart:
+                  _id: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Error adding product to cart
+        '401': 
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: No tienes permisos para realizar esta acción
+    put:
+      summary: Update a product quantity in a cart
+      description: Update a product quantity in a cart, requires authentication. Can't update the product if the cart belongs to another user or if the product belong to the user
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          description: Cart id
+          schema:
+            type: string
+        - in: path
+          name: productId
+          required: true
+          description: Product id
+          schema:
+            type: string
+        - in: body
+          name: quantity
+          required: true
+          description: Product quantity
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+              example:
+                status: success
+                message: cantidad de producto actualizada
+                cart:
+                  _id: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Error updating product in cart
+        '401': 
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: No tienes permisos para realizar esta acción
+    delete:
+      summary: Delete a product from a cart
+      description: Delete a product from a cart, requires authentication. Can't delete the product if the cart belongs to another user or if the product belong to the user
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          description: Cart id
+          schema:
+            type: string
+        - in: path
+          name: productId
+          required: true
+          description: Product id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+              example:
+                status: success
+                message: producto eliminado del carrito
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Error deleting product from cart
+        '401': 
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: No tienes permisos para realizar esta acción
+  
+  /api/carts/{cartId}/purchase:
+    post:
+      summary: Purchase a cart
+      description: Purchase a cart, requires authentication. Can't purchase the cart if it belongs to another user. If the purchase is successful, the cart will be deleted and the products will be removed from the inventory. If there is no stock of a product, that product will be removed from the purchase. The response will contain the ticket of the purchase and the products that were removed from the purchase
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          description: Cart id
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  ticket:
+                    type: string
+                  itemsRemoved:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: string
+                        quantity:
+                          type: number
+              example:
+                status: success
+                message: compra realizada
+                ticket: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+                itemsRemoved:
+                  - product: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+                    quantity: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Error purchasing cart
+        '401': 
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: No tienes permisos para realizar esta acción
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+        user:
+          type: string
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+              quantity:
+                type: number
+      example:
+        _id: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+        user: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+        products:
+          - product: 5f7b7b7b7b7b7b7b7b7b7b7b7b
+            quantity: 1

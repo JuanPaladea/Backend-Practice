@@ -195,7 +195,7 @@ export const purchaseCart = async (req, res) => {
       }
     }
     // Display the ticket and if there were products with no stock, display them too
-    res.status(200).send({status:'success', message:'compra realizada', ticket, itemsRemoved});
+    res.status(201).send({status:'success', message:'compra realizada', ticket, itemsRemoved});
   } catch (error) {
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status:'error', message: error.message, error: error})
