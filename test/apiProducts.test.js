@@ -1,7 +1,6 @@
 import * as chai from 'chai';
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080';
 const expect = chai.expect;
 
 describe('ApiProducts', () => {
