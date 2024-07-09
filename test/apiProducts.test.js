@@ -1,6 +1,6 @@
 import * as chai from 'chai';
-import productService from '../src/services/productService.js';
 
+import productService from '../src/services/productService.js';
 const expect = chai.expect;
 
 describe('ApiProducts', () => {
