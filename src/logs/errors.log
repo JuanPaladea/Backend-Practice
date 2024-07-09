@@ -139,3 +139,4 @@
 2024-07-04 20:24:53 ERROR: GET / - Unexpected token 'c', "createdAt:desc" is not valid JSON
 2024-07-05 12:34:19 WARNING: GET / - No tienes permisos para realizar esta acción
 2024-07-05 12:34:22 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-07-08 21:25:21 WARNING: GET / - Unauthorized
