@@ -148,3 +148,16 @@
 2024-07-10 21:50:53 ERROR: GET /api/products - Cannot set headers after they are sent to the client
 2024-07-10 21:51:10 ERROR: GET /api/products - Cannot set headers after they are sent to the client
 2024-07-10 21:52:20 ERROR: GET /api/products - Cannot set headers after they are sent to the client
+2024-07-11 15:31:36 ERROR: PUT /6690250888c97d8e98ccc005 - Plan executor error during findAndModify :: caused by :: Performing an update on the path '_id' would modify the immutable field '_id'
+2024-07-11 15:31:36 ERROR: DELETE /6690250888c97d8e98ccc005 - Error deleting product
+2024-07-11 15:33:21 WARNING: Unauthorized
+2024-07-11 15:33:22 WARNING: Unauthorized
+2024-07-11 15:33:22 WARNING: Unauthorized
+2024-07-11 15:34:24 ERROR: PUT /669025b01284b3267d42f167 - Plan executor error during findAndModify :: caused by :: Performing an update on the path '_id' would modify the immutable field '_id'
+2024-07-11 15:34:24 ERROR: DELETE /669025b01284b3267d42f167 - Error deleting product
+2024-07-11 15:36:11 ERROR: PUT /6690261b908c99189d1d6f9e - Plan executor error during findAndModify :: caused by :: Performing an update on the path '_id' would modify the immutable field '_id'
+2024-07-11 15:36:11 ERROR: DELETE /6690261b908c99189d1d6f9e - Error deleting product
+2024-07-11 15:50:40 ERROR: PUT /6690298011c76224be7e10b6 - Plan executor error during findAndModify :: caused by :: Performing an update on the path '_id' would modify the immutable field '_id'
+2024-07-11 15:53:20 ERROR: PUT /66902a205c0b03b675330437 - Plan executor error during findAndModify :: caused by :: Performing an update on the path '_id' would modify the immutable field '_id'
+2024-07-11 15:53:20 ERROR: DELETE /66902a205c0b03b675330437 - Error deleting product
+2024-07-11 15:55:13 ERROR: DELETE /66902a912bafa101494f2a0b - Error deleting product

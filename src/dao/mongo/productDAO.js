@@ -46,7 +46,7 @@ class productDAO {
 
   async deleteProduct(id) {
     try {
-      const product = await productModel.findOneAndDelete({id});
+      const product = await productModel.findOneAndDelete({_id: id});
       return product;
     } catch (error) {
       throw error

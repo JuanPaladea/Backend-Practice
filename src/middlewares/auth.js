@@ -7,12 +7,13 @@ const auth = (req, res, next) => {
       const token = req.header("Authorization").replace("Bearer ", "");
       const decoded = jwt.verify(token, JWT_SECRET);
       req.session.user = decoded;
-      next(); // Move inside the try block to ensure it only calls next if authentication succeeds
+      next();
     } catch (error) {
-      return res.status(401).send({ error: "Please authenticate" }); // Add return to prevent calling next after sending a response
+      req.logger.warning("Unauthorized");
+      return res.status(401).send({ status: 'error', message: 'Unauthorized' });
     }
   } else {
-    next(); // Ensure next is called when the user is already in the session
+    next()
   }
 }
 

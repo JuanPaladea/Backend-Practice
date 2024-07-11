@@ -31,19 +31,19 @@ export const sendVerificationEmail = (req, res) => {
     email: req.user.email,
   }, JWT_SECRET, {expiresIn: '1d'})
 
-  transport.sendMail({
-    from: `BackEnd JP <${EMAIL}>`,
-    to: req.user.email,
-    subject: 'Bienvenido al Backend JP - Verificación de cuenta',
-    html: 
-    `<div>
-    <h1>¡Bienvenido a Backend JP!</h1>
-    <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
-    <a href="http://localhost:8080/api/session/verify?token=${token}">Verificar cuenta</a>
-    </div>`
-  })
+  // transport.sendMail({
+  //   from: `BackEnd JP <${EMAIL}>`,
+  //   to: req.user.email,
+  //   subject: 'Bienvenido al Backend JP - Verificación de cuenta',
+  //   html: 
+  //   `<div>
+  //   <h1>¡Bienvenido a Backend JP!</h1>
+  //   <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
+  //   <a href="http://localhost:8080/api/session/verify?token=${token}">Verificar cuenta</a>
+  //   </div>`
+  // })
   
-  res.status(200).send({status: 'success', message: 'User registered, please check your email to verify your account.',});
+  res.status(200).send({status: 'success', message: 'User registered, please check your email to verify your account.'});
 }
 
 export const failRegister = (req, res) => {

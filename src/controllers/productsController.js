@@ -99,7 +99,7 @@ export const updateProduct = async (req, res) => {
       return res.status(400).send({status: 'error', message: 'One or more fields are missing'})
     }
 
-    if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.code !== 'number' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string' || !Array.isArray(product.thumbnails)) {
+    if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string') {
       req.logger.warning(`${req.method} ${req.path} - One or more fields have the wrong type`)
       return res.status(400).send({status: 'error', message: 'One or more fields have the wrong type'})
     }
