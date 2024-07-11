@@ -140,3 +140,11 @@
 2024-07-05 12:34:19 WARNING: GET / - No tienes permisos para realizar esta acción
 2024-07-05 12:34:22 WARNING: GET / - No tienes permisos para realizar esta acción
 2024-07-08 21:25:21 WARNING: GET / - Unauthorized
+2024-07-10 21:45:41 ERROR: GET /api/products - Cannot set headers after they are sent to the client
+2024-07-10 21:46:06 ERROR: GET /api/products - Cannot set headers after they are sent to the client
+2024-07-10 21:47:31 ERROR: GET /api/products - Cannot set headers after they are sent to the client
+2024-07-10 21:48:24 ERROR: GET /api/products - Cannot set headers after they are sent to the client
+2024-07-10 21:50:31 ERROR: GET /api/products - Cannot set headers after they are sent to the client
+2024-07-10 21:50:53 ERROR: GET /api/products - Cannot set headers after they are sent to the client
+2024-07-10 21:51:10 ERROR: GET /api/products - Cannot set headers after they are sent to the client
+2024-07-10 21:52:20 ERROR: GET /api/products - Cannot set headers after they are sent to the client

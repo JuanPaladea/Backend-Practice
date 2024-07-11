@@ -1,6 +1,5 @@
 import { Router } from "express";
 import auth from "../middlewares/auth.js";
-import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
 import { addProduct, deleteProduct, getMockProducts, getProduct, getProducts, updateProduct } from "../controllers/productsController.js";
 
