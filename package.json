@@ -5,7 +5,7 @@
   "description": "Backend ecommerce",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon src/app.js --ignore src/logs",
+    "start": "nodemon src/app.js --ignore src/logs -- ignore /public --ignore src/views --ignore /uploads",
     "test": "mocha"
   },
   "keywords": [],

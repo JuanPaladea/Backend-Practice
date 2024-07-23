@@ -31,17 +31,17 @@ export const sendVerificationEmail = (req, res) => {
     email: req.user.email,
   }, JWT_SECRET, {expiresIn: '1d'})
 
-  // transport.sendMail({
-  //   from: `BackEnd JP <${EMAIL}>`,
-  //   to: req.user.email,
-  //   subject: 'Bienvenido al Backend JP - Verificación de cuenta',
-  //   html: 
-  //   `<div>
-  //   <h1>¡Bienvenido a Backend JP!</h1>
-  //   <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
-  //   <a href="http://localhost:8080/api/session/verify?token=${token}">Verificar cuenta</a>
-  //   </div>`
-  // })
+  transport.sendMail({
+    from: `BackEnd JP <${EMAIL}>`,
+    to: req.user.email,
+    subject: 'Bienvenido al Backend JP - Verificación de cuenta',
+    html: 
+    `<div>
+    <h1>¡Bienvenido a Backend JP!</h1>
+    <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
+    <a href="http://localhost:8080/api/session/verify?token=${token}">Verificar cuenta</a>
+    </div>`
+  })
   
   res.status(200).send({status: 'success', message: 'User registered, please check your email to verify your account.'});
 }
@@ -80,7 +80,7 @@ export const setSessionUserCookie = (req, res) => {
   res.cookie('jwt', token);
   userService.updateLastConnection(req.user._id);
 
-  res.status(200).send({status: 'success', message: 'User logged in', token: token});
+  res.redirect('/');
 }
 
 export const failLogin = (req, res) => {
@@ -249,6 +249,14 @@ export const changeUserRole = async (req, res) => {
     }
 
     if (user.role === 'usuario') {
+      if (!user.documents) {
+        req.logger.warning(`${req.method} ${req.path} - User must upload documents to become premium`)
+        return res.status(400).send({status: 'error', message: 'User must upload documents to become premium'});
+      }
+      if (user.documents.length < 3) {
+        req.logger.warning(`${req.method} ${req.path} - User must upload documents to become premium`)
+        return res.status(400).send({status: 'error', message: 'User must upload documents to become premium'});
+      }
       const result = await userService.updateRole(userId, 'premium');
       req.session.user.role = 'premium';
       return res.status(200).send({status: 'success', message: 'User is now premium', user: result});
@@ -260,10 +268,15 @@ export const changeUserRole = async (req, res) => {
   }
 }
 
-export const uploadDocuments = async (req, res) => {
-  const documents = req.files.map(file => file.path);
+export const uploadDocuments = async (req, res) => {  
+  const userId = req.params.userId;
+  console.log(req.files)
+  const documents = req.files.map(file => {
+    return {name: file.originalname, reference: file.path}
+  })
+
   try {
-    const result = await userService.uploadDocuments(req.session.user._id, documents);
+    const result = await userService.uploadDocuments(userId, documents);
     res.status(200).send({status: 'success', message: 'Documents uploaded', user: result});
   } catch (error) {
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
@@ -272,6 +285,8 @@ export const uploadDocuments = async (req, res) => {
 }
 
 export const logOut = async (req, res) => {
+  userService.updateLastConnection(req.user._id);
+
   req.session.destroy(error => {
     
     if (error) {

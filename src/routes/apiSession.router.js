@@ -20,7 +20,7 @@ router.get('/verify', verifyUser)
 router.post('/forgotpassword', sendPasswordResetEmail)
 router.post('/resetpassword', resetPassword)
 router.get("/premium/:userId", auth, isVerified, changeUserRole);
-router.post("/:userId/documents", auth, isVerified, upload.array('file'), uploadDocuments)
+router.post("/:userId/documents", auth, isVerified, upload.array('files', 3), uploadDocuments)
 router.post("/logout", logOut);
 
 // EXTERNAL LOGIN

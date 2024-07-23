@@ -1,37 +1,27 @@
 <div class="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden my-4">
-    <div class="py-4 px-6">
-        <h1 class="text-2xl font-semibold text-gray-800">{{user.firstName}} {{user.lastName}} {{user.username}}</h1>
-      <p class="py-2 text-lg text-gray-700">{{user.email}}</p>
-      <div class="items-center text-gray-700">
-          <h1 class="text-sm">Age: {{user.age}} </h1>
-          <h1 class="text-sm">Rol: {{user.role}} </h1>
-
-      </div>
-      <div class="flex gap-2.5 py-2">
-        {{#if cart.products.length}}
-          <a href="/carts/{{cart._id}}" class="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-1 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">Mi carrito</a>
-        {{/if}}
-        <form action="/api/session/logout" method="POST">
-          <button type="submit"  href="#" class="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-1 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">Cerrar Sesión</button>
-        </form>
-      </div>
+  <div class="py-4 px-6">
+    <h1 class="text-2xl font-semibold text-gray-800">{{user.firstName}} {{user.lastName}} {{user.username}}</h1>
+    <p class="py-2 text-lg text-gray-700">{{user.email}}</p>
+    <div class="items-center text-gray-700">
+      <h1 class="text-sm">Age: {{user.age}} </h1>
+      <h1 class="text-sm">Rol: {{user.role}} </h1>
     </div>
-    <div class="col-span-full my-4">
-      <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Cover photo</label>
-      <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-        <div class="text-center">
-          <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
-          </svg>
-          <div class="mt-4 flex text-sm leading-6 text-gray-600">
-            <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-              <span>Upload a file</span>
-              <input id="file-upload" name="file-upload" type="file" class="sr-only">
-            </label>
-            <p class="pl-1">or drag and drop</p>
-          </div>
-          <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-        </div>
-      </div>
+    <div class="flex gap-2.5 py-2">
+      {{#if cart.products.length}}
+        <a href="/carts/{{cart._id}}" class="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-1 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">Mi carrito</a>
+      {{/if}}
+      <form action="/api/session/logout" method="POST">
+        <button type="submit"  href="#" class="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-1 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">Cerrar Sesión</button>
+      </form>
     </div>
+  </div>
+</div>
+<div class="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden my-4">
+  <div class="py-4 px-6">
+    <form action="/api/session/{{user._id}}/documents" method="POST" enctype="multipart/form-data">
+      <label class="block mb-2 text-sm font-medium text-gray-900" for="multiple_files">Suba Identificación, Comprobante de domicilio y Comprobante de estado de cuenta</label>
+      <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" name="files" multiple />
+      <button type="submit" class="my-2 inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-1 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">Subir</button>
+    </form>
+  </div>
 </div>
