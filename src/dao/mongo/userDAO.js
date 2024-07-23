@@ -79,6 +79,24 @@ class userDAO {
       throw error
     }
   } 
+
+  async updateLastConnection(userId) {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, {lastConnection: Date.now()}, {new: true})
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async uploadDocuments(userId, documents) {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, {documents: documents}, {new: true})
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default new userDAO();

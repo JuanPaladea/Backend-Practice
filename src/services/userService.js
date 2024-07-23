@@ -98,6 +98,30 @@ class userService {
       throw error;
     }
   }
+
+  async updateLastConnection(userId) {
+    try {
+      const user = await userDAO.updateLastConnection(userId);
+      if (!user) {
+        throw new Error("Error updating last connection");
+      }
+      return new userDTO(user);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async uploadDocuments(userId, documents) {
+    try {
+      const user = await userDAO.uploadDocuments(userId, documents);
+      if (!user) {
+        throw new Error("Error uploading documents");
+      }
+      return new userDTO(user);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new userService();
