@@ -4,8 +4,9 @@ import passport from "passport";
 import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isVerified from "../middlewares/isVerified.js";
+import upload from "../middlewares/multer.js";
 
-import { changeUserRole, failLogin, failRegister, getCurrentUser, getUsers, setSessionUserCookie, logOut, sendVerificationEmail, resetPassword, sendPasswordResetEmail, verifyUser, updateLastConnection } from "../controllers/sessionController.js";
+import { changeUserRole, failLogin, failRegister, getCurrentUser, getUsers, setSessionUserCookie, logOut, sendVerificationEmail, resetPassword, sendPasswordResetEmail, verifyUser, uploadDocuments } from "../controllers/sessionController.js";
 
 const router = Router();
 
@@ -13,13 +14,13 @@ router.get('/users', auth, isVerified, isAdmin, getUsers)
 router.get('/current', auth, isVerified, getCurrentUser);
 router.post('/register', passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}), sendVerificationEmail);
 router.get("/failRegister", failRegister);
-router.post('/login', passport.authenticate('login', {failureRedirect: '/api/session/failLogin', failureFlash: true}), setSessionUserCookie, updateLastConnection);
+router.post('/login', passport.authenticate('login', {failureRedirect: '/api/session/failLogin', failureFlash: true}), setSessionUserCookie);
 router.get("/failLogin", failLogin);
 router.get('/verify', verifyUser)
 router.post('/forgotpassword', sendPasswordResetEmail)
 router.post('/resetpassword', resetPassword)
 router.get("/premium/:userId", auth, isVerified, changeUserRole);
-router.post("/:userId/documents", auth, isVerified, uploadDocuments)
+router.post("/:userId/documents", auth, isVerified, upload.array('file'), uploadDocuments)
 router.post("/logout", logOut);
 
 // EXTERNAL LOGIN

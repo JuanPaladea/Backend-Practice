@@ -78,6 +78,8 @@ export const setSessionUserCookie = (req, res) => {
   }, JWT_SECRET, { expiresIn: '1h' });
 
   res.cookie('jwt', token);
+  userService.updateLastConnection(req.user._id);
+
   res.status(200).send({status: 'success', message: 'User logged in', token: token});
 }
 
@@ -258,18 +260,8 @@ export const changeUserRole = async (req, res) => {
   }
 }
 
-export const updateLastConnection = async (req, res) => {
-  try {
-    const result = await userService.updateLastConnection(req.session.user._id);
-    res.status(200).send({status: 'success', message: 'Last connection updated', user: result});
-  } catch (error) {
-    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
-    res.status(400).send({status: 'error', message: error.message});
-  }
-}
-
 export const uploadDocuments = async (req, res) => {
-  const documents = req.body.documents;
+  const documents = req.files.map(file => file.path);
   try {
     const result = await userService.uploadDocuments(req.session.user._id, documents);
     res.status(200).send({status: 'success', message: 'Documents uploaded', user: result});

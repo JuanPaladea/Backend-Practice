@@ -8,5 +8,6 @@ export default class userDTO {
     this.verified = user.verified;
     this.age = user.age;
     this.role = user.role || 'usuario';
+    this.lastConnection = user.lastConnection;
   }
 }
