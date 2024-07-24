@@ -2,11 +2,10 @@ import { Router } from "express";
 import productService from "../services/productService.js";
 import authRedirect from "../middlewares/authRedirect.js";
 import isAdmin from "../middlewares/isAdmin.js";
-import isVerified from "../middlewares/isVerified.js";
 
 const router = Router();
 
-router.get('/', authRedirect, isVerified, async (req, res) => {
+router.get('/', authRedirect, async (req, res) => {
   try {
     const limit = +req.query.limit || 8;
     const page = +req.query.page || 1;
@@ -52,7 +51,7 @@ router.get('/', authRedirect, isVerified, async (req, res) => {
   }
 })
 
-router.get('/add', authRedirect, isVerified, async (req, res) => {
+router.get('/add', authRedirect, async (req, res) => {
   if (req.session.user.role !== 'admin' && req.session.user.role !== 'premium') {
     return res.status(403).send({status: 'error', message: 'no tiene permisos para agregar productos'})
   }
@@ -71,7 +70,7 @@ router.get('/add', authRedirect, isVerified, async (req, res) => {
   }
 })
 
-router.get('/:pid', authRedirect, isVerified, async (req, res) => {
+router.get('/:pid', authRedirect, async (req, res) => {
   const productId = req.params.pid
   try {
     const product = await productService.getProductById(productId)

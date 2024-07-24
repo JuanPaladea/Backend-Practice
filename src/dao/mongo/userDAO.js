@@ -62,15 +62,6 @@ class userDAO {
     }
   }
 
-  async verifyUser(userId) {
-    try {
-      const user = await userModel.findByIdAndUpdate(userId, {verified: true}, {new: true})
-      return user
-    } catch (error) {
-      throw error
-    }
-  }
-
   async findUserEmail(email) {
     try {
       const user = await userModel.findOne({email: email})
@@ -92,6 +83,33 @@ class userDAO {
   async uploadDocuments(userId, documents) {
     try {
       const user = await userModel.findByIdAndUpdate(userId, {documents: documents}, {new: true})
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getUnactiveUsers() {
+    try {
+      const users = await userModel.find({lastConnection: {$lt: Date.now() - 172800000}})
+      return users
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async deleteUnactiveUsers() {
+    try {
+      const users = await userModel.deleteMany({lastConnection: {$lt: Date.now() - 172800000}})
+      return users
+    } catch (error) {
+      throw error
+    }
+  } 
+
+  async deleteUser(userId) {
+    try {
+      const user = await userModel.findByIdAndDelete(userId)
       return user
     } catch (error) {
       throw error

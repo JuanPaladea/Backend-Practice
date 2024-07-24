@@ -1,6 +1,7 @@
 import productService from "../services/productService.js";
-
+import transport from "../utils/mailer.js";
 import {generateProducts} from "../utils/faker.js";
+import { EMAIL } from "../utils/config.js";
 
 export const getProducts = async (req, res) => {
   const limit = +req.query.limit || 8;
@@ -54,11 +55,6 @@ export const addProduct = async (req, res) => {
     stock: parseInt(req.body.product.stock),
     category: req.body.product.category,
     thumbnails: req.body.product.thumbnails,
-  }
-
-  if (req.session.user.role == "usuario") {
-    req.logger.warning(`${req.method} ${req.path} - no tiene permisos para agregar productos`)
-    return res.status(403).send({status: 'error', message: 'no tiene permisos para agregar productos'})
   }
   
   try {
@@ -127,7 +123,7 @@ export const deleteProduct = async (req, res) => {
   const productId = req.params.productId;
   
   try {
-    const product = await productService.getProductById(productId);
+    const product = await productService.getProductById(productId)
 
     if (!product) {
       req.logger.warning(`${req.method} ${req.path} - producto no encontrado`)
@@ -136,7 +132,19 @@ export const deleteProduct = async (req, res) => {
 
     if (req.session.user.role === 'admin') {
       await productService.deleteProduct(productId);
+      if (product.owner.role === 'premium') {
+        transport.sendMail({
+          from: `BackEnd JP <${EMAIL}>`,
+          to: product.owner.email,
+          subject: 'Producto eliminado',
+          html: 
+          `
+            <h1>Producto eliminado</h1>
+            <p>El producto ${product.title} ha sido eliminado por un administrador</p>
+          `
+        })
       return res.status(200).send({status:'success', message:'producto eliminado'})
+      }
     }
 
     if (product.owner.toString() !== req.session.user._id.toString()) {
@@ -145,8 +153,19 @@ export const deleteProduct = async (req, res) => {
     }
 
     await productService.deleteProduct(productId);
+    if (product.owner.role === 'premium') {
+      transport.sendMail({
+        from: `BackEnd JP <${EMAIL}>`,
+        to: product.owner.email,
+        subject: 'Producto eliminado',
+        html: 
+        `
+          <h1>Producto eliminado</h1>
+          <p>El producto ${product.title} ha sido eliminado</p>
+        `
+      })
+    }
     res.status(200).send({status:'success', message:'producto eliminado'})
-
   } catch (error){
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status:'error', message: error.message})

@@ -2,11 +2,10 @@ import { Router } from "express";
 
 import cartService from "../services/cartService.js";
 import authRedirect from "../middlewares/authRedirect.js";
-import isVerified from "../middlewares/isVerified.js";
 
 const router = Router();
 
-router.get('/:cid', authRedirect, isVerified, async (req, res) => {
+router.get('/:cid', authRedirect, async (req, res) => {
   const cartId = req.params.cid
   try {
     const cart = await cartService.getCart(cartId)

@@ -28,7 +28,7 @@ class productDAO {
 
   async getProductById(id) {
     try {
-      const product = await productModel.findOne({_id: id}).lean();
+      const product = await productModel.findOne({_id: id}).populate('owner').lean();
       return product;
     } catch (error) {
       throw error

@@ -2,7 +2,8 @@ import { Router } from "express";
 import logged from "../middlewares/logged.js";
 import cartService from "../services/cartService.js";
 import authRedirect from "../middlewares/authRedirect.js";
-import isVerified from "../middlewares/isVerified.js";
+import isAdmin from "../middlewares/isAdmin.js";
+import userService from "../services/userService.js";
 
 const router = Router();
 
@@ -27,7 +28,7 @@ router.get('/register', logged, async (req, res) => {
   )
 })
 
-router.get('/user', authRedirect, isVerified, async (req, res) => {
+router.get('/user', authRedirect, async (req, res) => {
   const userId = req.session.user._id
 
   try {
@@ -45,6 +46,19 @@ router.get('/user', authRedirect, isVerified, async (req, res) => {
     res.status(400).send({status: 'error', error: error.message})
     console.log(error)
   }
+})
+
+router.get('/admin-users', authRedirect, isAdmin, async (req, res) => {
+  const users = await userService.getUsers()
+
+  res.render(
+    'admin-users',
+    {
+      layout: 'default',
+      title: 'Backend Juan Paladea | Admin Users',
+      users: users
+    }
+  )
 })
 
 router.get('/verify/:id', async (req, res) => {

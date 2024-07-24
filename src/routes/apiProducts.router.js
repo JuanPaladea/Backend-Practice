@@ -1,15 +1,15 @@
 import { Router } from "express";
 import auth from "../middlewares/auth.js";
-import isVerified from "../middlewares/isVerified.js";
 import { addProduct, deleteProduct, getMockProducts, getProduct, getProducts, updateProduct } from "../controllers/productsController.js";
+import isPremium from "../middlewares/isPremium.js";
 
 const router = Router();
 
-router.get('/', auth, isVerified, getProducts)
-router.get('/:productId', auth, isVerified, getProduct)
-router.post('/', auth, isVerified, addProduct)
-router.put('/:productId', auth, isVerified, updateProduct)
-router.delete('/:productId', auth, isVerified, deleteProduct)
+router.get('/', auth, getProducts)
+router.get('/:productId', auth, getProduct)
+router.post('/', auth, isPremium, addProduct)
+router.put('/:productId', auth, isPremium, updateProduct)
+router.delete('/:productId', auth, isPremium, deleteProduct)
 router.get('/mock/mockingproducts', getMockProducts)
 
 export default router
