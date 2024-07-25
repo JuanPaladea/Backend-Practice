@@ -44,7 +44,6 @@ router.get('/user', authRedirect, async (req, res) => {
     )
   } catch (error) {
     res.status(400).send({status: 'error', error: error.message})
-    console.log(error)
   }
 })
 
@@ -56,18 +55,8 @@ router.get('/admin-users', authRedirect, isAdmin, async (req, res) => {
     {
       layout: 'default',
       title: 'Backend Juan Paladea | Admin Users',
+      script: 'deleteUser.js',
       users: users
-    }
-  )
-})
-
-router.get('/verify/:id', async (req, res) => {
-  res.render(
-    'verify',
-    {
-      layout: 'default',
-      title: 'Backend Juan Paladea | Verify',
-      id: req.params.id
     }
   )
 })

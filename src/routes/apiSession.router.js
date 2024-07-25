@@ -5,15 +5,17 @@ import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import upload from "../middlewares/multer.js";
 
-import { changeUserRole, failLogin, failRegister, getCurrentUser, getUsers, setSessionUserCookie, logOut, resetPassword, sendPasswordResetEmail, uploadDocuments, deleteUnactiveUsers, deleteUser } from "../controllers/sessionController.js";
+import { changeUserRole, failLogin, failRegister, getCurrentUser, getUsers, setSessionUserCookie, logOut, resetPassword, sendPasswordResetEmail, uploadDocuments, deleteUnactiveUsers, deleteUser, getUserById } from "../controllers/sessionController.js";
+import logged from "../middlewares/logged.js";
 
 const router = Router();
 
 router.get('/', auth, getUsers)
 router.get('/current', auth, getCurrentUser);
-router.post('/register', passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}), setSessionUserCookie);
+router.get('/:userId', auth, isAdmin, getUserById)
+router.post('/register', logged, passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}), setSessionUserCookie);
 router.get("/failRegister", failRegister);
-router.post('/login', passport.authenticate('login', {failureRedirect: '/api/session/failLogin', failureFlash: true}), setSessionUserCookie);
+router.post('/login', logged, passport.authenticate('login', {failureRedirect: '/api/session/failLogin', failureFlash: true}), setSessionUserCookie);
 router.get("/failLogin", failLogin);
 router.post('/forgotpassword', sendPasswordResetEmail)
 router.post('/resetpassword', resetPassword)

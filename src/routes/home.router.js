@@ -12,6 +12,8 @@ router.get('/', authRedirect, async (req, res) => {
       "home", {
         layout: "default",
         title: 'Backend Juan Paladea',
+        script: 'deleteUnactiveUsers.js',
+        deleteCarts: 'deleteCartsWithoutUser.js',
         user: req.session.user,
         cart: cart 
       }

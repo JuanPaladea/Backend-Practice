@@ -14,9 +14,9 @@ router.get('/:cid', authRedirect, async (req, res) => {
     {
       layout: 'default',
       title: 'Backend Juan Paladea | Carrito',
-      script: 'cart.js',
-      cartId: cartId,
-      products: cart.products
+      cartId: cart._id,
+      products: cart.products,
+      script: 'deleteProductFromCart.js',
     })
   } catch (error) {
     res.status(400).send({status: 'error', message: error.message})

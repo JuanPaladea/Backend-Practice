@@ -107,6 +107,18 @@ class cartService {
       throw error;
     }
   }
+
+  async deleteCartsWithoutUser() {
+    try {
+      const carts = await cartDAO.deleteCartsWithoutUser();
+      if (!carts) {
+        throw new Error('Error deleting carts without users');
+      }
+      return carts
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new cartService();

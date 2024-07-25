@@ -1,7 +1,7 @@
 import { Router } from "express";
 import productService from "../services/productService.js";
+import cartService from "../services/cartService.js";
 import authRedirect from "../middlewares/authRedirect.js";
-import isAdmin from "../middlewares/isAdmin.js";
 
 const router = Router();
 
@@ -61,7 +61,6 @@ router.get('/add', authRedirect, async (req, res) => {
       "addProduct",
       {
         layout: "default",
-        script: 'addProduct.js',
         title: 'Backend Juan Paladea | Agregar producto'
       }
     )
@@ -72,15 +71,20 @@ router.get('/add', authRedirect, async (req, res) => {
 
 router.get('/:pid', authRedirect, async (req, res) => {
   const productId = req.params.pid
+  const userId = req.session.user._id
+  
   try {
     const product = await productService.getProductById(productId)
+    const cart = await cartService.getCartWithUserId(userId)
+
     res.render(
       "product",
       {
         layout: "default",
-        script: 'addToCart.js',
         title: 'Backend Juan Paladea | ' + product.title,
-        product: product
+        product: product,
+        userId: userId,
+        cart: cart
       })
   } catch (error) {
     res.status(400).send({status: 'error', message: error.message})

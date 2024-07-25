@@ -15,6 +15,17 @@ export const getUsers = async (req, res) => {
   }
 }
 
+export const getUserById = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const user = await userService.getUserById(userId);
+    res.status(200).send({status: 'success', message: 'User found', user});
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status: 'error', message: error.message});
+  }
+}
+
 export const getCurrentUser = async (req, res) => {
   try {
     const user = await userService.getUserById(req.session.user._id);
@@ -188,6 +199,11 @@ export const changeUserRole = async (req, res) => {
     }
 
     if (user.role === 'usuario') {
+      if (req.session.user.role == 'admin') {
+        const result = await userService.updateRole(userId, 'premium');
+        return res.status(200).send({status: 'success', message: 'User is now premium', user: result});
+      }
+
       if (!user.documents) {
         req.logger.warning(`${req.method} ${req.path} - User must upload documents to become premium`)
         return res.status(400).send({status: 'error', message: 'User must upload documents to become premium'});

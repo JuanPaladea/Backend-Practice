@@ -47,26 +47,26 @@ export const getProduct = async (req, res) => {
 }
 
 export const addProduct = async (req, res) => {
+  if (!req.body.title || !req.body.description || !req.body.code || !req.body.price || !req.body.stock || !req.body.category || !req.body.thumbnails) {
+    req.logger.warning(`${req.method} ${req.path} - One or more fields are missing`)
+    return res.status(400).send({status: 'error', message: 'One or more fields are missing'})
+  }
+
   const product = {
-    title: req.body.product.title,
-    description: req.body.product.description,
-    code: req.body.product.code,
-    price: parseInt(req.body.product.price),
-    stock: parseInt(req.body.product.stock),
-    category: req.body.product.category,
-    thumbnails: req.body.product.thumbnails,
+    title: req.body.title,
+    description: req.body.description,
+    code: req.body.code,
+    price: parseInt(req.body.price),
+    stock: parseInt(req.body.stock),
+    category: req.body.category,
+    thumbnails: req.body.thumbnails,
   }
   
   try {
-    if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.thumbnails) {
-      req.logger.warning(`${req.method} ${req.path} - One or more fields are missing`)
-      return res.status(400).send({status: 'error', message: 'One or more fields are missing'})
-    }
-
     if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string') {
       req.logger.warning(`${req.method} ${req.path} - One or more fields have the wrong type`)
       return res.status(400).send({status: 'error', message: 'One or more fields have the wrong type'})
-    }
+    } 
 
     const newProduct = await productService.addProduct({
       title: product.title,
@@ -161,7 +161,7 @@ export const deleteProduct = async (req, res) => {
         html: 
         `
           <h1>Producto eliminado</h1>
-          <p>El producto ${product.title} ha sido eliminado</p>
+          <p>Su producto ${product.title} ha sido eliminado de la base de datos</p>
         `
       })
     }
