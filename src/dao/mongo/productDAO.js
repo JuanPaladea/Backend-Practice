@@ -28,16 +28,16 @@ class productDAO {
 
   async getProductById(id) {
     try {
-      const product = await productModel.findOne({_id: id}).lean();
+      const product = await productModel.findOne({_id: id}).populate('owner').lean();
       return product;
     } catch (error) {
       throw error
     }
   }
 
-  async updateProduct(id, updatedFields) {
+  async updateProduct(id, updatedProductData) {
     try {
-      const product = await productModel.findOneAndUpdate({_id: id}, updatedFields, {new: true});
+      const product = await productModel.findOneAndUpdate({_id: id}, updatedProductData, {new: true});
       return product;
     } catch (error) {
       throw error

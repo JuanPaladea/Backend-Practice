@@ -56,14 +56,13 @@ export const addProductToCart = async (req, res) => {
     }
 
     const product = await productService.getProductById(productId);
-
-    if (product.owner?.toString() == userId) {
+    if (product.owner?._id.toString() == userId) {
       req.logger.warning(`${req.method} ${req.path} - No puedes agregar tus propios productos al carrito`)
       return res.status(400).send({status:'error', message:'No puedes agregar tus propios productos al carrito'})
     }
 
-    const response = await cartService.addProductToCart(cartId, productId, quantity);
-    res.status(201).send({status:'success', message:`producto ${productId} agregado al carrito`, response});
+    await cartService.addProductToCart(cartId, productId, quantity);
+    res.status(201).send({status:'success', message:`producto ${productId} agregado al carrito`});
   } catch (error){
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status:'error', message: error.message})
@@ -132,6 +131,16 @@ export const deleteCart = async (req, res) => {
 
     const response = await cartService.deleteAllProductsFromCart(cartId);
     res.status(200).send({status:'success', message:'carrito eliminado', response});
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status:'error', message: error.message})
+  }
+}
+
+export const deleteCartsWithoutUser = async (req, res) => {
+  try {
+    const response = await cartService.deleteCartsWithoutUser();
+    res.status(200).send({status:'success', message:'carritos sin usuario eliminados', response});
   } catch (error) {
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status:'error', message: error.message})

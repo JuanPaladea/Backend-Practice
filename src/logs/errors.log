@@ -165,3 +165,60 @@
 2024-07-23 10:42:40 ERROR: GET /premium/665e6433b743315f24126bc0 - Cannot read properties of undefined (reading 'length')
 2024-07-23 10:43:58 WARNING: GET /premium/665e6433b743315f24126bc0 - User must upload documents to become premium
 2024-07-23 11:08:53 WARNING: GET /users - No tienes permisos para realizar esta acción
+2024-07-24 16:25:27 WARNING: GET /role/66834bf11d7241ef22590cae - User must upload documents to become premium
+2024-07-24 16:25:42 WARNING: GET /admin-users - No tienes permisos para realizar esta acción
+2024-07-24 16:25:49 WARNING: GET /admin-users - No tienes permisos para realizar esta acción
+2024-07-24 16:26:06 WARNING: GET /admin-users - No tienes permisos para realizar esta acción
+2024-07-24 16:28:27 WARNING: GET /role/665e32bbe944a2faa492e92e - User must upload documents to become premium
+2024-07-25 11:02:10 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-07-25 11:06:01 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-07-25 11:23:00 WARNING: GET /admin-users - No tienes permisos para realizar esta acción
+2024-07-25 12:27:12 WARNING: GET /admin-users - No tienes permisos para realizar esta acción
+2024-07-25 12:37:13 ERROR: DELETE /null/products/null - Cast to ObjectId failed for value "null" (type string) at path "_id" for model "carts"
+2024-07-25 12:38:05 ERROR: DELETE /null/products/null - Cast to ObjectId failed for value "null" (type string) at path "_id" for model "carts"
+2024-07-25 14:22:57 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-25 14:23:01 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-25 14:23:07 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-25 14:25:16 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-25 14:25:43 WARNING: GET /role/665a06a89f0653cac83f7446 - User is admin, can't change to premium/user
+2024-07-25 14:26:16 WARNING: GET /role/66902eee5d4075fa2a190aa0 - User must upload documents to become premium
+2024-07-25 14:41:22 ERROR: DELETE / - carts.map is not a function
+2024-07-25 14:41:51 ERROR: DELETE / - carts.map is not a function
+2024-07-25 14:43:14 ERROR: DELETE / - carts.map is not a function
+2024-07-25 14:45:22 ERROR: DELETE / - carts.map is not a function
+2024-07-25 14:47:49 WARNING: GET /role/665a06a89f0653cac83f7446 - User is admin, can't change to premium/user
+2024-07-25 14:48:05 ERROR: DELETE /deleteCarts - Cast to ObjectId failed for value "deleteCarts" (type string) at path "_id" for model "carts"
+2024-07-25 14:53:14 ERROR: DELETE /deleteCarts - carts.map is not a function
+2024-07-25 15:04:58 ERROR: DELETE /deleteCarts - useColorModeValue is not defined
+2024-07-25 15:14:48 WARNING: GET /role/66834bf11d7241ef22590cae - User must upload documents to become premium
+2024-07-25 15:18:05 ERROR: GET /role/667c2e189d8d921f26a24ae0 - Cannot read properties of undefined (reading 'user')
+2024-07-25 15:18:18 ERROR: GET /role/667c2e189d8d921f26a24ae0 - Cannot read properties of undefined (reading 'user')
+2024-07-25 15:18:35 ERROR: GET /role/667c2e189d8d921f26a24ae0 - Cannot read properties of undefined (reading 'user')
+2024-07-25 15:23:49 WARNING: GET /665e6433b743315f24126bc0 - No tienes permisos para realizar esta acción
+2024-07-25 15:25:52 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-07-25 15:29:05 WARNING: POST /665e6433b743315f24126bc4/products/66a259f7289b18405d305707 - No puedes agregar tus propios productos al carrito
+2024-07-25 15:29:22 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-07-25 15:29:29 ERROR: POST /665e6433b743315f24126bc4/products/6617ed15f8782713d833e62f - Cannot read properties of undefined (reading '_id')
+2024-07-25 15:29:33 ERROR: POST /665e6433b743315f24126bc4/products/6617ed15f8782713d833e62f - Cannot read properties of undefined (reading '_id')
+2024-07-25 15:30:30 WARNING: GET /admin-users - No tienes permisos para realizar esta acción
+2024-07-26 14:00:30 INFO: POST /login - User logged in token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjVhMDZhODlmMDY1M2NhYzgzZjc0NDYiLCJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiQ29kZXJob3VzZSIsImVtYWlsIjoiYWRtaW5Db2RlckBjb2Rlci5jb20iLCJhZ2UiOjMwLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjIwMTMyMzAsImV4cCI6MTcyMjAxNjgzMH0.tCVmSBsahTFpNj51g9cZbDSV0QRnOK7fHSpp1ZTiwsc
+2024-07-26 14:07:17 INFO: POST /login - User logged in token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjVhMDZhODlmMDY1M2NhYzgzZjc0NDYiLCJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiQ29kZXJob3VzZSIsImVtYWlsIjoiYWRtaW5Db2RlckBjb2Rlci5jb20iLCJhZ2UiOjMwLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjIwMTM2MzcsImV4cCI6MTcyMjAxNzIzN30.pkc8ZJW7LMusX8KEaQEubHYr56vEiJhyw1Llr5K4jyg
+2024-07-26 15:15:52 ERROR: DELETE /deleteCarts - Cast to ObjectId failed for value "deleteCarts" (type string) at path "_id" for model "carts"
+2024-07-26 15:17:08 WARNING: GET /role/665a06a89f0653cac83f7446 - User is admin, can't change to premium/user
+2024-07-26 15:19:04 WARNING: POST / - One or more fields are missing
+2024-07-26 15:19:05 ERROR: GET /users - Cast to ObjectId failed for value "users" (type string) at path "_id" for model "users"
+2024-07-26 15:19:05 WARNING: Unauthorized
+2024-07-26 15:19:06 WARNING: Unauthorized
+2024-07-26 15:28:30 WARNING: DELETE /66a3eacd9c602a9daffdf3cd - no tiene permisos para eliminar este producto
+2024-07-26 15:28:31 ERROR: GET /users - Cast to ObjectId failed for value "users" (type string) at path "_id" for model "users"
+2024-07-26 15:28:31 WARNING: Unauthorized
+2024-07-26 15:28:31 ERROR: DELETE /undefined - Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+2024-07-26 15:28:31 WARNING: Unauthorized
+2024-07-26 15:44:11 WARNING: DELETE /66a3ee7a499cf9ca2f269177 - no tiene permisos para eliminar este producto
+2024-07-26 15:44:12 WARNING: Unauthorized
+2024-07-26 15:44:12 ERROR: DELETE /undefined - Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+2024-07-26 15:44:12 WARNING: Unauthorized
+2024-07-26 15:50:49 WARNING: Unauthorized
+2024-07-26 15:50:50 WARNING: Unauthorized
+2024-07-26 15:57:15 WARNING: Unauthorized
+2024-07-26 15:59:44 ERROR: DELETE /deleteCarts - Cast to ObjectId failed for value "deleteCarts" (type string) at path "_id" for model "carts"

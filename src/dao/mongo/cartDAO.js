@@ -1,4 +1,5 @@
 import cartModel from "./models/cartsModel.js";
+import userModel from "./models/usersModel.js";
 
 class cartDAO {  
   async addCart(userId) {
@@ -98,6 +99,16 @@ class cartDAO {
   async deleteCart(id) {
     try {
       const cart = await cartModel.deleteOne({_id: id})
+      return cart;
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async deleteCartsWithoutUser() {
+    try {
+      const existingUsersId = await userModel.distinct('_id');
+      const cart = await cartModel.deleteMany({user: {$nin: existingUsersId}})
       return cart;
     } catch (error) {
       throw error

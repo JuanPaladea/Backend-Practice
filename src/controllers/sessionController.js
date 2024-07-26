@@ -15,6 +15,17 @@ export const getUsers = async (req, res) => {
   }
 }
 
+export const getUserById = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const user = await userService.getUserById(userId);
+    res.status(200).send({status: 'success', message: 'User found', user});
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status: 'error', message: error.message});
+  }
+}
+
 export const getCurrentUser = async (req, res) => {
   try {
     const user = await userService.getUserById(req.session.user._id);
@@ -23,27 +34,6 @@ export const getCurrentUser = async (req, res) => {
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status: 'error', message: error.message});
   }
-}
-
-export const sendVerificationEmail = (req, res) => {
-  const token = jwt.sign({
-    _id: req.user._id,
-    email: req.user.email,
-  }, JWT_SECRET, {expiresIn: '1d'})
-
-  transport.sendMail({
-    from: `BackEnd JP <${EMAIL}>`,
-    to: req.user.email,
-    subject: 'Bienvenido al Backend JP - Verificación de cuenta',
-    html: 
-    `<div>
-    <h1>¡Bienvenido a Backend JP!</h1>
-    <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
-    <a href="http://localhost:8080/api/session/verify?token=${token}">Verificar cuenta</a>
-    </div>`
-  })
-  
-  res.status(200).send({status: 'success', message: 'User registered, please check your email to verify your account.'});
 }
 
 export const failRegister = (req, res) => {
@@ -62,7 +52,6 @@ export const setSessionUserCookie = (req, res) => {
     firstName: req.user.firstName,
     lastName: req.user.lastName,
     email: req.user.email,
-    verified: req.user.verified,
     age: req.user.age,
     role: req.user.role 
   };
@@ -71,7 +60,6 @@ export const setSessionUserCookie = (req, res) => {
     _id: req.user._id,
     firstName: req.user.firstName,
     lastName: req.user.lastName,
-    verified: req.user.verified,
     email: req.user.email,
     age: req.user.age,
     role: req.user.role
@@ -79,52 +67,13 @@ export const setSessionUserCookie = (req, res) => {
 
   res.cookie('jwt', token);
   userService.updateLastConnection(req.user._id);
-
-  res.redirect('/');
+  res.status(200).send({status: 'success', message: 'User logged in', token: token, userId: req.user._id});
 }
 
 export const failLogin = (req, res) => {
   const message = req.flash('error')[0];
   req.logger.error(`${req.method} ${req.path} - ${message}`)
   res.status(400).send({status: "error", message: message || "Failed Login"});
-}
-
-export const verifyUser = async (req, res) => {
-  const token = req.query.token;
-  if (!token) {
-    req.logger.warning(`${req.method} ${req.path} - Token not found`)
-    return res.status(400).send({status: 'error', message: 'Token not found'});
-  }
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await userService.getUserById(decoded._id);
-    if (!user) {
-      req.logger.warning(`${req.method} ${req.path} - User not found`)
-      return res.status(404).send({status: 'error', message: 'User not found'});
-    }
-
-    if (user.verified) {
-      req.logger.info(`${req.method} ${req.path} - User already verified`)
-      return res.status(400).send({status: 'error', message: 'User already verified'});
-    }
-    
-    const result = await userService.verifyUser(user._id);
-    req.session.user = {
-      _id: result._id,
-      firstName: result.firstName,
-      lastName: result.lastName,
-      email: result.email,
-      verified: result.verified,
-      age: result.age,
-      role: result.role
-    };
-
-    res.status(200).send({status: 'success', message: 'User verified, you are now logged in!'});
-  } catch (error) {
-    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
-    res.status(400).send({status: 'error', message: error.message});
-  }
 }
 
 export const sendPasswordResetEmail = async (req, res) => {
@@ -244,11 +193,15 @@ export const changeUserRole = async (req, res) => {
 
     if (user.role === 'premium') {
       const result = await userService.updateRole(userId, 'usuario');
-      req.session.user.role = 'usuario';
       return res.status(200).send({status: 'success', message: 'User is now user', user: result});
     }
 
     if (user.role === 'usuario') {
+      if (req.session.user.role == 'admin') {
+        const result = await userService.updateRole(userId, 'premium');
+        return res.status(200).send({status: 'success', message: 'User is now premium', user: result});
+      }
+
       if (!user.documents) {
         req.logger.warning(`${req.method} ${req.path} - User must upload documents to become premium`)
         return res.status(400).send({status: 'error', message: 'User must upload documents to become premium'});
@@ -258,7 +211,6 @@ export const changeUserRole = async (req, res) => {
         return res.status(400).send({status: 'error', message: 'User must upload documents to become premium'});
       }
       const result = await userService.updateRole(userId, 'premium');
-      req.session.user.role = 'premium';
       return res.status(200).send({status: 'success', message: 'User is now premium', user: result});
     }
     
@@ -270,7 +222,6 @@ export const changeUserRole = async (req, res) => {
 
 export const uploadDocuments = async (req, res) => {  
   const userId = req.params.userId;
-  console.log(req.files)
   const documents = req.files.map(file => {
     return {name: file.originalname, reference: file.path}
   })
@@ -278,6 +229,44 @@ export const uploadDocuments = async (req, res) => {
   try {
     const result = await userService.uploadDocuments(userId, documents);
     res.status(200).send({status: 'success', message: 'Documents uploaded', user: result});
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status: 'error', message: error.message});
+  }
+}
+
+export const deleteUnactiveUsers = async (req, res) => {
+  try {
+    const users = await userService.getUnactiveUsers();
+
+    if (users) {
+      users.forEach(async user => {
+        await transport.sendMail({
+          from: `BackEnd JP <${EMAIL}>`,
+          to: user.email,
+          subject: 'Backend JP | Account Deleted',
+          html: 
+          `<div>
+          <h1>Account Deleted</h1>
+          <p>Your account has been deleted due to inactivity</p>
+          </div>`
+        });
+      })
+    }
+
+    const result = await userService.deleteUnactiveUsers();
+    res.status(200).send({status: 'success', message: 'Users deleted', result});
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status: 'error', message: error.message});
+  }
+}
+
+export const deleteUser = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const result = await userService.deleteUser(userId);
+    res.status(200).send({status: 'success', message: 'User deleted', result});
   } catch (error) {
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status: 'error', message: error.message});

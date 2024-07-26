@@ -3,24 +3,27 @@ import passport from "passport";
 
 import auth from "../middlewares/auth.js";
 import isAdmin from "../middlewares/isAdmin.js";
-import isVerified from "../middlewares/isVerified.js";
 import upload from "../middlewares/multer.js";
 
-import { changeUserRole, failLogin, failRegister, getCurrentUser, getUsers, setSessionUserCookie, logOut, sendVerificationEmail, resetPassword, sendPasswordResetEmail, verifyUser, uploadDocuments } from "../controllers/sessionController.js";
+import { changeUserRole, failLogin, failRegister, getCurrentUser, getUsers, setSessionUserCookie, logOut, resetPassword, sendPasswordResetEmail, uploadDocuments, deleteUnactiveUsers, deleteUser, getUserById } from "../controllers/sessionController.js";
+import logged from "../middlewares/logged.js";
 
 const router = Router();
 
-router.get('/users', auth, isVerified, isAdmin, getUsers)
-router.get('/current', auth, isVerified, getCurrentUser);
-router.post('/register', passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}), sendVerificationEmail);
+router.get('/', auth, getUsers)
+router.delete('/', auth, isAdmin, deleteUnactiveUsers);
+router.delete("/:userId", auth, isAdmin, deleteUser);
+router.get('/current', auth, getCurrentUser);
+router.get('/:userId', auth, isAdmin, getUserById)
+
+router.post('/register', passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}), setSessionUserCookie);
 router.get("/failRegister", failRegister);
 router.post('/login', passport.authenticate('login', {failureRedirect: '/api/session/failLogin', failureFlash: true}), setSessionUserCookie);
 router.get("/failLogin", failLogin);
-router.get('/verify', verifyUser)
-router.post('/forgotpassword', sendPasswordResetEmail)
-router.post('/resetpassword', resetPassword)
-router.get("/premium/:userId", auth, isVerified, changeUserRole);
-router.post("/:userId/documents", auth, isVerified, upload.array('files', 3), uploadDocuments)
+router.post('/forgotpassword', logged, sendPasswordResetEmail)
+router.post('/resetpassword', logged, resetPassword)
+router.get("/role/:userId", auth, changeUserRole);
+router.post("/:userId/documents", auth, upload.array('files', 3), uploadDocuments)
 router.post("/logout", logOut);
 
 // EXTERNAL LOGIN
@@ -33,7 +36,6 @@ router.get("/githubcallback", passport.authenticate('github', {failureRedirect: 
     _id: req.user._id,
     firstName: req.user.firstName,
     email: req.user.email,
-    verified: true,
     role: req.user.role
   };
   res.redirect('/');
@@ -49,7 +51,6 @@ router.get("/googlecallback", passport.authenticate('google', {failureRedirect: 
     firstName: req.user.firstName,
     lastName: req.user.lastName,
     email: req.user.email,
-    verified: true,
     role: req.user.role
   };
   res.redirect('/');

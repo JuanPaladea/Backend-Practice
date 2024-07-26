@@ -145,7 +145,7 @@ paths:
   /api/carts/{cartId}:
     get:
       summary: Get a cart by id
-      description: Get a cart by id, requires authentication
+      description: Get a cart by id, requires authentication, only admins can access this route
       parameters:
         - in: path
           name: cartId
@@ -153,6 +153,7 @@ paths:
           description: Cart id
           schema:
             type: string
+          example: "665a06a99f0653cac83f744b"
       responses:
         '200':
           description: OK
@@ -596,6 +597,68 @@ paths:
                 status: error
                 message: Unauthorized
         '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: No tienes permisos para realizar esta acción
+
+  /api/carts/deleteCarts:
+    delete:
+      summary: Delete carts that doesnt have a user
+      description: Delete carts that doesnt have a user, requires authentication, only admin users can access this route
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: success
+                message: carritos eliminados
+        '400': 
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: Error deleting carts without users
+        '401': 
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: error
+                message: The user is not verified, please check your email to verify your account
+        '403': 
           description: Forbidden
           content:
             application/json:

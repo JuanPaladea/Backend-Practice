@@ -1,0 +1,764 @@
+openapi: 3.0.0
+info:
+  title: Users
+  version: 1.0.0
+  description: Users API
+
+paths:
+  /api/session/:
+    get: 
+      summary: Get all the users
+      description: Get all the users's Names, emails and roles. Requires authentication
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              example:
+                status: 'success'
+                message: 'usuarios encontrados'
+                users:
+                  - firstName: 'Juan'
+                    lastName: 'Perez'
+                    email: "example@mail.com"
+                    role: 'usuario'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'No users found'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Unauthorized'
+    delete:
+      summary: Delete unactive users, with lastConnection older than 2 days
+      description: Delete unactive users, with lastConnection older than 2 days. Requires authentication, only admin can do this.
+      responses:
+        '200':
+          description: Users deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'success'
+                message: 'Usuarios eliminados'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'No users found'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'No tienes permisos para realizar esta acción'
+
+  /api/session/current:
+    get:
+      summary: Get the current user
+      description: Get the current user's Name, email and role. Requires authentication
+      responses:
+        '200':
+          description: The current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                status: 'success'
+                message: 'usuario encontrado'
+                user:
+                  _id: '123456'
+                  firstName: 'Juan'
+                  lastName: 'Perez'
+                  email: "example@mail.com"
+                  password: '123456'
+                  age: 20
+                  role: 'usuario'
+                  cart: '123456'
+                  documents: ['123456', '1234576']
+                  lastConnection: '2021-06-01T00:00:00.000Z'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'No user found'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Unauthorized'
+
+  /api/session/{userId}:
+    get:
+      summary: Get a user by id
+      description: Get a user by id. Requires authentication, only admin can do this.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: The user id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                status: 'success'
+                message: 'usuario encontrado'
+                user:
+                  _id: '123456'
+                  firstName: 'Juan'
+                  lastName: 'Perez'
+                  email: "example@mail.com"
+                  password: '123456'
+                  age: 20
+                  role: 'usuario'
+                  cart: '123456'
+                  documents: ['123456', '1234576']
+                  lastConnection: '2021-06-01T00:00:00.000Z'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'No user found'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'No tienes permisos para realizar esta acción'
+    delete:
+      summary: Delete a user by id
+      description: Delete a user by id. Requires authentication, only admin can do this.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: The user id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The user deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'success'
+                message: 'Usuario eliminado'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'No user found'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'No tienes permisos para realizar esta acción'
+  /api/session/register:
+    post:
+      summary: Register a new user
+      description: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                age:
+                  type: number
+                email2:
+                  type: string
+                password2:
+                  type: string
+      responses:
+        '201':
+          description: The user created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'success'
+                message: 'Usuario creado'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Error al crear el usuario'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Usuario ya logueado'
+
+  /api/session/login:
+    post:
+      summary: Login a user
+      description: Login a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: The user logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  token:
+                    type: string
+              example:
+                status: 'success'
+                message: 'Usuario logueado'
+                token: '123456'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Error al loguear el usuario'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Error login'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Usuario ya logueado'
+  /api/sesssion/forgotpassword:
+    post:
+      summary: Forgot password
+      description: Forgot password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: The email sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'success'
+                message: 'Email sent to reset password'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Error al enviar el email'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Usuario ya logueado'
+
+  /api/session/resetpassword:
+    post:
+      summary: Reset password
+      description: Reset password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                password2:
+                  type: string
+                token:
+                  type: string
+      responses:
+        '200':
+          description: The password reseted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'success'
+                message: 'Password updated'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Error al resetear la contraseña'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Usuario ya logueado'
+
+  /api/session/role/{userId}:
+    put:
+      summary: Change the role of a user
+      description: Change the role of a user. Requires authentication. If the user is an admin, the role can't be changed. If the users is premium it becomes a regular user. If the user is a regular user and it has the 3 required documents, it becomes a premium user.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: The user id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+      responses:
+        '200':
+          description: The role changed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'success'
+                message: 'Rol cambiado'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Error al cambiar el rol'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Usuario no encontrado'
+  
+  /api/session/{userId}/documents:
+    post:
+      summary: Add a document to a user
+      description: Add a document to a user. Requires authentication, only the user can do this. It upload via Multer the document to the server and save the path in the user's documents array.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: The user id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                document:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: The document added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'success'
+                message: 'Documents uploaded'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Error al subir el documento'
+  
+  /api/session/logout:
+    post:
+      summary: Logout a user
+      description: Logout a user. Requires authentication
+      responses:
+        '200':
+          description: The user logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'success'
+                message: 'Usuario deslogueado'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Error al desloguear el usuario'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: 'error'
+                message: 'Unauthorized'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        age:
+          type: number
+        role:
+          type: string 
+        cart:
+          type: string
+        documents:
+          type: array
+          items:
+            type: string
+        lastConnection:
+          type: string

@@ -1,0 +1,39 @@
+<div class="bg-white py-6 sm:py-8 lg:py-12">
+  <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
+    <div class="bg-gray-100 px-4 py-6 md:py-8 lg:py-12">
+
+      <h2 class="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">Usuarios</h2>
+
+      <p class="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg">Proyecto backend de Juan Paladea</p>
+      <p class="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg">Gestión de usuarios por el administrador</p>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white py-6 sm:py-8 lg:py-12">
+  <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
+    <div class="grid gap-x-4 gap-y-8 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 xl:grid-cols-4">
+
+      {{#each users}}
+      <div>
+        <div>
+          <h3 class="text-2xl font-bold text-gray-800">{{this.email}}</h3>
+          <p class="text-gray-500">{{this.firstName}} {{this.lastName}}</p>
+          <p class="text-gray-500">{{this.role}}</p>
+        </div>
+        <div class="flex gap-4">
+          <form action="/api/session/role/{{this._id}}" method="GET">
+            <button type="submit" class="bg-indigo-500 px-4 py-2 text-white rounded">Cambiar rol user/premium</button>
+          </form>
+          <form class="deleteUser" data-user-id="{{this._id}}">
+            <button type="submit" class="bg-red-500 px-4 py-2 text-white rounded">Eliminar</button>
+          </form>
+        </div>
+      </div>
+      {{/each}}
+
+    </div>
+  </div>
+</div>
+
+<script src="/js/{{script}}"></script>
