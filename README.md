@@ -8,6 +8,7 @@ This is a backend application that uses Node.js, Express, and MongoDB. The appli
 - Session management with MongoDB store.
 - API endpoints for managing sessions, messages, products, carts, and tickets.
 - View routes for home, session, products, and carts.
+- Admin features. User: adminCoder@coder.com Pass: adminCod3r123
 
 ## Directory Structure
 
