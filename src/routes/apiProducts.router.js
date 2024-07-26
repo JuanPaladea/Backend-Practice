@@ -6,10 +6,11 @@ import isPremium from "../middlewares/isPremium.js";
 const router = Router();
 
 router.get('/', auth, getProducts)
-router.get('/:productId', auth, getProduct)
 router.post('/', auth, isPremium, addProduct)
+router.get('/:productId', auth, getProduct)
 router.put('/:productId', auth, isPremium, updateProduct)
 router.delete('/:productId', auth, isPremium, deleteProduct)
+
 router.get('/mock/mockingproducts', getMockProducts)
 
 export default router

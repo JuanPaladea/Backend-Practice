@@ -49,9 +49,9 @@ class productService {
     }
   }
 
-  async updateProduct(id, updatedFields) {
+  async updateProduct(id, updatedProductData) {
     try {
-      const product = await productDAO.updateProduct(id, updatedFields);
+      const product = await productDAO.updateProduct(id, updatedProductData);
       if (!product) {
         throw new Error("Error updating product");
       }

@@ -52,7 +52,6 @@ export const setSessionUserCookie = (req, res) => {
     firstName: req.user.firstName,
     lastName: req.user.lastName,
     email: req.user.email,
-    verified: req.user.verified,
     age: req.user.age,
     role: req.user.role 
   };
@@ -61,7 +60,6 @@ export const setSessionUserCookie = (req, res) => {
     _id: req.user._id,
     firstName: req.user.firstName,
     lastName: req.user.lastName,
-    verified: req.user.verified,
     email: req.user.email,
     age: req.user.age,
     role: req.user.role
@@ -69,7 +67,7 @@ export const setSessionUserCookie = (req, res) => {
 
   res.cookie('jwt', token);
   userService.updateLastConnection(req.user._id);
-  res.redirect('/');
+  res.status(200).send({status: 'success', message: 'User logged in', token: token, userId: req.user._id});
 }
 
 export const failLogin = (req, res) => {

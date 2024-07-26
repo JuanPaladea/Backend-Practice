@@ -11,19 +11,20 @@ import logged from "../middlewares/logged.js";
 const router = Router();
 
 router.get('/', auth, getUsers)
+router.delete('/', auth, isAdmin, deleteUnactiveUsers);
+router.delete("/:userId", auth, isAdmin, deleteUser);
 router.get('/current', auth, getCurrentUser);
 router.get('/:userId', auth, isAdmin, getUserById)
-router.post('/register', logged, passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}), setSessionUserCookie);
+
+router.post('/register', passport.authenticate('register', { failureRedirect: '/api/session/failRegister', failureFlash: true}), setSessionUserCookie);
 router.get("/failRegister", failRegister);
-router.post('/login', logged, passport.authenticate('login', {failureRedirect: '/api/session/failLogin', failureFlash: true}), setSessionUserCookie);
+router.post('/login', passport.authenticate('login', {failureRedirect: '/api/session/failLogin', failureFlash: true}), setSessionUserCookie);
 router.get("/failLogin", failLogin);
-router.post('/forgotpassword', sendPasswordResetEmail)
-router.post('/resetpassword', resetPassword)
+router.post('/forgotpassword', logged, sendPasswordResetEmail)
+router.post('/resetpassword', logged, resetPassword)
 router.get("/role/:userId", auth, changeUserRole);
 router.post("/:userId/documents", auth, upload.array('files', 3), uploadDocuments)
 router.post("/logout", logOut);
-router.delete('/', auth, isAdmin, deleteUnactiveUsers);
-router.delete("/:userId", auth, isAdmin, deleteUser);
 
 // EXTERNAL LOGIN
 router.get("/github", passport.authenticate('github', {scope: ['user:email']}), (req, res) => {

@@ -201,3 +201,24 @@
 2024-07-25 15:29:29 ERROR: POST /665e6433b743315f24126bc4/products/6617ed15f8782713d833e62f - Cannot read properties of undefined (reading '_id')
 2024-07-25 15:29:33 ERROR: POST /665e6433b743315f24126bc4/products/6617ed15f8782713d833e62f - Cannot read properties of undefined (reading '_id')
 2024-07-25 15:30:30 WARNING: GET /admin-users - No tienes permisos para realizar esta acción
+2024-07-26 14:00:30 INFO: POST /login - User logged in token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjVhMDZhODlmMDY1M2NhYzgzZjc0NDYiLCJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiQ29kZXJob3VzZSIsImVtYWlsIjoiYWRtaW5Db2RlckBjb2Rlci5jb20iLCJhZ2UiOjMwLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjIwMTMyMzAsImV4cCI6MTcyMjAxNjgzMH0.tCVmSBsahTFpNj51g9cZbDSV0QRnOK7fHSpp1ZTiwsc
+2024-07-26 14:07:17 INFO: POST /login - User logged in token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjVhMDZhODlmMDY1M2NhYzgzZjc0NDYiLCJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiQ29kZXJob3VzZSIsImVtYWlsIjoiYWRtaW5Db2RlckBjb2Rlci5jb20iLCJhZ2UiOjMwLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjIwMTM2MzcsImV4cCI6MTcyMjAxNzIzN30.pkc8ZJW7LMusX8KEaQEubHYr56vEiJhyw1Llr5K4jyg
+2024-07-26 15:15:52 ERROR: DELETE /deleteCarts - Cast to ObjectId failed for value "deleteCarts" (type string) at path "_id" for model "carts"
+2024-07-26 15:17:08 WARNING: GET /role/665a06a89f0653cac83f7446 - User is admin, can't change to premium/user
+2024-07-26 15:19:04 WARNING: POST / - One or more fields are missing
+2024-07-26 15:19:05 ERROR: GET /users - Cast to ObjectId failed for value "users" (type string) at path "_id" for model "users"
+2024-07-26 15:19:05 WARNING: Unauthorized
+2024-07-26 15:19:06 WARNING: Unauthorized
+2024-07-26 15:28:30 WARNING: DELETE /66a3eacd9c602a9daffdf3cd - no tiene permisos para eliminar este producto
+2024-07-26 15:28:31 ERROR: GET /users - Cast to ObjectId failed for value "users" (type string) at path "_id" for model "users"
+2024-07-26 15:28:31 WARNING: Unauthorized
+2024-07-26 15:28:31 ERROR: DELETE /undefined - Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+2024-07-26 15:28:31 WARNING: Unauthorized
+2024-07-26 15:44:11 WARNING: DELETE /66a3ee7a499cf9ca2f269177 - no tiene permisos para eliminar este producto
+2024-07-26 15:44:12 WARNING: Unauthorized
+2024-07-26 15:44:12 ERROR: DELETE /undefined - Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+2024-07-26 15:44:12 WARNING: Unauthorized
+2024-07-26 15:50:49 WARNING: Unauthorized
+2024-07-26 15:50:50 WARNING: Unauthorized
+2024-07-26 15:57:15 WARNING: Unauthorized
+2024-07-26 15:59:44 ERROR: DELETE /deleteCarts - Cast to ObjectId failed for value "deleteCarts" (type string) at path "_id" for model "carts"

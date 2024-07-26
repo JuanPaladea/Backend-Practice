@@ -88,30 +88,43 @@ export const addProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   const productId = req.params.productId;
-  const product = req.body.product;
+  const newProductData = req.body.product;
+
   try {
-    if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.thumbnails) {
+    const existingProduct = await productService.getProductById(productId);
+
+    if (!existingProduct) {
+      req.logger.warning(`${req.method} ${req.path} - Product not found`);
+      return res.status(404).send({status: 'error', message: 'Product not found'});
+    }
+
+    const updatedProductData = {
+      ...existingProduct,
+      ...newProductData
+    };
+
+    if (!updatedProductData.title || !updatedProductData.description || !updatedProductData.code || !updatedProductData.price || !updatedProductData.stock || !updatedProductData.category || !updatedProductData.thumbnails) {
       req.logger.warning(`${req.method} ${req.path} - One or more fields are missing`)
       return res.status(400).send({status: 'error', message: 'One or more fields are missing'})
     }
 
-    if (typeof product.title !== 'string' || typeof product.description !== 'string' || typeof product.price !== 'number' || product.price <= 0 || typeof product.stock !== 'number' || product.stock < 0 || typeof product.category !== 'string') {
+    if (typeof updatedProductData.title !== 'string' || typeof updatedProductData.description !== 'string' || typeof updatedProductData.price !== 'number' || updatedProductData.price <= 0 || typeof updatedProductData.stock !== 'number' || updatedProductData.stock < 0 || typeof updatedProductData.category !== 'string') {
       req.logger.warning(`${req.method} ${req.path} - One or more fields have the wrong type`)
       return res.status(400).send({status: 'error', message: 'One or more fields have the wrong type'})
     }
+    
 
     if (req.session.user.role === 'admin') {
-      const updatedProduct = await productService.updateProduct(productId, product);
+      const updatedProduct = await productService.updateProduct(productId, updatedProductData);
       return res.status(200).send({status:'success', message:'producto actualizado', updatedProduct})
     }
 
-    const productToUpdate = await productService.getProductById(productId);
     if (productToUpdate.owner.toString() !== req.session.user._id.toString()) {
       req.logger.warning(`${req.method} ${req.path} - no tiene permisos para actualizar este producto`)
       return res.status(403).send({status: 'error', message: 'no tiene permisos para actualizar este producto'})
     }
     
-    const updatedProduct = await productService.updateProduct(productId, product);
+    const updatedProduct = await productService.updateProduct(productId, updatedProductData);
     res.status(200).send({status:'success', message:'producto actualizado', updatedProduct})
   } catch (error){
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
@@ -143,8 +156,8 @@ export const deleteProduct = async (req, res) => {
             <p>El producto ${product.title} ha sido eliminado por un administrador</p>
           `
         })
-      return res.status(200).send({status:'success', message:'producto eliminado'})
       }
+      return res.status(200).send({status:'success', message:'producto eliminado'})
     }
 
     if (product.owner.toString() !== req.session.user._id.toString()) {

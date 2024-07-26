@@ -6,7 +6,6 @@ export const generateProducts = (q) => {
 
   for (let i = 0; i < numOfProducts; i++) {
     products.push({
-      _id: fakerES.database.mongodbObjectId(),
       title: fakerES.commerce.productName(),
       description: fakerES.commerce.productDescription(),
       code: fakerES.number.int(1000),
@@ -39,7 +38,6 @@ export const generateUser = () => {
   let password = fakerES.internet.password()
 
   return {
-    _id: fakerES.database.mongodbObjectId(),
     firstName: fakerES.person.firstName(),
     lastName: fakerES.person.lastName(),
     email: email,

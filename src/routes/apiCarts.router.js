@@ -9,11 +9,13 @@ const router = Router();
 router.post('/', auth, addCart)
 router.get('/', auth, isAdmin, getCarts)
 router.get('/:cid', auth, isAdmin, getCart)
+router.delete("/deleteCarts", auth, isAdmin, deleteCartsWithoutUser)
+router.delete("/:cid", auth, deleteCart)
+
 router.post('/:cid/products/:pid', auth, addProductToCart)
 router.put('/:cid/products/:pid', auth, updateProductQuantity)
 router.delete("/:cid/products/:pid", auth, deleteProductFromCart)
-router.delete("/deleteCarts", auth, isAdmin, deleteCartsWithoutUser)
-router.delete("/:cid", auth, deleteCart)
+
 router.post('/:cid/purchase', auth, purchaseCart)
 
 export default router

@@ -35,9 +35,9 @@ class productDAO {
     }
   }
 
-  async updateProduct(id, updatedFields) {
+  async updateProduct(id, updatedProductData) {
     try {
-      const product = await productModel.findOneAndUpdate({_id: id}, updatedFields, {new: true});
+      const product = await productModel.findOneAndUpdate({_id: id}, updatedProductData, {new: true});
       return product;
     } catch (error) {
       throw error
