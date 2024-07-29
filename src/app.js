@@ -98,7 +98,7 @@ app.use("/carts", cartsRouter)
 app.use('/chat', chatRouter)
 
 //PORT LISTEN
-const port = 8080;
+const port = process.env.PORT || 4000;
 const httpServer = app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)
 })
