@@ -23,29 +23,30 @@ const initializatePassport = () => {
     },
     async (req, email, password, done) => {
       const { firstName, lastName, age, email2, password2} = req.body;
+
       if (!firstName || !lastName || !age || !password || !email ) {
-        return done(null, false, {message: 'All fields are required!'})
+        return done(null, false, req.flash('error', 'All fields are required!'))
       }
       if (req.body.role) {
-        return done(null, false, {message: 'You cannot set your role!'})
+        return done(null, false, req.flash('error', 'You cannot set your role!'))
       }
       if (age < 18) {
-        return done(null, false, {message: 'You must be over 18 years old!'})
+        return done(null, false, req.flash('error', 'You must be over 18 years old!'))
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        return done(null, false, {message: 'Invalid email!'})
+        return done(null, false, req.flash('error', 'Invalid email!'))
       }
       if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(password)) {
-        return done(null, false, {message: 'Invalid password!, the password must have at least 8 characters, one uppercase letter, one lowercase letter, one number'})
+        return done(null, false, req.flash('error', 'Invalid password!, the password must have at least 8 characters, one uppercase letter, one lowercase letter, one number'))
       }
       if (email !== email2 || password !== password2) {
-        return done(null, false, {message: 'Email or password does not match!'})
+        return done(null, false, req.flash('error', 'Email or password does not match!'))
       }
 
       try {
         const existingUser = await userService.findUserEmail(email);
         if (existingUser) {
-          return done(null, false, {message: 'User already exist!'})
+          return done(null, false, req.flash('error', 'User already exist!'))
         }
 
         const newUser = {
@@ -63,7 +64,7 @@ const initializatePassport = () => {
 
         return done(null, result)
       } catch (error) {
-        return done(error)
+        done(error)
       }
     }
   ))
@@ -76,24 +77,24 @@ const initializatePassport = () => {
     },
     async (username, password, done) => {
       if (!username || !password) {
-        return done(null, false, {message: 'All fields are required!'})
+        return done(null, false, req.flash('error', 'All fields are required!'))
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username)) {
-        return done(null, false, {message: 'Invalid email!'})
+        return done(null, false, req.flash('error', 'Invalid email!'))
       }
       
       try {
         const user = await userService.findUserEmail(username);
         if (!user) {
-          return done(null, false, {message: 'User not found!'})
+          return done(null, false, req.flash('error', 'User not found!'))
         }
         if(!isValidPassword(user, password)) {
-          return done(null, false, {message: 'Invalid password!'})
+          return done(null, false, req.flash('error', 'Invalid password!'))
         }
         
         return done(null, user)
       } catch (error) {
-        return done(error)
+        done(error)
       }
     }
   ))
@@ -112,7 +113,7 @@ const initializatePassport = () => {
           return done(null, jwt_payload);
         }
       } catch (error) {
-        return done(error);
+        done(error);
       }
     }
   ))
@@ -141,7 +142,7 @@ const initializatePassport = () => {
           return done(null, user);
         }
       } catch (error) {
-        return done(error);
+        done(error);
       }
     }
   ));
@@ -171,19 +172,21 @@ const initializatePassport = () => {
           return done(null, user);
         }
       } catch (error) {
-        return done(error);
+        done(error);
       }
     })
   )
   
-  passport.serializeUser((user, done) => done(null, user._id));
+  passport.serializeUser((user, done) => 
+    done(null, user._id)
+  );
 
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await userService.getUserById(id);
       return done(null, user);
     } catch (error) {
-      return done(error);
+      done(error);
     }
   });
 }

@@ -37,7 +37,7 @@ export const getCurrentUser = async (req, res) => {
 }
 
 export const failRegister = (req, res) => {
-  const message = req.flash('error')[0];
+  const message = req.flash('error');
   req.logger.error(`${req.method} ${req.path} - ${message}`)
   res.status(400).send({status: "error", message: message || "Failed Register"});
 }
@@ -71,7 +71,7 @@ export const setSessionUserCookie = (req, res) => {
 }
 
 export const failLogin = (req, res) => {
-  const message = req.flash('error')[0];
+  const message = req.flash('error');
   req.logger.error(`${req.method} ${req.path} - ${message}`)
   res.status(400).send({status: "error", message: message || "Failed Login"});
 }

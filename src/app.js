@@ -39,21 +39,22 @@ const swaggerOptions = {
       title: "Ecommerce API",
       version: "1.0.0",
       description: "Ecommerce API Information",
-    }
+    },
   },
-  apis: [`./src/docs/**/*.yaml`]
+  apis: [`src/docs/**/*.yaml`]
 }
 
 const specs = swaggerJSDoc(swaggerOptions)
 app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 //MIDDLEWARES
+
+app.use(flash())
 app.use(addLogger)
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(express.static(`${__dirname}/../../public`));
 app.use(cookieParser());
-app.use(flash())
 
 //HANDLEBARS
 app.engine("handlebars", handlebars.engine());
@@ -76,6 +77,7 @@ app.use(session(
   ))
 
 //PASSPORT
+
 initializatePassport();
 app.use(passport.initialize())
 app.use(passport.session())
@@ -98,7 +100,7 @@ app.use("/carts", cartsRouter)
 app.use('/chat', chatRouter)
 
 //PORT LISTEN
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 10000;
 const httpServer = app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)
 })

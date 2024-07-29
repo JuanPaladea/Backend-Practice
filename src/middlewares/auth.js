@@ -9,7 +9,7 @@ const auth = (req, res, next) => {
       req.session.user = decoded;
       next();
     } catch (error) {
-      req.logger.warning("Unauthorized");
+      req.logger.warning(`${req.method} ${req.path} - No tienes permisos para realizar esta acción`)
       return res.status(401).send({ status: 'error', message: 'Unauthorized' });
     }
   } else {

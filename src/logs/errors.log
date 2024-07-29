@@ -222,3 +222,17 @@
 2024-07-26 15:50:50 WARNING: Unauthorized
 2024-07-26 15:57:15 WARNING: Unauthorized
 2024-07-26 15:59:44 ERROR: DELETE /deleteCarts - Cast to ObjectId failed for value "deleteCarts" (type string) at path "_id" for model "carts"
+2024-07-29 15:55:36 WARNING: Unauthorized
+2024-07-29 16:01:04 WARNING: Unauthorized
+2024-07-29 16:09:01 WARNING: Unauthorized
+2024-07-29 16:11:55 WARNING: Unauthorized
+2024-07-29 16:19:13 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
+2024-07-29 16:23:25 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-07-29 16:25:51 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
+2024-07-29 16:27:10 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
+2024-07-29 16:27:53 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
+2024-07-29 16:30:32 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
+2024-07-29 16:34:15 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
+2024-07-29 16:38:02 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
+2024-07-29 16:42:19 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
+2024-07-29 16:43:31 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
