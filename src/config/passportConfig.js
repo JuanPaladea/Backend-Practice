@@ -73,9 +73,10 @@ const initializatePassport = () => {
     {
       usernameField: 'email',
       passwordField: 'password',
+      passReqToCallback: true,
       failureFlash: true
     },
-    async (username, password, done) => {
+    async (req, username, password, done) => {
       if (!username || !password) {
         return done(null, false, {message: 'You must provide an email and a password'})
       }
