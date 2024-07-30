@@ -280,3 +280,4 @@
 2024-07-30 15:05:24 WARNING: GET / - No tienes permisos para realizar esta acción
 2024-07-30 15:05:31 ERROR: GET /failLogin - Invalid password
 2024-07-30 15:17:18 INFO: GET /login - Ya estás logueado
+2024-07-30 16:28:52 ERROR: GET /logout - Cast to ObjectId failed for value "logout" (type string) at path "_id" for model "users"

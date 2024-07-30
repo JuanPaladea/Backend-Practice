@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 import flash from 'connect-flash';
+import path from 'path';
 
 import { __dirname } from './utils/utils.js';
 import initializatePassport from './config/passportConfig.js';
@@ -41,8 +42,10 @@ const swaggerOptions = {
       description: "Ecommerce API Information. For admin pourpuses use the following credentials: email: adminCoder@coder.com password: adminCod3r123",
     },
   },
-  apis: [`./src/docs/**/*.yaml`]
+  apis: [path.resolve(__dirname, '../docs/**/*.yaml')]
 }
+
+console.log('Resolved API path:', swaggerOptions.apis); // Log the resolved path
 
 const specs = swaggerJSDoc(swaggerOptions)
 app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))

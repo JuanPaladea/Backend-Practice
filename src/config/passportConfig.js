@@ -127,7 +127,7 @@ const initializatePassport = () => {
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const user = await userModel.findOne({username: profile._json.login})
+        const user = await userModel.findOne({firstName: profile._json.name})
         if (!user) {
           const newUser = {
             firstName: profile._json.name,
@@ -155,7 +155,7 @@ const initializatePassport = () => {
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const user = await userModel.findOne({username: profile._json.name})
+        const user = await userModel.findOne({email: profile._json.email})
         if (!user) {
           const newUser = {
             email: profile._json.email,
