@@ -37,9 +37,9 @@ export const getCurrentUser = async (req, res) => {
 }
 
 export const failRegister = (req, res) => {
-  const message = req.flash('error');
-  req.logger.error(`${req.method} ${req.path} - ${message}`)
-  res.status(400).send({status: "error", message: message || "Failed Register"});
+  const message = req.flash('error')[0]
+  req.logger.error(`${req.method} ${req.path} - ${message} || 'Failed register'`)
+  res.status(400).send({ status: "error", message: message || 'Failed register' });
 }
 
 export const setSessionUserCookie = (req, res) => {
@@ -50,18 +50,18 @@ export const setSessionUserCookie = (req, res) => {
   req.session.user = {
     _id: req.user._id,
     firstName: req.user.firstName,
-    lastName: req.user.lastName,
-    email: req.user.email,
-    age: req.user.age,
+    lastName: req.user.lastName || "",
+    email: req.user.email || "",
+    age: req.user.age || 0,
     role: req.user.role 
   };
   
   const token = jwt.sign({
     _id: req.user._id,
     firstName: req.user.firstName,
-    lastName: req.user.lastName,
-    email: req.user.email,
-    age: req.user.age,
+    lastName: req.user.lastName || "",
+    email: req.user.email || "",
+    age: req.user.age || 0,
     role: req.user.role
   }, JWT_SECRET, { expiresIn: '1h' });
 
@@ -71,9 +71,9 @@ export const setSessionUserCookie = (req, res) => {
 }
 
 export const failLogin = (req, res) => {
-  const message = req.flash('error');
-  req.logger.error(`${req.method} ${req.path} - ${message}`)
-  res.status(400).send({status: "error", message: message || "Failed Login"});
+  const message = req.flash('error')[0];
+  req.logger.error(`${req.method} ${req.path} - ${message || 'Failed login'}`)
+  res.status(400).send({ status: "error", message: message || 'Failed login' });
 }
 
 export const sendPasswordResetEmail = async (req, res) => {
@@ -159,10 +159,9 @@ export const resetPassword = async (req, res) => {
     req.session.user = {
       _id: result._id,
       firstName: result.firstName,
-      lastName: result.lastName,
-      email: result.email,
-      verified: result.verified,
-      age: result.age,
+      lastName: result.lastName || "",
+      email: result.email || "",
+      age: result.age || 0,
       role: result.role
     };
 

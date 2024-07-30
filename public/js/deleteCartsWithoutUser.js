@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await axios.delete('/api/carts/deleteCarts');
       alert(response.data.status + ' ' + response.data.message);
     } catch (error) {
-      alert('Error deleting carts without user', error);
+      alert('Error deleting carts without user ' + error.message);
     }
     location.reload()
   })

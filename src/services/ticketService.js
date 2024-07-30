@@ -22,7 +22,7 @@ class ticketService {
       }
       return new ticketDTO(ticket);
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
@@ -32,7 +32,7 @@ class ticketService {
       if (!tickets) {
         throw new Error("No tickets found");
       }
-      return new ticketDTO(tickets);
+      return tickets.map((ticket) => new ticketDTO(ticket));
     } catch (error) {
       throw error;
     }

@@ -6,9 +6,9 @@ import passport from 'passport';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
-import flash from 'connect-flash';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
+import flash from 'connect-flash';
 
 import { __dirname } from './utils/utils.js';
 import initializatePassport from './config/passportConfig.js';
@@ -38,7 +38,7 @@ const swaggerOptions = {
     info: {
       title: "Ecommerce API",
       version: "1.0.0",
-      description: "Ecommerce API Information",
+      description: "Ecommerce API Information. For admin pourpuses use the following credentials: email: adminCoder@coder.com password: adminCod3r123",
     },
   },
   apis: [`src/docs/**/*.yaml`]
@@ -49,19 +49,19 @@ app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 //MIDDLEWARES
 
-app.use(flash())
 app.use(addLogger)
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(express.static(`${__dirname}/../../public`));
 app.use(cookieParser());
+app.use(flash())
 
 //HANDLEBARS
 app.engine("handlebars", handlebars.engine());
 app.set("views",`${__dirname}/../views`);
 app.set("view engine", "handlebars");
 
-//MONGO SESSION
+//MONGO SESSION AND FLASH
 app.use(session(
   {
     store: MongoStore.create(
@@ -77,7 +77,6 @@ app.use(session(
   ))
 
 //PASSPORT
-
 initializatePassport();
 app.use(passport.initialize())
 app.use(passport.session())

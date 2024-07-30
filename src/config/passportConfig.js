@@ -25,28 +25,28 @@ const initializatePassport = () => {
       const { firstName, lastName, age, email2, password2} = req.body;
 
       if (!firstName || !lastName || !age || !password || !email ) {
-        return done(null, false, req.flash('error', 'All fields are required!'))
+        return done(null, false, {message: 'All fields are required'})
       }
       if (req.body.role) {
-        return done(null, false, req.flash('error', 'You cannot set your role!'))
+        return done(null, false, {message: 'You are not allowed to change your role'})
       }
       if (age < 18) {
-        return done(null, false, req.flash('error', 'You must be over 18 years old!'))
+        return done(null, false, {message: 'You must be 18 years old or older'})
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        return done(null, false, req.flash('error', 'Invalid email!'))
+        return done(null, false, {message: 'Enter a valid email'})
       }
       if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(password)) {
-        return done(null, false, req.flash('error', 'Invalid password!, the password must have at least 8 characters, one uppercase letter, one lowercase letter, one number'))
+        return done(null, false, {message: 'Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number'})
       }
       if (email !== email2 || password !== password2) {
-        return done(null, false, req.flash('error', 'Email or password does not match!'))
+        return done(null, false, {message: 'Email and password must match'})
       }
 
       try {
         const existingUser = await userService.findUserEmail(email);
         if (existingUser) {
-          return done(null, false, req.flash('error', 'User already exist!'))
+          return done(null, false, {message: 'User already exists'})
         }
 
         const newUser = {
@@ -77,19 +77,19 @@ const initializatePassport = () => {
     },
     async (username, password, done) => {
       if (!username || !password) {
-        return done(null, false, req.flash('error', 'All fields are required!'))
+        return done(null, false, {message: 'You must provide an email and a password'})
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username)) {
-        return done(null, false, req.flash('error', 'Invalid email!'))
+        return done(null, false, {message: 'Enter a valid email'})
       }
       
       try {
         const user = await userService.findUserEmail(username);
         if (!user) {
-          return done(null, false, req.flash('error', 'User not found!'))
+          return done(null, false, {message: 'User not found'})
         }
         if(!isValidPassword(user, password)) {
-          return done(null, false, req.flash('error', 'Invalid password!'))
+          return done(null, false, {message: 'Invalid password'})
         }
         
         return done(null, user)
@@ -122,7 +122,7 @@ const initializatePassport = () => {
     {
     clientID: GHCLIENT_ID,
     clientSecret: GHCLIENT_SECRET,
-    callbackURL: 'http://localhost:8080/api/session/githubcallback'
+    callbackURL: '/api/session/githubcallback'
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -131,7 +131,6 @@ const initializatePassport = () => {
           const newUser = {
             firstName: profile._json.name,
             email: profile._json.email,
-            verified: true
           }
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)
@@ -151,7 +150,7 @@ const initializatePassport = () => {
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_SECRET,
-      callbackURL: 'http://localhost:8080/api/session/googlecallback'
+      callbackURL: '/api/session/googlecallback'
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -161,8 +160,8 @@ const initializatePassport = () => {
             email: profile._json.email,
             firstName: profile._json.given_name,
             lastName: profile._json.family_name,
-            verified: true
           }
+          
           const registeredUser = await userService.registerUser(newUser)
           const cart = await cartService.addCart(registeredUser._id)
           const result = await userService.updateUser(registeredUser._id, cart._id);

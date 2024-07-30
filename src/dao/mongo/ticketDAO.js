@@ -21,7 +21,7 @@ class ticketDAO {
 
   async getTicketsByUserId(userId) {
     try {
-      const tickets = await ticketModel.find({ userId: userId })
+      const tickets = await ticketModel.find({ purchaser: userId }).populate('products.product').lean()
       return tickets
     } catch (error) {
       throw error

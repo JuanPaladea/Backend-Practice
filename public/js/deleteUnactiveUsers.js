@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await axios.delete('/api/session/');
       alert(response.data.status + ' ' + response.data.message);
     } catch (error) {
-      alert('Error deleting unactive users', error);
+      alert('Error deleting unactive users ' + error.message);
     }
     location.reload()
   })

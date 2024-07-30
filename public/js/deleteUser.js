@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await axios.delete(`/api/session/${userId}`);
         alert(response.data.status + ' ' + response.data.message);
       } catch (error) {
-        alert('Error deleting user', error.message);
+        alert('Error deleting user ' + error.message);
       }
       location.reload()
     })

@@ -236,3 +236,44 @@
 2024-07-29 16:38:02 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
 2024-07-29 16:42:19 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
 2024-07-29 16:43:31 WARNING: GET /failRegister - No tienes permisos para realizar esta acción
+2024-07-30 11:20:45 WARNING: GET /failLogin - No tienes permisos para realizar esta acción
+2024-07-30 11:24:36 WARNING: GET /failLogin - No tienes permisos para realizar esta acción
+2024-07-30 11:30:42 WARNING: GET /failLogin - No tienes permisos para realizar esta acción
+2024-07-30 11:31:33 WARNING: GET /failLogin - No tienes permisos para realizar esta acción
+2024-07-30 11:32:13 WARNING: GET /failLogin - No tienes permisos para realizar esta acción
+2024-07-30 11:34:41 WARNING: GET /failLogin - No tienes permisos para realizar esta acción
+2024-07-30 11:36:58 WARNING: GET /failLogin - No tienes permisos para realizar esta acción
+2024-07-30 11:39:42 WARNING: GET /failLogin - No tienes permisos para realizar esta acción
+2024-07-30 12:14:32 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-30 12:14:36 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-30 12:14:47 WARNING: DELETE /deleteCarts - No tienes permisos para realizar esta acción
+2024-07-30 12:15:40 WARNING: DELETE /deleteCarts - No tienes permisos para realizar esta acción
+2024-07-30 12:15:43 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-30 12:16:01 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-30 12:16:08 WARNING: DELETE /deleteCarts - No tienes permisos para realizar esta acción
+2024-07-30 12:16:44 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-30 12:17:49 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-30 12:18:10 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-30 12:20:39 WARNING: DELETE / - No tienes permisos para realizar esta acción
+2024-07-30 12:20:42 WARNING: DELETE /deleteCarts - No tienes permisos para realizar esta acción
+2024-07-30 12:20:56 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-07-30 13:42:49 WARNING: GET /failLogin - No tienes permisos para realizar esta acción
+2024-07-30 13:44:27 WARNING: POST /665e6433b743315f24126bc4/products/66a9185840d9919761f209da - No puedes agregar tus propios productos al carrito
+2024-07-30 13:46:58 WARNING: GET /admin-users - No tienes permisos para realizar esta acción
+2024-07-30 13:47:47 WARNING: GET /google - No tienes permisos para realizar esta acción
+2024-07-30 13:48:11 WARNING: GET /github - No tienes permisos para realizar esta acción
+2024-07-30 13:59:49 ERROR: GET /failLogin - Failed login
+2024-07-30 14:09:09 ERROR: GET /failLogin - Failed login
+2024-07-30 14:09:49 ERROR: GET /failLogin - Failed login
+2024-07-30 14:17:21 ERROR: GET /failLogin - 
+2024-07-30 14:17:41 ERROR: GET /failLogin - 
+2024-07-30 14:17:49 INFO: GET /login - Ya estás logueado
+2024-07-30 14:17:57 ERROR: GET /failLogin - 
+2024-07-30 14:21:44 ERROR: GET /failLogin - 
+2024-07-30 14:26:48 ERROR: GET /failLogin - Failed login
+2024-07-30 14:27:35 ERROR: GET /failLogin - Failed login
+2024-07-30 14:30:22 ERROR: GET /failLogin - Invalid password
+2024-07-30 14:30:31 ERROR: GET /failLogin - Enter a valid email
+2024-07-30 14:50:26 ERROR: GET /failRegister - error || 'Failed register'
+2024-07-30 14:50:30 ERROR: GET /failRegister - error || 'Failed register'
+2024-07-30 14:51:43 ERROR: GET /failRegister - All fields are required || 'Failed register'

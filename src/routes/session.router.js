@@ -1,9 +1,12 @@
 import { Router } from "express";
+
 import logged from "../middlewares/logged.js";
-import cartService from "../services/cartService.js";
 import authRedirect from "../middlewares/authRedirect.js";
 import isAdmin from "../middlewares/isAdmin.js";
+
+import cartService from "../services/cartService.js";
 import userService from "../services/userService.js";
+import ticketService from "../services/ticketService.js";
 
 const router = Router();
 
@@ -13,7 +16,6 @@ router.get('/login', logged, async (req, res) => {
     {
       layout: 'default',
       title: 'Backend Juan Paladea | Login',
-      loginFailed: req.session.failLogin
     }
   )
 })
@@ -33,13 +35,16 @@ router.get('/user', authRedirect, async (req, res) => {
 
   try {
     const cart = await cartService.getCartWithUserId(userId)
+    const tickets = await ticketService.getTicketsByUserId(userId)
+    
     res.render(
       "user",
       {
         layout: "default",
         title: 'Backend Juan Paladea | Usuario',
         user: req.session.user,
-        cart: cart
+        cart: cart,
+        tickets: tickets
       }
     )
   } catch (error) {
