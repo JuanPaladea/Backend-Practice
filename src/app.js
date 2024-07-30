@@ -45,8 +45,6 @@ const swaggerOptions = {
   apis: [path.resolve(__dirname, '../docs/**/*.yaml')]
 }
 
-console.log('Resolved API path:', swaggerOptions.apis); // Log the resolved path
-
 const specs = swaggerJSDoc(swaggerOptions)
 app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
