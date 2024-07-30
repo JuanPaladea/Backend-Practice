@@ -3,7 +3,7 @@ import * as chai from 'chai';
 import { generateUser } from "../src/utils/faker.js";
 
 const expect = chai.expect;
-const requester = supertest("http://localhost:8080");
+const requester = supertest("http://localhost:10000");
 
 
 describe("apiSesssion", () => {
