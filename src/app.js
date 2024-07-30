@@ -41,7 +41,7 @@ const swaggerOptions = {
       description: "Ecommerce API Information. For admin pourpuses use the following credentials: email: adminCoder@coder.com password: adminCod3r123",
     },
   },
-  apis: [`src/docs/**/*.yaml`]
+  apis: [`./src/docs/**/*.yaml`]
 }
 
 const specs = swaggerJSDoc(swaggerOptions)

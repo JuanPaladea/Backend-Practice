@@ -279,3 +279,4 @@
 2024-07-30 14:51:43 ERROR: GET /failRegister - All fields are required || 'Failed register'
 2024-07-30 15:05:24 WARNING: GET / - No tienes permisos para realizar esta acción
 2024-07-30 15:05:31 ERROR: GET /failLogin - Invalid password
+2024-07-30 15:17:18 INFO: GET /login - Ya estás logueado
