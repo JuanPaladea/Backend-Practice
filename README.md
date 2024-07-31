@@ -1,6 +1,7 @@
 # Backend Practice
 
 This is a backend application that uses Node.js, Express, and MongoDB. The application provides a platform for managing products, shopping carts, messages, and tickets.
+[Live here](https://backend-practice-ml8a.onrender.com/)
 
 ## Features
 
@@ -26,7 +27,7 @@ This is a backend application that uses Node.js, Express, and MongoDB. The appli
   - views/                 - Contains view templates
 - public/
   - js/                    - Contains client-side JavaScript files
-- test/
+- test/                    - Contains test in local enviroment
 - uploads/                 - Contains uploaded files
 
 ## API Endpoints
@@ -92,7 +93,7 @@ This is a backend application that uses Node.js, Express, and MongoDB. The appli
 - `Express`: Web application framework for Node.js.
 - `Express-handlebars`: Handlebars view engine for Express.
 - `Express-session`: Session middleware for Express.
-- `Jsonwebtoken
+- `Jsonwebtoken`
 - `Mongodb`: MongoDB driver for Node.js.
 - `Mongoose`: MongoDB object modeling tool.
 - `Mongoose-paginate-v2`: Pagination plugin for Mongoose.
