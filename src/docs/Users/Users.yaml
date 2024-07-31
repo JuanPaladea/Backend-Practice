@@ -526,8 +526,11 @@ paths:
                   type: string
                 password2:
                   type: string
-                token:
-                  type: string
+      requestQuery:
+        token:
+          type: string
+          description: The token to reset the password
+          required: true
       responses:
         '200':
           description: The password reseted

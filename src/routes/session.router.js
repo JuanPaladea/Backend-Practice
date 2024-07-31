@@ -79,7 +79,7 @@ router.get('/forgotpassword', async (req, res) => {
 router.get('/resetpassword', async (req, res) => {
   const token = req.query.token
   if (!token) {
-    res.status(400).send({status: 'error', message: 'Token not found'})
+    return res.status(400).send({status: 'error', message: 'Token not found'})
   }
   res.render(
     'resetpassword',
