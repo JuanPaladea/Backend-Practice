@@ -102,7 +102,7 @@ app.use('/chat', chatRouter)
 //PORT LISTEN
 const port = process.env.PORT || 10000;
 const httpServer = app.listen(port, () => {
-  console.log(`Example app listening on port http://localhost:${port}`)
+  console.log(`Server online on port ${port}`)
 })
 
 // SOCKET SERVER

@@ -225,6 +225,11 @@ export const uploadDocuments = async (req, res) => {
     return {name: file.originalname, reference: file.path}
   })
 
+  if (!documents || documents.length < 3) {
+    req.logger.warning(`${req.method} ${req.path} - The 3 documents are required`)
+    return res.status(400).send({status: 'error', message: 'The 3 documents are required'});
+  }
+
   try {
     const result = await userService.uploadDocuments(userId, documents);
     res.status(200).send({status: 'success', message: 'Documents uploaded', user: result});
