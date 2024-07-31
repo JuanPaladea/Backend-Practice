@@ -225,7 +225,7 @@ export const uploadDocuments = async (req, res) => {
     return {name: file.originalname, reference: file.path}
   })
 
-  if (!documents || documents.length < 3) {
+  if (!documents || documents.length !== 3) {
     req.logger.warning(`${req.method} ${req.path} - The 3 documents are required`)
     return res.status(400).send({status: 'error', message: 'The 3 documents are required'});
   }
