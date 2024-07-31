@@ -268,6 +268,14 @@ export const deleteUnactiveUsers = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   const userId = req.params.userId;
+
+  const user = await userService.getUserById(userId);
+
+  if (user.role === 'admin') {
+    req.logger.warning(`${req.method} ${req.path} - Can't delete an admin`)
+    return res.status(400).send({status: 'error', message: "Can't delete an admin"});
+  }
+
   try {
     const result = await userService.deleteUser(userId);
     res.status(200).send({status: 'success', message: 'User deleted', result});

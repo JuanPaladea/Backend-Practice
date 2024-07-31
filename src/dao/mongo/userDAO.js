@@ -100,7 +100,7 @@ class userDAO {
 
   async deleteUnactiveUsers() {
     try {
-      const users = await userModel.deleteMany({lastConnection: {$lt: Date.now() - 172800000}})
+      const users = await userModel.deleteMany({lastConnection: {$lt: Date.now() - 172800000}, role: {$ne: "admin"}})
       return users
     } catch (error) {
       throw error

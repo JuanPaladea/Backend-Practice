@@ -32,13 +32,10 @@ router.post("/logout", logOut);
 router.get("/github", passport.authenticate('github', {scope: ['user:email']}), (req, res) => {
   res.status(200).send({status: 'success', message: 'Success'});
 });
-
 router.get("/githubcallback", passport.authenticate('github', {failureRedirect: '/login'}), setSessionUserCookie);
-
 router.get("/google", passport.authenticate('google', {scope: ['email', 'profile']}), (req, res) => {
   res.status(200).send({status: 'success', message: 'Success'});
 });
-
 router.get("/googlecallback", passport.authenticate('google', {failureRedirect: '/login'}), setSessionUserCookie);
 
 router.get('/:userId', auth, isAdmin, getUserById)
