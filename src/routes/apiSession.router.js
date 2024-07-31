@@ -25,7 +25,7 @@ router.post('/forgotpassword', logged, sendPasswordResetEmail)
 router.post('/resetpassword', logged, resetPassword)
 
 router.get("/role/:userId", auth, changeUserRole);
-router.post("/:userId/documents", auth, upload.array('files', 3), uploadDocuments)
+router.post("/:userId/documents", auth, upload.array('files'), uploadDocuments)
 router.post("/logout", logOut);
 
 // EXTERNAL LOGIN
