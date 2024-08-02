@@ -22,12 +22,6 @@ class userDAO {
 
   async registerUser(user) {
     try {
-      if (user.email == "adminCoder@coder.com" && isValidPassword(user, ' ')) {
-        const newUser = await userModel.create(user)
-        newUser.role = "admin"
-        newUser.save()
-        return newUser
-      }
       const newUser = await userModel.create(user)
       return newUser
     } catch (error) {
