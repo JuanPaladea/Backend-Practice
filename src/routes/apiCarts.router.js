@@ -18,5 +18,8 @@ router.delete("/:cid/products/:pid", auth, deleteProductFromCart)
 
 router.post('/:cid/purchase', auth, purchaseCart)
 router.post('/mercadopago', auth, checkOutMP)
+router.get('/mercadopago/success', auth, successMP)
+router.get('/mercadopago/failure', auth, failureMP)
+router.get('/mercadopago/pending', auth, pendingMP)
 
 export default router

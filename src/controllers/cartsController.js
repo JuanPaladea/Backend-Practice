@@ -253,3 +253,30 @@ export const checkOutMP = async (req, res) => {
     res.status(400).send({status:'error', message: error.message, error: error})
   }
 }
+
+export const successMP = async (req, res) => {
+  try {
+    res.status(200).send({status:'success', message:'pago aprobado'});
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status:'error', message: error.message, error: error})
+  }
+}
+
+export const failureMP = async (req, res) => {
+  try {
+    res.status(400).send({status:'error', message:'pago rechazado'});
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status:'error', message: error.message, error: error})
+  }
+}
+
+export const pendingMP = async (req, res) => {
+  try {
+    res.status(200).send({status:'warning', message:'pago pendiente'});
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status:'error', message: error.message, error: error})
+  }
+}

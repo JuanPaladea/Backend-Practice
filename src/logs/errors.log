@@ -283,3 +283,4 @@
 2024-07-30 16:28:52 ERROR: GET /logout - Cast to ObjectId failed for value "logout" (type string) at path "_id" for model "users"
 2024-07-31 14:26:03 WARNING: POST /665a06a89f0653cac83f7446/documents - Documents are required
 2024-07-31 14:26:36 WARNING: POST /665a06a89f0653cac83f7446/documents - The 3 documents are required
+2024-08-19 14:47:16 WARNING: GET / - No tienes permisos para realizar esta acción
