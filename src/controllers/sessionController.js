@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-import transport from "../utils/mailer.js";
+import { sendEmail } from "../utils/mailer.js";
 import userService from "../services/userService.js";
-import { EMAIL, JWT_SECRET } from "../utils/config.js";
+import { BASE_URL, JWT_SECRET } from "../utils/config.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 
 export const getUsers = async (req, res) => {
@@ -97,17 +97,11 @@ export const sendPasswordResetEmail = async (req, res) => {
       email: user.email
     }, JWT_SECRET, { expiresIn: '1h' });
 
-    transport.sendMail({
-      from: `BackEnd JP <${EMAIL}>`,
-      to: email,
-      subject: 'Backend JP | Reset Password',
-      html: 
-      `<div>
-      <h1>Reset Password</h1>
-      <p>To reset your password, please click on the following link:</p>
-      <a href="http://localhost:8080/resetpassword?token=${token}">Reset Password</a>
-      </div>`
-    });
+    sendEmail(
+      email,
+      'Reset Password',
+      `To reset your password, please click on the following link: <a href="${BASE_URL}/resetpassword?token=${token}">Reset Password</a>`
+    );
 
     res.status(200).send({status: 'success', message: 'Email sent to reset password'});
   } catch (error) {
@@ -245,16 +239,11 @@ export const deleteUnactiveUsers = async (req, res) => {
 
     if (users) {
       users.forEach(async user => {
-        await transport.sendMail({
-          from: `BackEnd JP <${EMAIL}>`,
-          to: user.email,
-          subject: 'Backend JP | Account Deleted',
-          html: 
-          `<div>
-          <h1>Account Deleted</h1>
-          <p>Your account has been deleted due to inactivity</p>
-          </div>`
-        });
+        sendEmail(
+          user.email,
+          'Account Deleted',
+          'Your account has been deleted due to inactivity'
+        );
       })
     }
 

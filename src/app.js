@@ -18,12 +18,6 @@ import apiProductsRouter from "./routes/apiProducts.router.js"
 import apiSessionRouter from "./routes/apiSession.router.js"
 import apiTicketsRouter from "./routes/apiTickets.router.js"
 import apiMessagesRouter from "./routes/apiMessages.router.js"
-import loggerTestRouter from "./routes/loggerTest.router.js"
-import homeRouter from "./routes/home.router.js"
-import productsRouter from "./routes/products.router.js"
-import cartsRouter from "./routes/carts.router.js"
-import sessionRouter from "./routes/session.router.js"
-import chatRouter from "./routes/chat.router.js"
 import { MONGODB_URI, SECRET_SESSION } from './utils/config.js';
 import { addLogger } from './middlewares/logger.js';
 
@@ -90,14 +84,6 @@ app.use("/api/carts", apiCartsRouter)
 app.use('/api/session', apiSessionRouter)
 app.use("/api/tickets", apiTicketsRouter)
 app.use('/api/messages', apiMessagesRouter)
-app.use("/loggertest", loggerTestRouter)
-
-//VIEWS ROUTES
-app.use(homeRouter)
-app.use(sessionRouter)
-app.use("/products", productsRouter)
-app.use("/carts", cartsRouter)
-app.use('/chat', chatRouter)
 
 //PORT LISTEN
 const port = process.env.PORT || 10000;

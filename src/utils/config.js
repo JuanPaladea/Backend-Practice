@@ -13,3 +13,5 @@ export const SECRET_SESSION = process.env.SECRET_SESSION
 export const EMAIL = process.env.EMAIL
 export const PASSWORD = process.env.PASSWORD
 export const NODE_ENV = process.env.NODE_ENV
+export const BASE_URL = process.env.BASE_URL
+export const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN

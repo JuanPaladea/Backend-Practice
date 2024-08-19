@@ -1,6 +1,10 @@
 import cartService from "../services/cartService.js";
 import productService from "../services/productService.js";
 import ticketService from "../services/ticketService.js";
+import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { BASE_URL, MP_ACCESS_TOKEN } from "../utils/config.js";
+
+const clientMP = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN });
 
 export const addCart = async (req, res) => {
   const userId = req.session.user._id
@@ -205,6 +209,45 @@ export const purchaseCart = async (req, res) => {
     }
     // Display the ticket and if there were products with no stock, display them too
     res.status(201).send({status:'success', message:'compra realizada', ticket, itemsRemoved});
+  } catch (error) {
+    req.logger.error(`${req.method} ${req.path} - ${error.message}`)
+    res.status(400).send({status:'error', message: error.message, error: error})
+  }
+}
+
+export const checkOutMP = async (req, res) => {
+  try {
+    const user = req.session.user;
+    const cart = await cartService.addCart(user._id);
+
+    const currentCart = await cartService.getCart(cart._id);
+    let totalAmount = 0;
+    for (let item of currentCart.products) {
+      totalAmount += item.product.price * item.quantity;
+    }
+
+    const data = {
+      transaction_amount: totalAmount,
+      items: currentCart.products.map(item => ({
+        title: item.product.name,
+        unit_price: item.product.price,
+        quantity: item.quantity
+      })),
+      payer: {
+        email: user.email
+      },
+      back_urls: {
+        success: `${BASE_URL}/api/carts/mercadopago/success`,
+        failure: `${BASE_URL}/api/carts/mercadopago/failure`,
+        pending: `${BASE_URL}/api/carts/mercadopago/pending`
+      },
+      auto_return: 'approved',
+    }
+
+    const service = new Preference(clientMP)
+    const payment = await service.create({ body: data })
+
+    res.status(200).send({ url: payment.sandbox_init_point });
   } catch (error) {
     req.logger.error(`${req.method} ${req.path} - ${error.message}`)
     res.status(400).send({status:'error', message: error.message, error: error})

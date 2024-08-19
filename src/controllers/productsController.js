@@ -1,7 +1,6 @@
 import productService from "../services/productService.js";
-import transport from "../utils/mailer.js";
+import { sendEmail } from "../utils/mailer.js";
 import {generateProducts} from "../utils/faker.js";
-import { EMAIL } from "../utils/config.js";
 
 export const getProducts = async (req, res) => {
   const limit = +req.query.limit || 8;
@@ -146,16 +145,11 @@ export const deleteProduct = async (req, res) => {
     if (req.session.user.role === 'admin') {
       await productService.deleteProduct(productId);
       if (product.owner.role === 'premium') {
-        transport.sendMail({
-          from: `BackEnd JP <${EMAIL}>`,
-          to: product.owner.email,
-          subject: 'Producto eliminado',
-          html: 
-          `
-            <h1>Producto eliminado</h1>
-            <p>El producto ${product.title} ha sido eliminado por un administrador</p>
-          `
-        })
+        sendEmail(
+          product.owner.email,
+          'Producto eliminado',
+          `El producto ${product.title} ha sido eliminado por un administrador`
+        )
       }
       return res.status(200).send({status:'success', message:'producto eliminado'})
     }
@@ -167,16 +161,11 @@ export const deleteProduct = async (req, res) => {
 
     await productService.deleteProduct(productId);
     if (product.owner.role === 'premium') {
-      transport.sendMail({
-        from: `BackEnd JP <${EMAIL}>`,
-        to: product.owner.email,
-        subject: 'Producto eliminado',
-        html: 
-        `
-          <h1>Producto eliminado</h1>
-          <p>Su producto ${product.title} ha sido eliminado de la base de datos</p>
-        `
-      })
+      sendEmail(
+        product.owner.email,
+        'Producto eliminado',
+        `El producto ${product.title} ha sido eliminado`
+      )
     }
     res.status(200).send({status:'success', message:'producto eliminado'})
   } catch (error){
