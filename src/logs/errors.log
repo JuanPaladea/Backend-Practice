@@ -284,3 +284,11 @@
 2024-07-31 14:26:03 WARNING: POST /665a06a89f0653cac83f7446/documents - Documents are required
 2024-07-31 14:26:36 WARNING: POST /665a06a89f0653cac83f7446/documents - The 3 documents are required
 2024-08-19 14:47:16 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-08-20 15:27:35 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-08-20 15:28:57 ERROR: GET /failLogin - User not found
+2024-08-20 15:29:24 ERROR: GET /failLogin - Failed login
+2024-08-20 15:30:21 ERROR: GET /failLogin - Missing credentials
+2024-08-20 15:31:16 WARNING: GET / - No tienes permisos para realizar esta acción
+2024-08-20 15:31:55 ERROR: GET /failLogin - Missing credentials
+2024-08-20 15:38:40 ERROR: POST /mercadopago - invalid_token
+2024-08-20 15:41:33 ERROR: POST /mercadopago - invalid_token
