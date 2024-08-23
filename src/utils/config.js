@@ -15,3 +15,4 @@ export const PASSWORD = process.env.PASSWORD
 export const NODE_ENV = process.env.NODE_ENV
 export const BASE_URL = process.env.BASE_URL
 export const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN
+export const FRONT_URL = process.env.FRONT_URL
