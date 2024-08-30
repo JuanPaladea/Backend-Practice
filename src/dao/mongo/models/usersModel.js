@@ -24,6 +24,9 @@ const usersSchema = new mongoose.Schema({
     type: String,
     default: 'usuario',
   },
+  avatar: {
+    type: String,
+  },
   cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'carts'
@@ -42,7 +45,7 @@ const usersSchema = new mongoose.Schema({
   },
   lastConnection: {
     type: Date,
-  }
+  },
 })
 
 usersSchema.plugin(mongoosePaginate)

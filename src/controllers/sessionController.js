@@ -63,10 +63,16 @@ export const setSessionUserCookie = (req, res) => {
     lastName: req.user.lastName || "",
     email: req.user.email || "",
     age: req.user.age || 0,
-    role: req.user.role
+    role: req.user.role,
+    avatar: req.user.avatar || ""
   }, JWT_SECRET, { expiresIn: '1h' });
 
-  res.cookie('jwt', token);
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none'
+  });
+
   userService.updateLastConnection(req.user._id);
   res.status(200).send({status: 'success', message: 'User logged in', token: token, userId: req.user._id, user: req.session.user});
 }

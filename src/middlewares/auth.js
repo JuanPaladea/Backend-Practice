@@ -4,7 +4,7 @@ import { JWT_SECRET } from '../utils/config.js';
 const auth = (req, res, next) => {
   if (!req.session.user) {
     try {
-      const token = req.header("Authorization").replace("Bearer ", "");
+      const token = req.header("Authorization").replace("Bearer ", "") || req.cookies.token;
       const decoded = jwt.verify(token, JWT_SECRET);
       req.session.user = decoded;
       next();

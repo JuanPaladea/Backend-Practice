@@ -20,7 +20,7 @@ class userService {
       if (!user) {
         throw new Error("User not found");
       }
-      return user;
+      return new userDTO(user);
     } catch (error) {
       throw error;
     }
