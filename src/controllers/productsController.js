@@ -1,7 +1,6 @@
 import productService from "../services/productService.js";
-import transport from "../utils/mailer.js";
+import { sendEmail } from "../utils/mailer.js";
 import {generateProducts} from "../utils/faker.js";
-import { EMAIL } from "../utils/config.js";
 
 export const getProducts = async (req, res) => {
   const limit = +req.query.limit || 8;
@@ -47,7 +46,7 @@ export const getProduct = async (req, res) => {
 }
 
 export const addProduct = async (req, res) => {
-  if (!req.body.title || !req.body.description || !req.body.code || !req.body.price || !req.body.stock || !req.body.category || !req.body.thumbnails) {
+  if (!req.body.title || !req.body.description || !req.body.code || !req.body.price || !req.body.stock || !req.body.category || !req.body.thumbnails || !req.body.brand || !req.body.collection) {
     req.logger.warning(`${req.method} ${req.path} - One or more fields are missing`)
     return res.status(400).send({status: 'error', message: 'One or more fields are missing'})
   }
@@ -60,6 +59,8 @@ export const addProduct = async (req, res) => {
     stock: parseInt(req.body.stock),
     category: req.body.category,
     thumbnails: req.body.thumbnails,
+    brand: req.body.brand || null,
+    collection: req.body.collection || null,
   }
   
   try {
@@ -76,7 +77,9 @@ export const addProduct = async (req, res) => {
       stock: product.stock,
       category: product.category,
       thumbnails: product.thumbnails,
-      owner: req.session.user._id
+      owner: req.session.user._id,
+      brand: product.brand,
+      collection: product.collection,
     })
 
     res.status(201).send({status:'success', message:'producto agregado', newProduct})
@@ -146,16 +149,11 @@ export const deleteProduct = async (req, res) => {
     if (req.session.user.role === 'admin') {
       await productService.deleteProduct(productId);
       if (product.owner.role === 'premium') {
-        transport.sendMail({
-          from: `BackEnd JP <${EMAIL}>`,
-          to: product.owner.email,
-          subject: 'Producto eliminado',
-          html: 
-          `
-            <h1>Producto eliminado</h1>
-            <p>El producto ${product.title} ha sido eliminado por un administrador</p>
-          `
-        })
+        sendEmail(
+          product.owner.email,
+          'Producto eliminado',
+          `El producto ${product.title} ha sido eliminado por un administrador`
+        )
       }
       return res.status(200).send({status:'success', message:'producto eliminado'})
     }
@@ -167,16 +165,11 @@ export const deleteProduct = async (req, res) => {
 
     await productService.deleteProduct(productId);
     if (product.owner.role === 'premium') {
-      transport.sendMail({
-        from: `BackEnd JP <${EMAIL}>`,
-        to: product.owner.email,
-        subject: 'Producto eliminado',
-        html: 
-        `
-          <h1>Producto eliminado</h1>
-          <p>Su producto ${product.title} ha sido eliminado de la base de datos</p>
-        `
-      })
+      sendEmail(
+        product.owner.email,
+        'Producto eliminado',
+        `El producto ${product.title} ha sido eliminado`
+      )
     }
     res.status(200).send({status:'success', message:'producto eliminado'})
   } catch (error){

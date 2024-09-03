@@ -10,6 +10,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 import flash from 'connect-flash';
 import path from 'path';
+import cors from 'cors';
 
 import { __dirname } from './utils/utils.js';
 import initializatePassport from './config/passportConfig.js';
@@ -18,13 +19,7 @@ import apiProductsRouter from "./routes/apiProducts.router.js"
 import apiSessionRouter from "./routes/apiSession.router.js"
 import apiTicketsRouter from "./routes/apiTickets.router.js"
 import apiMessagesRouter from "./routes/apiMessages.router.js"
-import loggerTestRouter from "./routes/loggerTest.router.js"
-import homeRouter from "./routes/home.router.js"
-import productsRouter from "./routes/products.router.js"
-import cartsRouter from "./routes/carts.router.js"
-import sessionRouter from "./routes/session.router.js"
-import chatRouter from "./routes/chat.router.js"
-import { MONGODB_URI, SECRET_SESSION } from './utils/config.js';
+import { FRONT_URL, MONGODB_URI, SECRET_SESSION } from './utils/config.js';
 import { addLogger } from './middlewares/logger.js';
 
 export const app = express();
@@ -56,6 +51,10 @@ app.use(express.json());
 app.use(express.static(`${__dirname}/../../public`));
 app.use(cookieParser());
 app.use(flash())
+app.use(cors({
+  origin: `${FRONT_URL}`,
+  credentials: true
+}))
 
 //HANDLEBARS
 app.engine("handlebars", handlebars.engine());
@@ -73,7 +72,10 @@ app.use(session(
       }),
       secret: SECRET_SESSION,
       resave: true,
-      saveUninitialized: true
+      saveUninitialized: true,
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24
+      }
     }
   ))
 
@@ -90,14 +92,6 @@ app.use("/api/carts", apiCartsRouter)
 app.use('/api/session', apiSessionRouter)
 app.use("/api/tickets", apiTicketsRouter)
 app.use('/api/messages', apiMessagesRouter)
-app.use("/loggertest", loggerTestRouter)
-
-//VIEWS ROUTES
-app.use(homeRouter)
-app.use(sessionRouter)
-app.use("/products", productsRouter)
-app.use("/carts", cartsRouter)
-app.use('/chat', chatRouter)
 
 //PORT LISTEN
 const port = process.env.PORT || 10000;

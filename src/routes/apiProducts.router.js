@@ -5,9 +5,9 @@ import isPremium from "../middlewares/isPremium.js";
 
 const router = Router();
 
-router.get('/', auth, getProducts)
+router.get('/', getProducts)
 router.post('/', auth, isPremium, addProduct)
-router.get('/:productId', auth, getProduct)
+router.get('/:productId', getProduct)
 router.put('/:productId', auth, isPremium, updateProduct)
 router.delete('/:productId', auth, isPremium, deleteProduct)
 

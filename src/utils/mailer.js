@@ -10,4 +10,16 @@ const transport = nodemailer.createTransport({
   }
 });
 
-export default transport; 
+export const sendEmail = (to, subject, text) => {
+  const mailOptions = {
+    from: EMAIL,
+    to,
+    subject: 'Backend JP - ' + subject,
+    html: `<div>
+      <h1>${subject}</h1>
+      <p>${text}</p>	
+      </div>`
+  };
+
+  transport.sendMail(mailOptions);
+};

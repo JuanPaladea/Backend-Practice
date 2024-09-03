@@ -9,6 +9,7 @@ import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import cartService from "../services/cartService.js";
 import userService from "../services/userService.js";
 import { GHCALLBACK_URL, GHCLIENT_ID, GHCLIENT_SECRET, GOOGLE_CALLBACK_URL, GOOGLE_CLIENT_ID, GOOGLE_SECRET, JWT_SECRET } from "../utils/config.js";
+import userDTO from "../dao/dto/userDTO.js";
 
 const localStrategy = local.Strategy;
 const JWTStratergy = jwt.Strategy;
@@ -93,7 +94,7 @@ const initializatePassport = () => {
           return done(null, false, {message: 'Invalid password'})
         }
         
-        return done(null, user)
+        return done(null, new userDTO(user))
       } catch (error) {
         done(error)
       }

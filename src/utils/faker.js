@@ -44,6 +44,7 @@ export const generateUser = () => {
     email2: email,
     age: fakerES.number.int(100),
     password: password,
-    password2: password
+    password2: password,
+    avatar: fakerES.person.firstName()
   }
 }

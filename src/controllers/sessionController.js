@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-import transport from "../utils/mailer.js";
+import { sendEmail } from "../utils/mailer.js";
 import userService from "../services/userService.js";
-import { EMAIL, JWT_SECRET } from "../utils/config.js";
+import { BASE_URL, JWT_SECRET } from "../utils/config.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 
 export const getUsers = async (req, res) => {
@@ -53,7 +53,8 @@ export const setSessionUserCookie = (req, res) => {
     lastName: req.user.lastName || "",
     email: req.user.email || "",
     age: req.user.age || 0,
-    role: req.user.role 
+    role: req.user.role,
+    avatar: req.user.avatar || ""
   };
   
   const token = jwt.sign({
@@ -62,12 +63,18 @@ export const setSessionUserCookie = (req, res) => {
     lastName: req.user.lastName || "",
     email: req.user.email || "",
     age: req.user.age || 0,
-    role: req.user.role
+    role: req.user.role,
+    avatar: req.user.avatar || ""
   }, JWT_SECRET, { expiresIn: '1h' });
 
-  res.cookie('jwt', token);
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none'
+  });
+
   userService.updateLastConnection(req.user._id);
-  res.status(200).send({status: 'success', message: 'User logged in', token: token, userId: req.user._id});
+  res.status(200).send({status: 'success', message: 'User logged in', token: token, userId: req.user._id, user: req.session.user});
 }
 
 export const failLogin = (req, res) => {
@@ -97,17 +104,11 @@ export const sendPasswordResetEmail = async (req, res) => {
       email: user.email
     }, JWT_SECRET, { expiresIn: '1h' });
 
-    transport.sendMail({
-      from: `BackEnd JP <${EMAIL}>`,
-      to: email,
-      subject: 'Backend JP | Reset Password',
-      html: 
-      `<div>
-      <h1>Reset Password</h1>
-      <p>To reset your password, please click on the following link:</p>
-      <a href="http://localhost:8080/resetpassword?token=${token}">Reset Password</a>
-      </div>`
-    });
+    sendEmail(
+      email,
+      'Reset Password',
+      `To reset your password, please click on the following link: <a href="${BASE_URL}/resetpassword?token=${token}">Reset Password</a>`
+    );
 
     res.status(200).send({status: 'success', message: 'Email sent to reset password'});
   } catch (error) {
@@ -245,16 +246,11 @@ export const deleteUnactiveUsers = async (req, res) => {
 
     if (users) {
       users.forEach(async user => {
-        await transport.sendMail({
-          from: `BackEnd JP <${EMAIL}>`,
-          to: user.email,
-          subject: 'Backend JP | Account Deleted',
-          html: 
-          `<div>
-          <h1>Account Deleted</h1>
-          <p>Your account has been deleted due to inactivity</p>
-          </div>`
-        });
+        sendEmail(
+          user.email,
+          'Account Deleted',
+          'Your account has been deleted due to inactivity'
+        );
       })
     }
 
