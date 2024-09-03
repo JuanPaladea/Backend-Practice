@@ -10,5 +10,7 @@ export default class productDTO {
     this.category = product.category;
     this.thumbnails = product.thumbnails || [];
     this.owner = product.owner;
+    this.brand = product.brand || null;
+    this.collection = product.collection || null;
   }
 }

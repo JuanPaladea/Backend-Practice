@@ -36,6 +36,14 @@ const productsSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
+  brand: {
+    type: String,
+    default: null
+  },
+  collection: {
+    type: String,
+    default: null
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',

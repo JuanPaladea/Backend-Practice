@@ -46,7 +46,7 @@ export const getProduct = async (req, res) => {
 }
 
 export const addProduct = async (req, res) => {
-  if (!req.body.title || !req.body.description || !req.body.code || !req.body.price || !req.body.stock || !req.body.category || !req.body.thumbnails) {
+  if (!req.body.title || !req.body.description || !req.body.code || !req.body.price || !req.body.stock || !req.body.category || !req.body.thumbnails || !req.body.brand || !req.body.collection) {
     req.logger.warning(`${req.method} ${req.path} - One or more fields are missing`)
     return res.status(400).send({status: 'error', message: 'One or more fields are missing'})
   }
@@ -59,6 +59,8 @@ export const addProduct = async (req, res) => {
     stock: parseInt(req.body.stock),
     category: req.body.category,
     thumbnails: req.body.thumbnails,
+    brand: req.body.brand || null,
+    collection: req.body.collection || null,
   }
   
   try {
@@ -75,7 +77,9 @@ export const addProduct = async (req, res) => {
       stock: product.stock,
       category: product.category,
       thumbnails: product.thumbnails,
-      owner: req.session.user._id
+      owner: req.session.user._id,
+      brand: product.brand,
+      collection: product.collection,
     })
 
     res.status(201).send({status:'success', message:'producto agregado', newProduct})
